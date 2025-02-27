@@ -87,7 +87,7 @@ export class ContractorService implements IContractorService {
         }
     }
 
-    public addEquipment = async (req: Request, data: any) => {
+    public addEquipment = async (req: Request, data: any): Promise<ServiceResponse> => {
         const { tool, count } = data
         if(!tool || !count) {
             return {
@@ -109,6 +109,25 @@ export class ContractorService implements IContractorService {
         return {
             success: true,
             message: 'Equipment adding success'
+        }
+    }
+
+    public getEquipment = async(req: Request): Promise<ServiceResponse> => {
+        try {
+            const accessToken = req.cookies.accessToken
+            const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
+            const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
+            const equipment = await equipmentScheme.findEquipmentByContractorId(decoded._id)
+            return {
+                success: true,
+                message: 'Equipment feching successfull',
+                data: equipment
+            }
+        } catch (error) {
+            return {
+                success: false,
+                message: 'Server problem on fetching equipment'
+            }
         }
     }
 

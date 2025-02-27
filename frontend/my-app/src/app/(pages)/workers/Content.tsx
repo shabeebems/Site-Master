@@ -20,6 +20,7 @@ const Content = () => {
     const fetchData = async () => {
       try {
         const users = await fetchDetails('get_workers');
+        console.log(users)
         setWorkers(users);
       } catch (error) {
         console.error("Error fetching workers:", error);

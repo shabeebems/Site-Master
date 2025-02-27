@@ -3,6 +3,7 @@ export interface IEquipment {
     count: number;
     available: number;
     onSite: number;
+    contractorId?: any;
 }
 
 export interface IEquipmentRepository {

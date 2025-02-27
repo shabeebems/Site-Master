@@ -6,11 +6,12 @@ import "react-toastify/dist/ReactToastify.css";
 
 type AddFormProps = {
   cancel: Function;
+  addEquipment: Function;
 };
 
 type tools = { tool: string; count: string }
 
-const AddForm: React.FC<AddFormProps> = ({ cancel }) => {
+const AddForm: React.FC<AddFormProps> = ({ cancel, addEquipment }) => {
 
   const [formData, setFormData] = useState<tools>({
     tool: '',
@@ -32,8 +33,8 @@ const AddForm: React.FC<AddFormProps> = ({ cancel }) => {
           position: "top-right",
           style: { fontSize: "12px", padding: "8px", maxWidth: "250px" }
         });
+        addEquipment({...formData, available: formData.count, onSite: 0 })
         setFormData({ tool: '', count: '' })
-
       } else {
 
         toast.error(response.message, { 

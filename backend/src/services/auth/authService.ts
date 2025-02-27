@@ -49,7 +49,7 @@ export class AuthService implements IAuthService {
         res.cookie('accessToken', accessToken, { 
             httpOnly: true,
             secure: false,
-            maxAge: 24 * 60 * 60 * 1000, // 30 mins
+            maxAge: 30 * 60 * 1000, // 30 mins
             sameSite: 'strict',
             path: '/'
         });
