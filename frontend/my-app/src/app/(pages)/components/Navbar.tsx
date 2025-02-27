@@ -31,7 +31,7 @@ const Navbar: React.FC<NavbarProps> = ({ active }) => {
             <span className="text-blue-950 font-medium hidden md:block">Shabeeb</span>
             <BiLogOut
               onClick={logout} 
-              color='#030032' size={20} className='cursor-pointer'
+              color='#030032' size={20}  className='cursor-pointer'
             />
           </div>
       </div>
