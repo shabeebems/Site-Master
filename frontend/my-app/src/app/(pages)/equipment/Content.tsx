@@ -17,6 +17,7 @@ const Content = () => {
         // const users = await fetchWorkers();
         const users = await fetchDetails('get_equipment');
         // setWorkers(users);
+        // a
       } catch (error) {
         console.error("Error fetching workers:", error);
       }
