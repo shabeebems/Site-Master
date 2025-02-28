@@ -61,28 +61,43 @@ export class AuthService implements IAuthService {
     public otp = async (data: any): Promise<ServiceResponse> => {
         try {
             const { otp, password, ...rest } = data;
+
             const findOtp = await otpSchema.findOtp(data.email);
+
             if (findOtp) {
                 if (findOtp.otp === otp) {
+
+                    // Password hashing
                     const hashPassword = await hashedPassword(password)
+
+                    // Extract user details from data and add some details
                     const userData = { ...rest, password: hashPassword, role: 'Contractor' };
+
+                    // Create new User
                     await userSchema.createUser(userData);
+
+                    // Delete Exissting otp
                     await otpSchema.deleteOtp(data.email);
+
                     return {
                         success: true,
                         message: 'Registration success'
                     };
                 }
+
                 return {
                     success: false,
                     message: 'Wrong otp'
                 };
             }
+
             return {
                 success: false,
                 message: 'Time limit over, resend again'
             };
+
         } catch (error) {
+
             console.error('Otp validation error:', error);
             return {
                 success: false,
