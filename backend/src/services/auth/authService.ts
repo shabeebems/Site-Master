@@ -109,16 +109,22 @@ export class AuthService implements IAuthService {
 
     public resendOtp = async (email: string): Promise<ServiceResponse> => {
         try {
+            // Delete otp before resending, if exists
             await otpSchema.deleteOtp(email);
+
             const otp = Math.floor(1000 + Math.random() * 9000) + ''
 
+            // Call senOtp function
             await sendOtp(email, otp);
 
+            // Save new otp to MongoDb
             await otpSchema.createOtp(email, otp)
+
             return {
                 success: true,
                 message: 'Otp resended'
             };
+
         } catch (error) {
             console.error('Resend error:', error);
             return {
