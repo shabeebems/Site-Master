@@ -1,5 +1,7 @@
+import { Types } from "mongoose";
+
 export interface IUser {
-    _id: any;
+    _id: string | Types.ObjectId;
     name: string;
     email: string;
     password: string;
@@ -11,5 +13,6 @@ export interface IUser {
 
 export interface IUserRepository {
     createUser(userData: object): Promise<IUser>;
-    findUserByEmail(email: string): Promise<IUser | null>
+    findUserByEmail(email: string): Promise<IUser | null>;
+    findWorkersByContractorId(_id: string): Promise<IUser | null>;
 }

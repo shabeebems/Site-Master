@@ -5,12 +5,16 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
 import { useAppDispatch } from "../../store/hooks";
+
+// Redux
 import { setUser } from '@/app/store/userSlice';
 
 import { apiCheck } from '../../api/api';
 
+// Loading component, working while loading on submit button
 import Loading from '../../components/Loading';
 
+// For message passing 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -24,6 +28,7 @@ interface FormData {
 
 export default function SignupForm() {
 
+  // Make true while loading
   const [isLoading, setIsLoading] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
@@ -35,16 +40,20 @@ export default function SignupForm() {
 
   const router = useRouter();
 
+  // Define a custon dispatch hook
   const dispatch = useAppDispatch();
 
+  // Function will trigger while submitting
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Loading until complete
     setIsLoading(true);
 
     try {
       // - Call API for signup
       const response = await apiCheck(formData, 'auth/signup')
-      console.log('hmm')
+
       if(response.success) {
 
         // Store a temporary cookie to get access of otp page
@@ -52,16 +61,23 @@ export default function SignupForm() {
           expires: new Date(Date.now() + 60 * 10000) // - 10 mins
         });
 
+        // Save form details to redux to store db after otp submition
         dispatch(setUser(formData))
 
+        // Passing success message
         toast.success(response.message, { position: "top-right" });
 
+        // Render otp page
         router.push('/otp');
+
       } else {
+        // Re-render register while any unexpected error happens
         router.push('/register');
       }
+      console.log('ee')
+      
     } catch (error: any) {
-      // ---- Passing error message ----
+      // Passing error message (async functions handling 400 status errors in catch)
       if (error.response) {
         const { data } = error.response;
 
@@ -76,8 +92,10 @@ export default function SignupForm() {
       }
 
     } finally {
+      // Loading disable after complete
       setIsLoading(false);
     }
+
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

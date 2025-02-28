@@ -18,6 +18,46 @@ const otpSchema = new OtpRepository()
 
 export class AuthService implements IAuthService {
 
+    public registerUser = async (data: UserRegistrationData): Promise<ServiceResponse> => {
+        try {
+            const { password, confirmPassword, email } = data;
+
+            const existingUser = await userSchema.findUserByEmail(email);
+
+            if (existingUser) {
+                return { success: false, message: "Email already exists" };
+            }
+
+            if (!emailValidation(email)) {
+                return { success: false, message: "Enter valid email" };
+            }
+
+            if (password.length < 6) {
+                return { success: false, message: "Password must be at least 6 characters" };
+            }
+
+            if (password !== confirmPassword) {
+                return { success: false, message: "Confirm password is incorrect" };
+            }
+
+            // Create a random number as otp
+            const otp = Math.floor(1000 + Math.random() * 9000) + ''
+
+            // Calling send otp function to sent otp to email
+            await sendOtp(email, otp);
+
+            // Store otp to MongoDb
+            await otpSchema.createOtp(email, otp)
+
+            return { success: true, message: "Form data validated" };
+            
+        } catch (error) {
+
+            console.error("Error in registerUser:", error);
+            return { success: false, message: "Something went wrong. Please try again." };
+        }
+    }
+
     public loginUser = async (data: UserLoginData, res: Response): Promise<ServiceResponse> => {
         const existingUser = await userSchema.findUserByEmail(data.email);
 
@@ -65,40 +105,8 @@ export class AuthService implements IAuthService {
         return {
             success: true,
             message: 'Login successful',
-            data: existingUser,
+            // data: existingUser,
         };
-    }
-
-    public registerUser = async (data: UserRegistrationData): Promise<ServiceResponse> => {
-        try {
-            const { password, confirmPassword, email } = data;
-            const existingUser = await userSchema.findUserByEmail(email);
-
-            if (existingUser) {
-                return { success: false, message: "Email already exists" };
-            }
-
-            if (!emailValidation(email)) {
-                return { success: false, message: "Enter valid email" };
-            }
-
-            if (password.length < 6) {
-                return { success: false, message: "Password must be at least 6 characters" };
-            }
-
-            if (password !== confirmPassword) {
-                return { success: false, message: "Confirm password is incorrect" };
-            }
-            const otp = Math.floor(1000 + Math.random() * 9000) + ''
-
-            await sendOtp(email, otp);
-            await otpSchema.createOtp(email, otp)
-
-            return { success: true, message: "Form data validated" };
-        } catch (error) {
-            console.error("Error in registerUser:", error);
-            return { success: false, message: "Something went wrong. Please try again." };
-        }
     }
 
     public otp = async (data: any): Promise<ServiceResponse> => {
