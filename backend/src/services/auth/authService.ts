@@ -58,57 +58,6 @@ export class AuthService implements IAuthService {
         }
     }
 
-    public loginUser = async (data: UserLoginData, res: Response): Promise<ServiceResponse> => {
-        const existingUser = await userSchema.findUserByEmail(data.email);
-
-        if (!existingUser) {
-            return {
-                success: false,
-                message: "User not found",
-            };
-        }
-
-        const checkPassword = await bcrypt.compare(data.password, existingUser.password);
-
-        if (!checkPassword) {
-            return {
-                success: false,
-                message: "Incorrect password",
-            };
-        }
-
-        const payload = {
-            _id: existingUser._id,
-            email: existingUser.email,
-            role: existingUser.role,
-        };
-
-        const accessToken = await generateAccessToken(payload);
-        const refreshToken = await generateRefreshToken(payload);
-
-        res.cookie('accessToken', accessToken, { 
-            httpOnly: true,
-            secure: false,
-            maxAge: 30 * 60 * 1000, // 30 mins
-            sameSite: 'strict',
-            path: '/'
-        });
-        
-        res.cookie('refreshToken', refreshToken, { 
-            httpOnly: true,
-            secure: false,
-            maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
-            sameSite: 'strict',
-            path: '/'
-        });
-
-        return {
-            success: true,
-            message: 'Login successful',
-            // data: existingUser,
-        };
-    }
-
     public otp = async (data: any): Promise<ServiceResponse> => {
         try {
             const { otp, password, ...rest } = data;
@@ -163,6 +112,57 @@ export class AuthService implements IAuthService {
                 error: 'SERVER_ERROR'
             };
         }
+    }
+
+    public loginUser = async (data: UserLoginData, res: Response): Promise<ServiceResponse> => {
+        const existingUser = await userSchema.findUserByEmail(data.email);
+
+        if (!existingUser) {
+            return {
+                success: false,
+                message: "User not found",
+            };
+        }
+
+        const checkPassword = await bcrypt.compare(data.password, existingUser.password);
+
+        if (!checkPassword) {
+            return {
+                success: false,
+                message: "Incorrect password",
+            };
+        }
+
+        const payload = {
+            _id: existingUser._id,
+            email: existingUser.email,
+            role: existingUser.role,
+        };
+
+        const accessToken = await generateAccessToken(payload);
+        const refreshToken = await generateRefreshToken(payload);
+
+        res.cookie('accessToken', accessToken, { 
+            httpOnly: true,
+            secure: false,
+            maxAge: 30 * 60 * 1000, // 30 mins
+            sameSite: 'strict',
+            path: '/'
+        });
+        
+        res.cookie('refreshToken', refreshToken, { 
+            httpOnly: true,
+            secure: false,
+            maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
+            sameSite: 'strict',
+            path: '/'
+        });
+
+        return {
+            success: true,
+            message: 'Login successful',
+            // data: existingUser,
+        };
     }
 
     public logout = async(res: Response) => {

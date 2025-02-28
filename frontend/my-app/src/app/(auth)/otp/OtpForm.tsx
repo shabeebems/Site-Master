@@ -4,53 +4,70 @@ import React, { useEffect, useState } from 'react'
 
 import { apiCheck } from '../../api/api'
 
+// Loading component, working while loading on submit button
 import Loading from '../../components/Loading';
+
+// Success component, working while otp validation success
 import Success from '../register/success';
 
+// For message passing 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Custom hooks
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
+
+// Reduc for clear register details after otp success
 import { clearUser } from '@/app/store/userSlice';
 
 const OtpForm = () => {
 
     const [otp, setOtp] = useState(['', '', '', ''])
 
+    // CountDown (Only resend after 60 seconds)
     const [count, setCount] = useState<number>(10)
 
-    // ---- Resend button didn't show until 'count' become '0'
+    // Disable resend button
+    const [showResend, setShowResend] = useState<boolean>(false)
+
+    // Resend button didn't show until 'count' become '0'
     useEffect(() => {
       if(count > 0) {
         setTimeout(() => {
           setCount(count => count - 1)
         },1000)
       } else {
+        // Enable resend button after 60 seconds
         setShowResend(true)
       }
     }, [count])
 
-    // -- Show resend button after 60 seconds
-    const [showResend, setShowResend] = useState<boolean>(false)
-
+    // Make true while loading
     const [isLoading, setIsLoading] = useState(false)
     
-    // -- To show register success button after submission
+    // To show register success component after submission
     const [isSubmitted, setIsSubmitted] = useState(false);
 
     const dispatch = useAppDispatch()
 
+    // Save register user details from redux to the user variable
     const user = useAppSelector((state) => state.registerUser)
 
     const onSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        // Loading until complete
         setIsLoading(true);
 
         try {
+
+          // Save register user details and otp to variable to pass to backend to validate
           const userDetails = {
             ...user,
             otp: otp.join('')
           }
+          
+          // Call api with user details and otp
           const response = await apiCheck(userDetails, 'auth/otp')
           
           if(response.success) {
