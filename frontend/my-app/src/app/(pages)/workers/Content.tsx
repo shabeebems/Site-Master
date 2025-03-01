@@ -4,39 +4,50 @@ import React, { useCallback, useEffect, useState } from 'react'
 import AddForm from './AddForm'
 import { fetchDetails } from '@/app/api/api';
 
+// For display workers details
+interface Worker {
+  name: string;
+  email: string;
+  mobile: string;
+  place: string;
+}
+
 const Content = () => {
-  
-  interface Worker {
-    name: string;
-    email: string;
-    mobile: string;
-    place: string;
-  }
-  
-  const [workers, setWorkers] = useState<Worker[]>([]);
+
+  // State to manage new worker adding form (Show form while true)
   const [add, setAdd] = useState(false)
 
+  // Save all workers details
+  const [workers, setWorkers] = useState<Worker[]>([]);
+
+  // Fetch workers under contractor to display
   useEffect(() => {
     const fetchData = async () => {
       try {
+
+        // Call api to get workers
         const users = await fetchDetails('get_workers');
-        console.log(users)
+
+        // Store workers details to state
         setWorkers(users);
+
       } catch (error) {
         console.error("Error fetching workers:", error);
       }
     };
   
+    // Call function
     fetchData();
 
   }, [])
 
-  const cancel = useCallback(
-    () => {
+    // Trigger while cancel form (Passing to child component(AddForm))
+    const cancel = useCallback(() => {
+      // Set false while cancel button click
       setAdd(false)
-    },[]
-  )
+    }, [])
 
+  // Add latest added worker to state to display (Passing to child component(AddForm))
   const handleWorkerAdded = (newWorker: Worker) => {
     setWorkers((prevWorkers) => [...prevWorkers, newWorker]);
   };

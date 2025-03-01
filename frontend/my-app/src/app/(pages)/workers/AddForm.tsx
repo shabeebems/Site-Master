@@ -1,20 +1,24 @@
 import React, { useState } from 'react'
+
 import { apiCheck } from '../../api/api';
+
 import Loading from '../../components/Loading';
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Props to recieve datas from parent
 type AddFormProps = {
   cancel: Function;
   onWorkerAdded: (newWorker: { name: string; mobile: string; email: string; place: string }) => void;
 };
 
+// Type of adding new workers
 type Worker = { name: string; mobile: string; email: string; place: string };
+
 
 const AddForm: React.FC<AddFormProps> = ({cancel, onWorkerAdded}) => {
   
-
     const [newUser, setNewUser] = useState<Worker>({
       name: "",
       mobile: "",
@@ -24,38 +28,54 @@ const AddForm: React.FC<AddFormProps> = ({cancel, onWorkerAdded}) => {
 
     const [isLoading, setIsLoading] = useState(false);
 
+    // Trigger while input changing
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { name, value } = e.target
       setNewUser({ ...newUser, [name]: value })
     }
 
+    // Trigger while submitting
     const handleSubmit = async(e: React.FormEvent) => {
+
       e.preventDefault()
       setIsLoading(true);
 
       try {
+      
+        // Call api to validate and save new user details
         const response = await apiCheck(newUser, 'contractor/newWorker')
+
         if(response.success) {
+
           toast.success(response.message, { 
             position: "top-right",
             style: { fontSize: "12px", padding: "8px", maxWidth: "250px" }
-          });
-          
+          })
+          ;
+          // Parent function to display latest added user details
           onWorkerAdded(newUser);
+
+          // Upadate formData(empty)
           setNewUser({ name: '', mobile: '', email: '', place: '' })
+
         } else {
+
           toast.error(response.message, { 
             position: "top-right",
             style: { fontSize: "12px", padding: "8px", maxWidth: "250px" } 
           });
+        
         }
       } catch (error) {
+
         toast.error("Network error, please try again!", {
           position: "top-right",
           style: { fontSize: "12px", padding: "8px", maxWidth: "250px" } 
         });
         console.error("Worker adding failed:", error);
+
       } finally {
+        
         setIsLoading(false);
       }
     }
