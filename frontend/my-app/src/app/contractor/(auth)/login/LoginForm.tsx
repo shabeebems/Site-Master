@@ -63,14 +63,14 @@ export default function LoginForm() {
         router.push('/dashboard');
 
       } else {
-        toast.error(response.message || "Something went wrong!", { position: "top-right" });
+        toast.error(response.message || "Server side error!", { position: "top-right" });
       }
 
     } catch (error: any) {
 
       // -- Handle unexpected errors
       console.log(error)
-      toast.error("Something went wrong!", { position: "top-right" });
+      toast.error("Server side error!", { position: "top-right" });
 
     } finally {
       // Loading disable after complete
@@ -79,76 +79,79 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="w-full max-w-md space-y-8 animate-fadeIn">
-      <ToastContainer />
-      <div className="text-center">
-      <h2 className="text-4xl font-extrabold text-gray-900 tracking-tighter bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
-        SiteMaster
-      </h2>
-        <p className="mt-3 text-lg text-gray-600 font-medium">
-          Sign in to manage your construction projects
-        </p>
-      </div>
-
-      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-        <div className="space-y-4 rounded-md">
-          <div>
-            <label htmlFor="email" className="sr-only">
-              Email address
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              onChange={handleChange}
-              required
-              className="relative block w-full rounded-lg border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-amber-600 transition-all duration-200"
-              placeholder="Email address"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="sr-only">
-              Password
-            </label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              onChange={handleChange}
-              required
-              className="relative block w-full rounded-lg border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-amber-600 transition-all duration-200"
-              placeholder="Password"
-            />
-          </div>
+    <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl shadow-xl space-y-8 animate-fadeIn">
+        <ToastContainer />
+        
+        {/* Header Section */}
+        <div className="text-center space-y-3">
+          <h2 className="text-4xl font-bold text-gray-900 tracking-tight">
+            Welcome to 
+            <span className="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent"> SiteMaster</span>
+          </h2>
+          <p className="text-gray-600 text-base font-medium">
+            Sign in to manage your construction projects
+          </p>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="text-sm">
-            <a href="#" className="font-medium text-amber-600 hover:text-amber-500 transition-colors">
+        {/* Form Section */}
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-5">
+            {/* Email Field */}
+            <div className="relative">
+              <label htmlFor="email" className="text-sm font-medium text-gray-700">Email Address</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                onChange={handleChange}
+                required
+                className="mt-1 w-full rounded-full border border-gray-300 py-3 px-5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                placeholder="Enter your email"
+              />
+            </div>
+
+            {/* Password Field */}
+            <div className="relative">
+              <label htmlFor="password" className="text-sm font-medium text-gray-700">Password</label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                onChange={handleChange}
+                required
+                className="mt-1 w-full rounded-full border border-gray-300 py-3 px-5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+                placeholder="Enter your password"
+              />
+            </div>
+          </div>
+
+          {/* Forgot Password Link */}
+          <div className="text-right">
+            <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors">
               Forgot your password?
             </a>
           </div>
-        </div>
 
-        <button
-          type="submit"
-          disabled={isLoading}
-          className="group relative flex w-full justify-center rounded-lg bg-amber-600 px-4 py-3 text-sm font-semibold text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
-        >
-          {isLoading ? (
-            <Loading />
-          ) : (
-            'Sign in'
-          )}
-        </button>
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full rounded-full bg-blue-500 py-3 text-sm font-semibold text-white hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
+          >
+            {isLoading ? <Loading /> : 'Sign In'}
+          </button>
 
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
-          <a href="/register" className="font-medium text-amber-600 hover:text-amber-500 transition-colors">
-            Register here
-          </a>
-        </p>
-      </form>
+          {/* Register Link */}
+          <p className="text-center text-sm text-gray-600">
+            Don't have an account?{' '}
+            <a href="/contractor/register" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+              Register here
+            </a>
+          </p>
+        </form>
+      </div>
     </div>
+
   );
 }

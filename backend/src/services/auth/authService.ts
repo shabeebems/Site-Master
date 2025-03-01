@@ -150,6 +150,14 @@ export class AuthService implements IAuthService {
 
             const { _id, email, password, role } = existingUser
 
+            // Check role of contractor
+            if(role !== 'Contractor') {
+                return {
+                    success: false,
+                    message: "You are not contractor",
+                };
+            }
+
             // Campare input password and db stored password
             const checkPassword = await bcrypt.compare(data.password, password);
 

@@ -21,7 +21,7 @@ const sendOtp = async(email: string, otp: string)=>{
         `
       });
 
-    console.log('Otp sended')
+    console.log('Otp sended', otp)
 
 }
 

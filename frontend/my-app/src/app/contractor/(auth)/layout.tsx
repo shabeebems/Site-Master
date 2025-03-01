@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { useRouter } from "next/navigation";
+import Photos from "./components/AuthComponet";
 
 export default function RootLayout({
   children,
@@ -22,8 +23,9 @@ export default function RootLayout({
     if(protect.email) return null
 
     return (
-        <html lang="en">
-            <body>{children}</body>
-        </html>
+        <div className="min-h-screen w-full flex flex-col md:flex-row">
+            <Photos />
+            {children}
+        </div>
     );
 }

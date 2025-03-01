@@ -131,32 +131,28 @@ const OtpForm = () => {
 
   return (
     <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl shadow-xl space-y-8 animate-fadeIn">
       <ToastContainer />
-        <div className="w-full max-w-md space-y-8 animate-fadeIn">
-          <div className="text-center">
-            
-            <h2 className="text-4xl font-extrabold text-gray-900 tracking-tighter bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
-            {isSubmitted ? (
-              "Registration success"
-              ) : (
-              "Verify OTPs"
-              )}
-            </h2>
+        {/* Header */}
+        <div className="text-center">
+          <h2 className="text-4xl font-extrabold text-gray-900 tracking-tighter">
+            <span className="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
+              {isSubmitted ? "Registration Success" : "Verify OTP"}
+            </span>
+          </h2>
+          <p className="mt-3 text-lg text-gray-600 font-medium">
+            {isSubmitted
+              ? "Your account has been created successfully"
+              : "Enter the 4-digit code sent to your email"}
+          </p>
+        </div>
 
-            <p className="mt-3 text-lg text-gray-600 font-medium">
-            {isSubmitted ? (
-              'Your account has been created successfully'
-            ) : (
-                'Enter the 4-digit code sent to your email'
-              )}
-            </p>
-
-          </div>
-          
-          {isSubmitted ? (
+        {/* Success Message or OTP Form */}
+        {isSubmitted ? (
           <Success />
-          ) : (
+        ) : (
           <form className="mt-8 space-y-6" onSubmit={onSubmit}>
+            {/* OTP Inputs */}
             <div className="flex justify-center space-x-4">
               {[0, 1, 2, 3].map((index) => (
                 <input
@@ -164,46 +160,47 @@ const OtpForm = () => {
                   id={`otp-input-${index}`}
                   type="text"
                   inputMode="numeric"
-                  onChange={ (e) => onChange(index, e.target.value) }
+                  onChange={(e) => onChange(index, e.target.value)}
                   maxLength={1}
                   value={otp[index]}
                   autoFocus={index === 0}
-                  className="w-16 h-16 text-3xl text-center rounded-lg border-0 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-amber-600 transition-all duration-200"
+                  className="w-16 h-16 text-3xl text-center rounded-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               ))}
             </div>
 
+            {/* Submit Button */}
             <div>
               <button
                 type="submit"
-                className="group relative flex w-full justify-center rounded-lg bg-amber-600 px-4 py-3 text-sm font-semibold text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
+                className="w-full rounded-full bg-blue-500 py-3 text-sm font-semibold text-white hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
               >
-               {isLoading ? (
-              <Loading />
-            ) : (
-              'Verify otp'
-            )}
+                {isLoading ? <Loading /> : "Verify OTP"}
               </button>
             </div>
+
+            {/* Resend Timer / Button */}
             {!showResend ? (
-              <p className="mt-2 text-center text-sm text-gray-600">Resend button will show after {count}s</p>
+              <p className="mt-2 text-center text-sm text-gray-600">
+                Resend button will show after {count}s
+              </p>
             ) : (
-            <p className="mt-2 text-center text-sm text-gray-600">
-              Didn't receive code?{' '}
-              <button 
-                type="button"
-                onClick={resend}
-                className="font-medium text-amber-600 hover:text-amber-500 transition-colors"
-              >
-                Resend OTP
-              </button>
-            </p>
+              <p className="mt-2 text-center text-sm text-gray-600">
+                Didn't receive code?{" "}
+                <button
+                  type="button"
+                  onClick={resend}
+                  className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+                >
+                  Resend OTP
+                </button>
+              </p>
             )}
-            
           </form>
         )}
-        </div>
-      </div> 
+      </div>
+    </div>
+
   )
 }
 

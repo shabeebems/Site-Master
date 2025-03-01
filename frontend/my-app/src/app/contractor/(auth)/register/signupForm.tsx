@@ -68,11 +68,11 @@ export default function SignupForm() {
         toast.success(response.message, { position: "top-right" });
 
         // Render otp page
-        router.push('/otp');
+        router.push('/contractor/otp');
 
       } else {
         // Re-render register while any unexpected error happens
-        router.push('/register');
+        router.push('/contractor/register');
       }
       console.log('ee')
       
@@ -115,22 +115,28 @@ export default function SignupForm() {
   ];
 
   return (
-    <div className="w-full max-w-md space-y-8 animate-fadeIn">
-      {/* For passing messages */}
-      <ToastContainer />
-      <div className="text-center">
-        <h2 className="text-4xl font-extrabold text-gray-900 tracking-tighter bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
-        SiteMaster
-      </h2>
-        <p className="mt-3 text-lg text-gray-600 font-medium">
-          Sign up to manage your construction projects
-        </p>
-      </div>
-      
-      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-        <div className="space-y-4 rounded-md">
-        {formFields.map((field: any) => (
-              <div key={field.name}>
+    <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
+      <div className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl shadow-xl space-y-8 animate-fadeIn">
+        {/* For passing messages */}
+        <ToastContainer />
+
+        {/* Header Section */}
+        <div className="text-center">
+          <h2 className="text-4xl font-extrabold text-gray-900 tracking-tighter">
+            <span className="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
+              SiteMaster
+            </span>
+          </h2>
+          <p className="mt-3 text-lg text-gray-600 font-medium">
+            Sign up to manage your construction projects
+          </p>
+        </div>
+
+        {/* Form Section */}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div className="space-y-5 rounded-md">
+            {formFields.map((field: any) => (
+              <div key={field.name} className="relative">
                 <label htmlFor={field.name} className="sr-only">
                   {field.placeholder}
                 </label>
@@ -139,34 +145,33 @@ export default function SignupForm() {
                   value={formData[field.name as keyof FormData]}
                   onChange={handleChange}
                   required
-                  className="relative block w-full rounded-lg border-0 py-3 px-4 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-amber-600 transition-all duration-200"
+                  className="w-full rounded-full border border-gray-300 py-3 px-5 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
                 />
               </div>
             ))}
-        </div>
+          </div>
 
-        <div>
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="group relative flex w-full justify-center rounded-lg bg-amber-600 px-4 py-3 text-sm font-semibold text-white hover:bg-amber-500 focus:outline-none focus:ring-2 focus:ring-amber-600 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
-          >
-            {/* Handle button loading */}
-            {isLoading ? (
-              <Loading />
-            ) : (
-              'Sign up'
-            )}
-          </button>
-        </div>
+          {/* Submit Button */}
+          <div>
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full rounded-full bg-blue-500 py-3 text-sm font-semibold text-white hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
+            >
+              {isLoading ? <Loading /> : 'Sign up'}
+            </button>
+          </div>
 
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <a href="/login" className="font-medium text-amber-600 hover:text-amber-500 transition-colors">
-            Sign in here
-          </a>
-        </p>
-      </form>
+          {/* Sign In Link */}
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Already have an account?{' '}
+            <a href="/contractor/login" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+              Sign in here
+            </a>
+          </p>
+        </form>
+      </div>
     </div>
+
   );
 }
