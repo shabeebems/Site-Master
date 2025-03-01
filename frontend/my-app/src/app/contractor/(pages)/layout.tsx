@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from "react";
-import { useAppSelector } from "../../store/hooks";
+import { useAppSelector } from "@/app/store/hooks";
 import { useRouter } from "next/navigation";
 
 export default function RootLayout({
@@ -14,16 +14,14 @@ export default function RootLayout({
     const router = useRouter()
 
     useEffect(() => {
-        if(protect.email) {
-            router.push('/dashboard')
+        if(!protect.email) {
+            router.push('/contractor/login')
         }
     }, [protect.email])
 
-    if(protect.email) return null
+    if(!protect.email) return null
 
     return (
-        <html lang="en">
-            <body>{children}</body>
-        </html>
+            <>{children}</>
     );
 }
