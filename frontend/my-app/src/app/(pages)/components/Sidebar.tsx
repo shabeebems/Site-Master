@@ -1,6 +1,10 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+
+import { useRouter } from 'next/navigation';
+
+// React icons
 import { MdOutlineDashboard } from "react-icons/md";
 import { BiTask } from "react-icons/bi";
 import { GrUserWorker } from "react-icons/gr";
@@ -8,25 +12,29 @@ import { VscTools } from "react-icons/vsc";
 import { MdOutlineMessage } from "react-icons/md";
 import { LuCircleUser } from "react-icons/lu";
 import { FaPersonWalkingArrowRight } from "react-icons/fa6";
-import { useRouter } from 'next/navigation';
 
 
+// Props to recieve datas from parent
 type SidebarProps = {
   active: string;
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ active }) => {
 
+  // For small screen
   useEffect(() => {
     if (window.innerWidth < 640) {
+      // Can't open sidebar in small screen devices 
       setOpen(false)
     }
   },[])
 
+  // To manage sidebar
   const [open, setOpen] = useState(true)
 
   const router = useRouter()
 
+  // Sidebar details
   const menus = [
     { title: 'Dashboard', path: 'dashboard', icon: <MdOutlineDashboard color='#030032' /> },
     { title: 'Project', path: 'project', icon: <BiTask color='#030032' /> },
@@ -37,7 +45,6 @@ const Sidebar: React.FC<SidebarProps> = ({ active }) => {
   ]
 
   
-
   return (
       <div 
         className={`${open ? 'w-56 lg:w-72' : 'w-20'}

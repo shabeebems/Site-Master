@@ -1,11 +1,19 @@
 'use client'
 
-import { apiCheck, logoutApi } from '@/app/api/api';
-import { useAppDispatch } from '@/app/store/hooks';
-import { clearEmail } from '@/app/store/protect';
 import React from 'react'
+
+// Api for logout (Clearing tokens on backend)
+import { logoutApi } from '@/app/api/api';
+
+import { useAppDispatch } from '@/app/store/hooks';
+
+// Redux to clear email for logout
+import { clearEmail } from '@/app/store/protect';
+
+// React icons
 import { BiLogOut } from "react-icons/bi";
 
+// Props to recieve datas from parent
 type NavbarProps = {
   active: string;
 };
@@ -16,7 +24,9 @@ const Navbar: React.FC<NavbarProps> = ({ active }) => {
   const dispatch = useAppDispatch()
 
   const logout = async() => {
+    // Calling logout api
     await logoutApi()
+    // Clear email from redux
     dispatch(clearEmail())
   }
 
