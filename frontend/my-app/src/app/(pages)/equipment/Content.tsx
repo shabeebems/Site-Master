@@ -24,7 +24,6 @@ const Content = () => {
       try {
         const getTools = await fetchDetails('get_equipment');
         setTools(getTools);
-        console.log(getTools)
       } catch (error) {
         console.error("Error fetching workers:", error);
       }
