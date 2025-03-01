@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { apiCheck } from '../../api/api';
+import { apiCheck } from '@/app/api/api';
 
-import Loading from '../../components/Loading';
+import Loading from '@/app/components/Loading';
 
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch } from "@/app/store/hooks";
 
 // Redux to store email after login submission to protect frontend
 import { setEmail } from '@/app/store/protect';

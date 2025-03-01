@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import LoginForm from './LoginForm';
 import Photos from '../components/AuthComponet';
 

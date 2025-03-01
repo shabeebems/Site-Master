@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from "react";
-import { useAppSelector } from "../store/hooks";
+import { useAppSelector } from "@/app/store/hooks";
 import { useRouter } from "next/navigation";
 
 export default function RootLayout({

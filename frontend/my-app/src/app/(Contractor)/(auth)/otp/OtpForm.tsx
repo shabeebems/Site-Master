@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from 'react'
 
-import { apiCheck } from '../../api/api'
+import { apiCheck } from '@/app/api/api'
 
 // Loading component, working while loading on submit button
-import Loading from '../../components/Loading';
+import Loading from '@/app/components/Loading';
 
 // Success component, working while otp validation success
 import Success from '../register/success';
@@ -15,7 +15,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Custom hooks
-import { useAppSelector, useAppDispatch } from "../../store/hooks";
+import { useAppSelector, useAppDispatch } from "@/app/store/hooks";
 
 // Reduc for clear register details after otp success
 import { clearUser } from '@/app/store/userSlice';

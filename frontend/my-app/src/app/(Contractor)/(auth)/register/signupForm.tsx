@@ -4,15 +4,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
-import { useAppDispatch } from "../../store/hooks";
+import { useAppDispatch } from "@/app/store/hooks";
 
 // Redux
 import { setUser } from '@/app/store/userSlice';
 
-import { apiCheck } from '../../api/api';
+import { apiCheck } from '@/app/api/api';
 
 // Loading component, working while loading on submit button
-import Loading from '../../components/Loading';
+import Loading from '@/app/components/Loading';
 
 // For message passing 
 import { toast, ToastContainer } from "react-toastify";
