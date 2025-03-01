@@ -38,32 +38,6 @@ export class AuthController implements IAuthController {
         }
     }
 
-
-    public login = async (req: Request, res: Response): Promise<void> => {
-        try {
-            // -- Calling the loginUser to check login credentials
-            const result: AuthResponse = await authService.loginUser(req.body, res);
-
-            const { success, message, data } = result
-
-            res.status(201).json({
-                success, 
-                message,
-                data
-            });
-            return
-            
-        } catch (error) {
-
-            console.error("Login error:", error);
-
-            res.status(500).json({
-                success: false,
-                message: 'An unexpected error occurred during login'
-            });
-        }
-    }; 
-
     public otp = async (req: Request, res: Response): Promise<void> => {
         try {
             // -- Calling the otp service to check otp credentials
@@ -114,6 +88,31 @@ export class AuthController implements IAuthController {
             return;
         }
     }
+
+    public login = async (req: Request, res: Response): Promise<void> => {
+        try {
+            // -- Calling the loginUser to check login credentials
+            const result: AuthResponse = await authService.loginUser(req.body, res);
+
+            const { success, message, data } = result
+
+            res.status(201).json({
+                success, 
+                message,
+                data
+            });
+            return
+            
+        } catch (error) {
+
+            console.error("Login error:", error);
+
+            res.status(500).json({
+                success: false,
+                message: 'An unexpected error occurred during login'
+            });
+        }
+    }; 
 
     public logout = async(req: Request, res: Response): Promise<void> => {
         try {

@@ -35,7 +35,7 @@ const OtpForm = () => {
       if(count > 0) {
         setTimeout(() => {
           setCount(count => count - 1)
-        },1000)
+        }, 1000)
       } else {
         // Enable resend button after 60 seconds
         setShowResend(true)
@@ -66,26 +66,35 @@ const OtpForm = () => {
             ...user,
             otp: otp.join('')
           }
-          
+
           // Call api with user details and otp
           const response = await apiCheck(userDetails, 'auth/otp')
           
           if(response.success) {
+            // Clear register user redux after success otp
             dispatch(clearUser())
+
+            // Make isSubmitted true to call Success (Register success) component
             setIsSubmitted(true)
+          
           } else {
+            // Passing error messages
             toast.error(response.message || "Something went wrong!", { position: "top-right" });
           }
+
         } catch (error) {
 
           toast.error("Otp verification failed, please try again!", { position: "top-right" });
           console.error("Signup failed:", error);
+
         } finally {
+          // Stop loading
           setIsLoading(false);
         }
     }
 
     const onChange = (i: number, value: string) => {
+        // Save otp
         const newOtp = [...otp]
         newOtp[i] = value
         setOtp(newOtp)
@@ -98,13 +107,23 @@ const OtpForm = () => {
     }
 
     const resend = async (e: React.FormEvent) => {
+      
       e.preventDefault()
       try {
+          // Pass otp resend success message
           toast.success('Otp resended', { position: "top-right" })
+
+          // Disable resend button to countdown restart
           setShowResend(false)
+
+          // Countdown restart from 60
           setCount(10)
+
+          // Api call to resend otp
           await apiCheck(user, 'auth/resendOtp')
+
       } catch (error) {
+
         console.log(error)
         toast.error("Resend otp failed, please try again!", { position: "top-right" });
       }
@@ -115,6 +134,7 @@ const OtpForm = () => {
       <ToastContainer />
         <div className="w-full max-w-md space-y-8 animate-fadeIn">
           <div className="text-center">
+            
             <h2 className="text-4xl font-extrabold text-gray-900 tracking-tighter bg-gradient-to-r from-amber-600 to-amber-800 bg-clip-text text-transparent">
             {isSubmitted ? (
               "Registration success"
@@ -122,6 +142,7 @@ const OtpForm = () => {
               "Verify OTPs"
               )}
             </h2>
+
             <p className="mt-3 text-lg text-gray-600 font-medium">
             {isSubmitted ? (
               'Your account has been created successfully'
@@ -129,7 +150,9 @@ const OtpForm = () => {
                 'Enter the 4-digit code sent to your email'
               )}
             </p>
+
           </div>
+          
           {isSubmitted ? (
           <Success />
           ) : (

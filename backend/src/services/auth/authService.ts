@@ -136,58 +136,81 @@ export class AuthService implements IAuthService {
     }
 
     public loginUser = async (data: UserLoginData, res: Response): Promise<ServiceResponse> => {
-        const existingUser = await userSchema.findUserByEmail(data.email);
-
-        if (!existingUser) {
-            return {
-                success: false,
-                message: "User not found",
-            };
-        }
-
-        const checkPassword = await bcrypt.compare(data.password, existingUser.password);
-
-        if (!checkPassword) {
-            return {
-                success: false,
-                message: "Incorrect password",
-            };
-        }
-
-        const payload = {
-            _id: existingUser._id,
-            email: existingUser.email,
-            role: existingUser.role,
-        };
-
-        const accessToken = await generateAccessToken(payload);
-        const refreshToken = await generateRefreshToken(payload);
-
-        res.cookie('accessToken', accessToken, { 
-            httpOnly: true,
-            secure: false,
-            maxAge: 30 * 60 * 1000, // 30 mins
-            sameSite: 'strict',
-            path: '/'
-        });
         
-        res.cookie('refreshToken', refreshToken, { 
-            httpOnly: true,
-            secure: false,
-            maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
-            sameSite: 'strict',
-            path: '/'
-        });
+        try {
 
-        return {
-            success: true,
-            message: 'Login successful',
-            // data: existingUser,
-        };
+            const existingUser = await userSchema.findUserByEmail(data.email);
+
+            if (!existingUser) {
+                return {
+                    success: false,
+                    message: "User not found",
+                };
+            }
+
+            const { _id, email, password, role } = existingUser
+
+            // Campare input password and db stored password
+            const checkPassword = await bcrypt.compare(data.password, password);
+
+            if (!checkPassword) {
+                return {
+                    success: false,
+                    message: "Incorrect password",
+                };
+            }
+
+            // Create payload to create tokens
+            const payload = {
+                _id: _id,
+                email: email,
+                role: role,
+            };
+
+            // Generate tokens
+            const accessToken = await generateAccessToken(payload);
+            const refreshToken = await generateRefreshToken(payload);
+
+            // Save accessToken to cookie
+            res.cookie('accessToken', accessToken, { 
+                httpOnly: true,
+                secure: false,
+                maxAge: 30 * 60 * 1000, // 30 mins
+                sameSite: 'strict',
+                path: '/'
+            });
+            
+            // Save refreshToken to cookie
+            res.cookie('refreshToken', refreshToken, { 
+                httpOnly: true,
+                secure: false,
+                maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
+                sameSite: 'strict',
+                path: '/'
+            });
+
+            return {
+                success: true,
+                message: 'Login successful',
+                data: existingUser,
+            };
+
+        } catch (error) {
+
+            console.error('Login error:', error);
+            return {
+                success: false,
+                message: 'Failed to complete login credentials check',
+                error: 'SERVER_ERROR'
+            };
+
+        }
     }
 
     public logout = async(res: Response) => {
         try {
+
+            // Clear cookies
             res.clearCookie('accessToken', {
                 httpOnly: true,
                 secure: false,
@@ -201,17 +224,21 @@ export class AuthService implements IAuthService {
                 sameSite: 'strict',
                 path: '/'
             });
+
             return {
                 success: true,
                 message: 'Tokens cleared, Logout successful!'
             }
+
         } catch (error) {
+
             console.error('Resend error:', error);
             return {
                 success: false,
                 message: 'Failed to complete logout',
                 error: 'SERVER_ERROR'
             };
+            
         }
     }
 

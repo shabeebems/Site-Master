@@ -1,11 +1,15 @@
 'use client'
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+
 import { apiCheck } from '../../api/api';
 
 import Loading from '../../components/Loading';
 
 import { useAppDispatch } from "../../store/hooks";
+
+// Redux to store email after login submission to protect frontend
 import { setEmail } from '@/app/store/protect';
 
 import { toast, ToastContainer } from "react-toastify";
@@ -18,38 +22,58 @@ interface FormData {
 
 export default function LoginForm() {
 
+  // Define a custon dispatch hook
   const dispatch = useAppDispatch();
 
   const router = useRouter();
+
+  // Make true while loading
   const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState<FormData>({
     email: '',
     password: ''
   })
 
+  // Function will trigger changing inputs
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData({ ...formData, [name]: value })
   }
 
+  // Function will trigger while submitting
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Loading until complete
     setIsLoading(true);
 
     try {
+      // - Call API for validate login formData
       const response = await apiCheck(formData, 'auth/login')
       if(response.success) {
+
+        // Passing success message
         toast.success(response.message, { position: "top-right" });
-        // console.log(response)
+
+        // save email to redux to validate frontend
         dispatch(setEmail(response.data.email))
+
+        // Navigate to dashboard
         router.push('/dashboard');
+
       } else {
         toast.error(response.message || "Something went wrong!", { position: "top-right" });
       }
+
     } catch (error: any) {
+
+      // -- Handle unexpected errors
       console.log(error)
       toast.error("Something went wrong!", { position: "top-right" });
+
     } finally {
+      // Loading disable after complete
       setIsLoading(false)
     }
   };

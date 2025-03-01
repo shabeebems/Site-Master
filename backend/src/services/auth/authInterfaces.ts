@@ -15,6 +15,7 @@ export interface ServiceResponse<T = any> {
     success: boolean;
     message: string;
     error?: string;
+    data?: any;
 }
 
 export interface IAuthService {
