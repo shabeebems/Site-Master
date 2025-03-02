@@ -8,7 +8,7 @@ import { logoutApi } from '@/app/api/api';
 import { useAppDispatch } from '@/app/store/hooks';
 
 // Redux to clear email for logout
-import { clearEmail } from '@/app/store/protect';
+import { clearProtect } from '@/app/store/protect';
 
 // React icons
 import { BiLogOut } from "react-icons/bi";
@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ active }) => {
     // Calling logout api
     await logoutApi()
     // Clear email from redux
-    dispatch(clearEmail())
+    dispatch(clearProtect())
   }
 
   return (

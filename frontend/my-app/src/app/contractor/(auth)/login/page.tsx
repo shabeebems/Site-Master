@@ -1,9 +1,9 @@
 import LoginForm from './LoginForm';
-import Photos from '../../../components/AuthPhoto';
 
 export default function LoginPage() {
+  const role: string = 'Contractor'
   return (
       // <Photos />
-      <LoginForm />
+      <LoginForm role={role} />
   );
 }

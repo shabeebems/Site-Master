@@ -2,12 +2,14 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 // Define state type
 interface UserState {
-  email: string;
+  email: any;
+  role: any;
 }
 
 // Initial state with defined type
 const initialState: UserState = {
   email: "",
+  role: ""
 };
 
 // Create slice with type safety
@@ -15,15 +17,17 @@ const protectSlice = createSlice({
   name: "protect",
   initialState,
   reducers: {
-    setEmail: (state, action: PayloadAction<string>) => {
-      state.email = action.payload;
+    setProtect: (state, action: PayloadAction<UserState>) => {
+      state.email = action.payload.email;
+      state.role = action.payload.role;
     },
-    clearEmail: (state) => {
+    clearProtect: (state) => {
       state.email = "";
+      state.role = "";
     }
   },
 });
 
 // Export actions and reducer
-export const { setEmail, clearEmail } = protectSlice.actions;
+export const { setProtect, clearProtect } = protectSlice.actions;
 export default protectSlice.reducer;

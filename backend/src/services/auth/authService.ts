@@ -136,9 +136,8 @@ export class AuthService implements IAuthService {
     }
 
     public loginUser = async (data: UserLoginData, res: Response): Promise<ServiceResponse> => {
-        
+        // These code for contractor and worker login
         try {
-
             const existingUser = await userSchema.findUserByEmail(data.email);
 
             if (!existingUser) {
@@ -150,11 +149,12 @@ export class AuthService implements IAuthService {
 
             const { _id, email, password, role } = existingUser
 
-            // Check role of contractor
-            if(role !== 'Contractor') {
+            // Check login user role and exist user role
+            // Managing, if worker logged with contractor details or Ulta(reverse)
+            if(role !== data.role) {
                 return {
                     success: false,
-                    message: "You are not contractor",
+                    message: `You are not ${role == 'Contractor' ? 'worker' : 'contractor'}`,
                 };
             }
 

@@ -16,7 +16,11 @@ export default function RootLayout({
 
     useEffect(() => {
         if(protect.email) {
-            router.push('/contractor/dashboard')
+            if(protect.role === 'Contractor') {
+                router.push('/contractor/dashboard')
+            } else if(protect.role === 'Worker') {
+                router.push('/worker/dashboard')
+            }
         }
     }, [protect.email])
 

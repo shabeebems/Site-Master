@@ -10,7 +10,7 @@ import Loading from '@/app/components/Loading';
 import { useAppDispatch } from "@/app/store/hooks";
 
 // Redux to store email after login submission to protect frontend
-import { setEmail } from '@/app/store/protect';
+import { setProtect } from '@/app/store/protect';
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -20,7 +20,12 @@ interface FormData {
   password: string
 }
 
-export default function LoginForm() {
+// Props to recieve datas from parent
+type AddFormProps = {
+  role: string
+};
+
+const LoginForm: React.FC<AddFormProps> = ({role}) => {
 
   // Define a custon dispatch hook
   const dispatch = useAppDispatch();
@@ -49,18 +54,22 @@ export default function LoginForm() {
     setIsLoading(true);
 
     try {
-      // - Call API for validate login formData
-      const response = await apiCheck(formData, 'auth/login')
+      // Assign role and formData to a variable, role changing based on parent components.
+      // If worker login role will be worker, else contractor
+      const data = { ...formData, role: role }
+      // Call API for validate login formData
+      const response = await apiCheck(data, 'auth/login')
       if(response.success) {
 
         // Passing success message
         toast.success(response.message, { position: "top-right" });
 
+        const { email, role } = response.data
         // save email to redux to validate frontend
-        dispatch(setEmail(response.data.email))
+        dispatch(setProtect({email, role}))
 
         // Navigate to dashboard
-        router.push('/dashboard');
+        // router.push('/dasboard');
 
       } else {
         toast.error(response.message || "Server side error!", { position: "top-right" });
@@ -82,7 +91,6 @@ export default function LoginForm() {
     <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
       <div className="w-full max-w-md mx-auto p-6 bg-white rounded-2xl shadow-xl space-y-8 animate-fadeIn">
         <ToastContainer />
-        
         {/* Header Section */}
         <div className="text-center space-y-3">
           <h2 className="text-4xl font-bold text-gray-900 tracking-tight">
@@ -142,16 +150,21 @@ export default function LoginForm() {
             {isLoading ? <Loading /> : 'Sign In'}
           </button>
 
-          {/* Register Link */}
-          <p className="text-center text-sm text-gray-600">
-            Don't have an account?{' '}
-            <a href="/contractor/register" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
-              Register here
-            </a>
-          </p>
+          {/* Register Link only for contractors */}
+          {role === 'Contractor' ? (
+              <p className="text-center text-sm text-gray-600">
+                Don't have an account?{' '}
+                <a href="/contractor/register" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                  Register here
+                </a>
+              </p>
+            ): null
+          }
         </form>
       </div>
     </div>
 
   );
 }
+
+export default LoginForm

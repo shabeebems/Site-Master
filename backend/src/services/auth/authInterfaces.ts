@@ -9,6 +9,7 @@ export interface UserRegistrationData {
 export interface UserLoginData {
     email: string;
     password: string;
+    role: string;
 }
 
 export interface ServiceResponse<T = any> {
