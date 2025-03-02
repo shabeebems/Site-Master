@@ -36,5 +36,9 @@ export const Messages = {
     OTP_RESEND_SERVER_ERROR: "Server error during OTP resend",
     LOGIN_SERVER_ERROR: "Server error during login",
     LOGOUT_SERVER_ERROR: "Server error during logout",
+    ADD_WORKER_SERVER_ERROR: "Server error during worker addition",
+    FETCH_WORKERS_SERVER_ERROR: "Server error during workers fetch",
+    ADD_EQUIPMENT_SERVER_ERROR: "Server error during equipment addition",
+    FETCH_EQUIPMENT_SERVER_ERROR: "Server error during equipment fetch",
 
 }

@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ControllerResponse, IContractorController } from './contractorInterface';
 import { ContractorService } from '../../services/contractor/contractorService';
+import { Messages } from '../../constants/messageConstants';
 
 const contractorService = new ContractorService
 
@@ -16,10 +17,10 @@ export class ContractorController implements IContractorController {
             });
 
         } catch (error) {
-            console.error("Unexpected error in add worker controller:", error);
+            console.error(Messages.ADD_WORKER_SERVER_ERROR, error);
             return res.status(500).json({
                 success: false,
-                message: "Internal server error. Please try again later.",
+                message: Messages.ADD_WORKER_SERVER_ERROR,
             });
         }
     }
@@ -33,10 +34,10 @@ export class ContractorController implements IContractorController {
                 data: result.data
             });
         } catch (error) {
-            console.error("Unexpected error in get worker controller:", error);
+            console.error(Messages.FETCH_WORKERS_SERVER_ERROR, error);
             return res.status(500).json({
                 success: false,
-                message: "Internal server error. Please try again later.",
+                message: Messages.FETCH_WORKERS_SERVER_ERROR,
             });
         }
     }
@@ -50,10 +51,10 @@ export class ContractorController implements IContractorController {
             });
             
         } catch (error) {
-            console.error("Unexpected error in add equipment controller:", error);
+            console.error(Messages.ADD_EQUIPMENT_SERVER_ERROR, error);
             return res.status(500).json({
                 success: false,
-                message: "Internal server error. Please try again later.",
+                message: Messages.ADD_EQUIPMENT_SERVER_ERROR,
             });
         }
     }
@@ -67,10 +68,10 @@ export class ContractorController implements IContractorController {
                 data: result.data
             });
         } catch (error) {
-            console.error("Unexpected error in getting equipment:", error);
+            console.error(Messages.FETCH_EQUIPMENT_SERVER_ERROR, error);
             return res.status(500).json({
                 success: false,
-                message: "Internal server error. Please try again later.",
+                message: Messages.FETCH_EQUIPMENT_SERVER_ERROR,
             });
         }
     }
