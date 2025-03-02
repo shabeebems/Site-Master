@@ -28,5 +28,13 @@ export const Messages = {
     INVALID_COUNT: "Count must be a positive number",
     EQUIPMENT_ADDED_SUCCESS: "Equipment added successfully",
     EQUIPMENT_FETCH_SUCCESS: "Equipment fetched successfully",
-    EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching equipment"
+    EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching equipment",
+
+    // Controller
+    REGISTER_CONTROLLER_ERROR: "Unexpected error in register controller",
+    OTP_SERVER_ERROR: "Server error during OTP verification",
+    OTP_RESEND_SERVER_ERROR: "Server error during OTP resend",
+    LOGIN_SERVER_ERROR: "Server error during login",
+    LOGOUT_SERVER_ERROR: "Server error during logout",
+
 }

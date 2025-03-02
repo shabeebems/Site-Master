@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { AuthService } from '../../services/auth/authService';
 import { AuthResponse, IAuthController } from './authInterface';
+import { Messages } from '../../constants/messageConstants';
 
 const authService = new AuthService()
 
@@ -29,11 +30,11 @@ export class AuthController implements IAuthController {
             
         } catch (error) {
 
-            console.error("Unexpected error in register controller:", error);
+            console.error(Messages.REGISTER_CONTROLLER_ERROR, error);
 
             res.status(500).json({
                 success: false,
-                message: "Internal server error. Please try again later.",
+                message: Messages.REGISTRATION_FAILED,
             }); 
         }
     }
@@ -53,11 +54,11 @@ export class AuthController implements IAuthController {
 
         } catch (error) {
 
-            console.error("Otp error:", error);
+            console.error(Messages.OTP_SERVER_ERROR, error);
             
             res.status(500).json({
                 success: false,
-                message: 'An unexpected error occurred during otp verification',
+                message: Messages.OTP_SERVER_ERROR,
                 data: null
             });
         }
@@ -78,11 +79,11 @@ export class AuthController implements IAuthController {
 
         } catch (error) {
 
-            console.error("Resend otp error:", error);
+            console.error(Messages.OTP_RESEND_SERVER_ERROR, error);
 
             res.status(500).json({
                 success: false,
-                message: 'An unexpected error occurred during resending otp',
+                message: Messages.OTP_RESEND_SERVER_ERROR,
                 data: null
             });
             return;
@@ -105,11 +106,11 @@ export class AuthController implements IAuthController {
             
         } catch (error) {
 
-            console.error("Login error:", error);
+            console.error(Messages.LOGIN_SERVER_ERROR, error);
 
             res.status(500).json({
                 success: false,
-                message: 'An unexpected error occurred during login'
+                message: Messages.LOGIN_SERVER_ERROR
             });
         }
     }; 
@@ -129,11 +130,11 @@ export class AuthController implements IAuthController {
 
         } catch (error) {
 
-            console.error('Logout error:', error);
+            console.error(Messages.LOGOUT_SERVER_ERROR, error);
             
             res.status(500).json({
                 success: false,
-                message: 'An error occurred while logging out',
+                message: Messages.LOGOUT_SERVER_ERROR,
             });
         }
     }
