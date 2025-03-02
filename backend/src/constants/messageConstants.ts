@@ -1,4 +1,5 @@
 export const Messages = {
+    // Form validation
     EMAIL_ALREADY_EXISTS: "Email already exists",
     INVALID_EMAIL: "Enter a valid email",
     INVALID_MOBILE: "Enter a valid mobile",
@@ -18,24 +19,24 @@ export const Messages = {
     LOGIN_VERIFICATION_FAILED: "Failed to complete login credentials check",
     LOGOUT_SUCCESS: "Tokens cleared, logout successful!",
     LOGOUT_FAILED: "Failed to complete logout",
-
     FIELDS_REQUIRED: "Please fill in all required fields",
+    // Worker
     WORKER_CREATED_SUCCESS: "Worker created successfully",
     WORKER_CREATION_FAILED: "Failed to add worker",
     FETCH_WORKER_SUCCESS: "Fetch worker successful!",
     FETCH_WORKER_FAILED: "Failed to fetch worker data",
-
+    // Equipment
     INVALID_COUNT: "Count must be a positive number",
     EQUIPMENT_ADDED_SUCCESS: "Equipment added successfully",
     EQUIPMENT_FETCH_SUCCESS: "Equipment fetched successfully",
     EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching equipment",
-
-    // Controller
+    // Controller auth
     REGISTER_CONTROLLER_ERROR: "Unexpected error in register controller",
     OTP_SERVER_ERROR: "Server error during OTP verification",
     OTP_RESEND_SERVER_ERROR: "Server error during OTP resend",
     LOGIN_SERVER_ERROR: "Server error during login",
     LOGOUT_SERVER_ERROR: "Server error during logout",
+    // Controller contractor
     ADD_WORKER_SERVER_ERROR: "Server error during worker addition",
     FETCH_WORKERS_SERVER_ERROR: "Server error during workers fetch",
     ADD_EQUIPMENT_SERVER_ERROR: "Server error during equipment addition",
