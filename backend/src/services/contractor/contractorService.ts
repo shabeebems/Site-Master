@@ -16,37 +16,53 @@ export class ContractorService implements IContractorService {
 
     public addWorker = async(req: Request, data: AddUserData): Promise<ServiceResponse> => {
         try {
+
             const { name, mobile, email, place } = data
+
             if(!name || !mobile || !email || !place) {
                 return {
                     success: false,
                     message: Messages.FIELDS_REQUIRED
                 }
             }
+
             const existingUser = await userScheme.findUserByEmail(email)
+
             if(existingUser) {
                 return {
                     success: false,
                     message: Messages.EMAIL_ALREADY_EXISTS
                 }
             }
+
             if(!emailValidation(email)) {
                 return {
                     success: false,
                     message: Messages.INVALID_EMAIL
                 }
-            } if(/\D/.test(mobile)) {
+            }
+            
+            if(/\D/.test(mobile)) {
                 return {
                     success: false,
                     message: Messages.INVALID_MOBILE
                 }
             }
+
+            // After validation success
+            // Create a random password to sent worker email
             const password = Math.floor(100000 + Math.random() * 900000);
             const hashPassword = await hashedPassword(password + '')
+
+            // Send password and email to workers's email
             sendPassword(email, password + '')
+
+            // Decode access token for get logged contractor id to save on worker db
             const accessToken = req.cookies.accessToken
             const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
             const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
+
+            // Create and add to db
             const worker = {
                 contractorId: decoded._id,
                 ...data,
@@ -60,6 +76,7 @@ export class ContractorService implements IContractorService {
                 message: Messages.WORKER_CREATED_SUCCESS,
                 data: data
             }
+
         } catch (error) {
             console.log('error')
             return {
@@ -71,6 +88,7 @@ export class ContractorService implements IContractorService {
 
     public getWorkers = async(req: Request, data: AddUserData): Promise<ServiceResponse> => {
         try {
+            
             const accessToken = req.cookies.accessToken
             const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
             const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
