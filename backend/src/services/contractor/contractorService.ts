@@ -88,16 +88,20 @@ export class ContractorService implements IContractorService {
 
     public getWorkers = async(req: Request, data: AddUserData): Promise<ServiceResponse> => {
         try {
-            
+            // Decode access token for get logged contractor id to get workers db
             const accessToken = req.cookies.accessToken
             const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
             const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
+
+            // Find workers using contractor id
             const workers = await userScheme.findWorkersByContractorId(decoded._id)
+
             return {
                 success: true,
                 data: workers,
                 message: Messages.FETCH_WORKER_SUCCESS
             }
+
         } catch (error) {
             return {
                 success: false,
@@ -107,41 +111,63 @@ export class ContractorService implements IContractorService {
     }
 
     public addEquipment = async (req: Request, data: any): Promise<ServiceResponse> => {
-        const { tool, count } = data
-        if(!tool || !count) {
-            return {
-                success: false,
-                message: Messages.FIELDS_REQUIRED
-            }
-        }
-        if(count < 1) {
-            return {
-                success: false,
-                message: Messages.INVALID_COUNT
-            }
-        }
-        const accessToken = req.cookies.accessToken
-        const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
-        const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
-        await equipmentScheme.addEquipment(data, decoded._id)
+        try {
 
-        return {
-            success: true,
-            message: Messages.EQUIPMENT_ADDED_SUCCESS
+            const { tool, count } = data
+
+            // Validating datas
+            if(!tool || !count) {
+                return {
+                    success: false,
+                    message: Messages.FIELDS_REQUIRED
+                }
+            }
+
+            if(count < 1) {
+                return {
+                    success: false,
+                    message: Messages.INVALID_COUNT
+                }
+            }
+
+            // Decode access token for get logged contractor id to save to equipment db
+            const accessToken = req.cookies.accessToken
+            const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
+            const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
+
+            // Save data to db
+            await equipmentScheme.addEquipment(data, decoded._id)
+            
+            return {
+                success: true,
+                message: Messages.EQUIPMENT_ADDED_SUCCESS
+            }
+
+        } catch (error) {
+            return {
+                success: false,
+                message: Messages.EQUIPMENT_ADDED_FAILED
+            }
         }
     }
 
     public getEquipment = async(req: Request): Promise<ServiceResponse> => {
         try {
+
+            // Decode access token for get logged contractor id to get equipment
             const accessToken = req.cookies.accessToken
             const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
             const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
+
+            // Find equipment with contractor id
             const equipment = await equipmentScheme.findEquipmentByContractorId(decoded._id)
+
             return {
                 success: true,
                 message: Messages.EQUIPMENT_FETCH_SUCCESS,
                 data: equipment
             }
+            
         } catch (error) {
             return {
                 success: false,

@@ -28,6 +28,7 @@ export const Messages = {
     // Equipment
     INVALID_COUNT: "Count must be a positive number",
     EQUIPMENT_ADDED_SUCCESS: "Equipment added successfully",
+    EQUIPMENT_ADDED_FAILED: "Equipment added failed",
     EQUIPMENT_FETCH_SUCCESS: "Equipment fetched successfully",
     EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching equipment",
     // Controller auth
