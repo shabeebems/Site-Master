@@ -1,4 +1,4 @@
-import LoginForm from '@/app/contractor/(auth)/login/LoginForm'
+import LoginForm from '@/app/components/LoginForm';
 import React from 'react'
 
 const Page = () => {

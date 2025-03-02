@@ -1,4 +1,4 @@
-import LoginForm from './LoginForm';
+import LoginForm from '@/app/components/LoginForm';
 
 export default function LoginPage() {
   const role: string = 'Contractor'

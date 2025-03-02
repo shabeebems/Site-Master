@@ -68,7 +68,7 @@ const LoginForm: React.FC<AddFormProps> = ({role}) => {
         // save email to redux to validate frontend
         dispatch(setProtect({email, role}))
 
-        // Navigate to dashboard
+        // Navigation logic is applied in the layouts, so no need extra navigation
         // router.push('/dasboard');
 
       } else {
