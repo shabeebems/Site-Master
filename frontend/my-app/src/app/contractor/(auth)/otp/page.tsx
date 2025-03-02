@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react'
 import Cookies from 'js-cookie';
-import Photos from '../components/AuthComponet';
+import Photos from '../../../components/AuthPhoto';
 import OtpForm from './OtpForm';
 import { useRouter } from 'next/navigation';
 

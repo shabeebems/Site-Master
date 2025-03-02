@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useAppSelector } from "../../store/hooks";
 import { useRouter } from "next/navigation";
-import Photos from "./components/AuthComponet";
+import Photos from "../../components/AuthPhoto";
 
 export default function RootLayout({
   children,

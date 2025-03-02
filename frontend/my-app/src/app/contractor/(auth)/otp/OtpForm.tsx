@@ -8,7 +8,7 @@ import { apiCheck } from '@/app/api/api'
 import Loading from '@/app/components/Loading';
 
 // Success component, working while otp validation success
-import Success from '../register/success';
+import Success from '../components/success';
 
 // For message passing 
 import { toast, ToastContainer } from "react-toastify";
@@ -173,7 +173,7 @@ const OtpForm = () => {
             <div>
               <button
                 type="submit"
-                className="w-full rounded-full bg-blue-500 py-3 text-sm font-semibold text-white hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200"
+                className="w-full rounded-full bg-blue-500 py-3 text-sm font-semibold text-white hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center"
               >
                 {isLoading ? <Loading /> : "Verify OTP"}
               </button>
