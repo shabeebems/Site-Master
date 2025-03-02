@@ -12,6 +12,7 @@ import {
     UserRegistrationData, 
     ServiceResponse
 } from './authInterfaces';
+import { Messages } from '../../constants/messageConstants';
 
 const userSchema = new UserRepository()
 const otpSchema = new OtpRepository()
@@ -25,19 +26,19 @@ export class AuthService implements IAuthService {
             const existingUser = await userSchema.findUserByEmail(email);
 
             if (existingUser) {
-                return { success: false, message: "Email already exists" };
+                return { success: false, message: Messages.EMAIL_ALREADY_EXISTS };
             }
 
             if (!emailValidation(email)) {
-                return { success: false, message: "Enter valid email" };
+                return { success: false, message: Messages.INVALID_EMAIL };
             }
 
             if (password.length < 6) {
-                return { success: false, message: "Password must be at least 6 characters" };
+                return { success: false, message: Messages.PASSWORD_TOO_SHORT };
             }
 
             if (password !== confirmPassword) {
-                return { success: false, message: "Confirm password is incorrect" };
+                return { success: false, message: Messages.WRONG_CONFIRM_PASSWORD };
             }
 
             // Create a random number as otp
@@ -49,12 +50,12 @@ export class AuthService implements IAuthService {
             // Store otp to MongoDb
             await otpSchema.createOtp(email, otp)
 
-            return { success: true, message: "Form data validated" };
+            return { success: true, message: Messages.FORM_VALIDATION_SUCCESS };
             
         } catch (error) {
 
             console.error("Error in registerUser:", error);
-            return { success: false, message: "Something went wrong. Please try again." };
+            return { success: false, message: Messages.REGISTRATION_FAILED };
         }
     }
 
@@ -81,27 +82,27 @@ export class AuthService implements IAuthService {
 
                     return {
                         success: true,
-                        message: 'Registration success'
+                        message: Messages.REGISTRATION_SUCCESS
                     };
                 }
 
                 return {
                     success: false,
-                    message: 'Wrong otp'
+                    message: Messages.INVALID_OTP
                 };
             }
 
             return {
                 success: false,
-                message: 'Time limit over, resend again'
+                message: Messages.OTP_TIME_LIMIT_EXCEEDED
             };
 
         } catch (error) {
 
-            console.error('Otp validation error:', error);
+            console.error(Messages.OTP_VERIFICATION_FAILED, error);
             return {
                 success: false,
-                message: 'Failed to complete Otp validation',
+                message: Messages.OTP_VERIFICATION_FAILED,
                 error: 'SERVER_ERROR'
             };
         }
@@ -122,14 +123,14 @@ export class AuthService implements IAuthService {
 
             return {
                 success: true,
-                message: 'Otp resended'
+                message: Messages.OTP_RESENT
             };
 
         } catch (error) {
             console.error('Resend error:', error);
             return {
                 success: false,
-                message: 'Failed to complete resend otp',
+                message: Messages.FAILED_TO_RESEND_OTP,
                 error: 'SERVER_ERROR'
             };
         }
@@ -143,7 +144,7 @@ export class AuthService implements IAuthService {
             if (!existingUser) {
                 return {
                     success: false,
-                    message: "User not found",
+                    message: Messages.USER_NOT_FOUND,
                 };
             }
 
@@ -164,7 +165,7 @@ export class AuthService implements IAuthService {
             if (!checkPassword) {
                 return {
                     success: false,
-                    message: "Incorrect password",
+                    message: Messages.INCORRECT_PASSWORD,
                 };
             }
 
@@ -199,7 +200,7 @@ export class AuthService implements IAuthService {
 
             return {
                 success: true,
-                message: 'Login successful',
+                message: Messages.LOGIN_SUCCESS,
                 data: existingUser,
             };
 
@@ -208,7 +209,7 @@ export class AuthService implements IAuthService {
             console.error('Login error:', error);
             return {
                 success: false,
-                message: 'Failed to complete login credentials check',
+                message: Messages.LOGIN_VERIFICATION_FAILED,
                 error: 'SERVER_ERROR'
             };
 
@@ -235,7 +236,7 @@ export class AuthService implements IAuthService {
 
             return {
                 success: true,
-                message: 'Tokens cleared, Logout successful!'
+                message: Messages.LOGOUT_SUCCESS
             }
 
         } catch (error) {
@@ -243,7 +244,7 @@ export class AuthService implements IAuthService {
             console.error('Resend error:', error);
             return {
                 success: false,
-                message: 'Failed to complete logout',
+                message: Messages.LOGOUT_FAILED,
                 error: 'SERVER_ERROR'
             };
             

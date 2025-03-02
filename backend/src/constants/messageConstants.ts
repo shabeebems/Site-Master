@@ -1,0 +1,32 @@
+export const Messages = {
+    EMAIL_ALREADY_EXISTS: "Email already exists",
+    INVALID_EMAIL: "Enter a valid email",
+    INVALID_MOBILE: "Enter a valid mobile",
+    PASSWORD_TOO_SHORT: "Password must be at least 6 characters",
+    WRONG_CONFIRM_PASSWORD: "Confirm password is incorrect",
+    FORM_VALIDATION_SUCCESS: "Form data validated",
+    REGISTRATION_SUCCESS: "Registration successful!",
+    REGISTRATION_FAILED: "Registration failed, please try again!",
+    INVALID_OTP: "Incorrect OTP",
+    OTP_TIME_LIMIT_EXCEEDED: "Time limit exceeded, please resend OTP",
+    OTP_VERIFICATION_FAILED: "OTP verification failed!",
+    OTP_RESENT: "OTP has been resent",
+    FAILED_TO_RESEND_OTP: "Failed to resend OTP",
+    USER_NOT_FOUND: "User not found",
+    INCORRECT_PASSWORD: "Incorrect password",
+    LOGIN_SUCCESS: "Login successful",
+    LOGIN_VERIFICATION_FAILED: "Failed to complete login credentials check",
+    LOGOUT_SUCCESS: "Tokens cleared, logout successful!",
+    LOGOUT_FAILED: "Failed to complete logout",
+
+    FIELDS_REQUIRED: "Please fill in all required fields",
+    WORKER_CREATED_SUCCESS: "Worker created successfully",
+    WORKER_CREATION_FAILED: "Failed to add worker",
+    FETCH_WORKER_SUCCESS: "Fetch worker successful!",
+    FETCH_WORKER_FAILED: "Failed to fetch worker data",
+
+    INVALID_COUNT: "Count must be a positive number",
+    EQUIPMENT_ADDED_SUCCESS: "Equipment added successfully",
+    EQUIPMENT_FETCH_SUCCESS: "Equipment fetched successfully",
+    EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching equipment"
+}

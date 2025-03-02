@@ -6,6 +6,7 @@ import { Request } from 'express';
 import { decode } from "../../utils/jwt";
 import { UserRepository } from "../../repositories/user/userRepository";
 import { EquipmentRepository } from "../../repositories/equipment/equipmentRepository";
+import { Messages } from "../../constants/messageConstants";
 
 const userScheme = new UserRepository()
 const equipmentScheme = new EquipmentRepository()
@@ -19,25 +20,25 @@ export class ContractorService implements IContractorService {
             if(!name || !mobile || !email || !place) {
                 return {
                     success: false,
-                    message: 'Fill the blanks'
+                    message: Messages.FIELDS_REQUIRED
                 }
             }
             const existingUser = await userScheme.findUserByEmail(email)
             if(existingUser) {
                 return {
                     success: false,
-                    message: 'Email already exists'
+                    message: Messages.EMAIL_ALREADY_EXISTS
                 }
             }
             if(!emailValidation(email)) {
                 return {
                     success: false,
-                    message: 'Enter valid email'
+                    message: Messages.INVALID_EMAIL
                 }
             } if(/\D/.test(mobile)) {
                 return {
                     success: false,
-                    message: 'Enter valid mobile'
+                    message: Messages.INVALID_MOBILE
                 }
             }
             const password = Math.floor(100000 + Math.random() * 900000);
@@ -56,14 +57,14 @@ export class ContractorService implements IContractorService {
     
             return {
                 success: true,
-                message: 'Success',
+                message: Messages.WORKER_CREATED_SUCCESS,
                 data: data
             }
         } catch (error) {
             console.log('error')
             return {
                 success: false,
-                message: 'Add worker failed'
+                message: Messages.WORKER_CREATION_FAILED
             }
         }
     }
@@ -77,12 +78,12 @@ export class ContractorService implements IContractorService {
             return {
                 success: true,
                 data: workers,
-                message: 'Ok'
+                message: Messages.FETCH_WORKER_SUCCESS
             }
         } catch (error) {
             return {
                 success: false,
-                message: 'Get worker failed'
+                message: Messages.FETCH_WORKER_FAILED
             }
         }
     }
@@ -92,13 +93,13 @@ export class ContractorService implements IContractorService {
         if(!tool || !count) {
             return {
                 success: false,
-                message: 'Fill the blanks'
+                message: Messages.FIELDS_REQUIRED
             }
         }
         if(count < 1) {
             return {
                 success: false,
-                message: 'Count must be positive number'
+                message: Messages.INVALID_COUNT
             }
         }
         const accessToken = req.cookies.accessToken
@@ -108,7 +109,7 @@ export class ContractorService implements IContractorService {
 
         return {
             success: true,
-            message: 'Equipment adding success'
+            message: Messages.EQUIPMENT_ADDED_SUCCESS
         }
     }
 
@@ -120,13 +121,13 @@ export class ContractorService implements IContractorService {
             const equipment = await equipmentScheme.findEquipmentByContractorId(decoded._id)
             return {
                 success: true,
-                message: 'Equipment feching successfull',
+                message: Messages.EQUIPMENT_FETCH_SUCCESS,
                 data: equipment
             }
         } catch (error) {
             return {
                 success: false,
-                message: 'Server problem on fetching equipment'
+                message: Messages.EQUIPMENT_FETCH_FAILED
             }
         }
     }
