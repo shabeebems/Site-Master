@@ -1,3 +1,4 @@
+import { Response } from 'express';
 import jwt from 'jsonwebtoken'
 
 interface TokenPayload {
@@ -16,6 +17,15 @@ export const generateAccessToken = async (payload: TokenPayload) : Promise<strin
     return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, {
         expiresIn: '30m',
         algorithm: 'HS256'
+    });
+}
+
+export const deleteToken = async (res: Response ,token: string) => {
+    res.clearCookie(token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict',
+        path: '/'
     });
 }
 

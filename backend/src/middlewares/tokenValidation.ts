@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { deleteToken } from "../utils/jwt";
 
 
 export const authenticateToken = async(
@@ -11,19 +12,18 @@ export const authenticateToken = async(
         const accessToken = req.cookies.accessToken
 
         if(accessToken) {
-            jwt.verify(accessToken, process.env.REFRESH_TOKEN_SECRET as string, (err: any, decoded: any) => {
+            jwt.verify(accessToken, process.env.ACCESSS_TOKEN_SECRET as string, (err: any, decoded: any) => {
                 if(err) {
+                    deleteToken(res, 'accessToken')
+                    deleteToken(res, 'refreshToken')
+
                     res.status(406).json({
                         refreshToken: false
                     })
-                    return
-                } else {
-                    console.log('oo')
-                    res.json({
-                        refreshToken: true
-                    })
+                    
                     return
                 }
+                next()
             })
         }
 

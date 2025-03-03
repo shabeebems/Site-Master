@@ -11,6 +11,11 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
+    
+    if(error.response.status == 406) {
+        console.log('sss')
+        localStorage.clear();
+    }
     console.log('Error', error.response.status);
     return Promise.reject(error);
   }
