@@ -15,6 +15,7 @@ export const apiCheck = async (data: object, route: string) => {
 export const fetchDetails = async (route: string) => {
     try {
         const response = await axios.get(`http://localhost:5000/api/contractor/${route}`, { withCredentials: true })
+        // console.log(response.data)
         return response?.data.data
     } catch (error) {
         console.error("Error during fetching workers", error);

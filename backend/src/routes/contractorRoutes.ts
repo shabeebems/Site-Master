@@ -6,8 +6,8 @@ const router = express()
 
 const contractorController = new ContractorController()
 
-router.post('/newWorker', authenticateToken, contractorController.addWorker)
-      .get('/get_workers', authenticateToken, contractorController.getWorkers)
+router.post('/newWorker', contractorController.addWorker)
+      .get('/get_workers', contractorController.getWorkers)
       .post('/add_equipment', contractorController.addEquipment)
       .get('/get_equipment', contractorController.getEquipment)
 
