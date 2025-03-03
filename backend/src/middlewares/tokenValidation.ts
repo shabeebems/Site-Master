@@ -13,8 +13,7 @@ export const authenticateToken = async(
         if(accessToken) {
             jwt.verify(accessToken, process.env.REFRESH_TOKEN_SECRET as string, (err: any, decoded: any) => {
                 if(err) {
-                    console.log('ee')
-                    res.json({
+                    res.status(406).json({
                         refreshToken: false
                     })
                     return
@@ -23,6 +22,7 @@ export const authenticateToken = async(
                     res.json({
                         refreshToken: true
                     })
+                    return
                 }
             })
         }
