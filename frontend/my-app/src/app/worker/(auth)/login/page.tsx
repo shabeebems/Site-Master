@@ -8,5 +8,5 @@ const Page = () => {
     <LoginForm role={role} />
   )
 }
- 
+
 export default Page
