@@ -1,8 +1,6 @@
 import User from '../../model/userModel'
 import { IUser, IUserRepository } from './userInterface'
 
-
-
 export class UserRepository implements IUserRepository {
 
     public createUser = async (userData: object): Promise<IUser> => {

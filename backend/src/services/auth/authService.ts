@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import hashedPassword from '../../utils/hashPassword'
 import { Response } from 'express';
-import { generateAccessToken, generateRefreshToken } from "../../utils/jwt";
+import { createAccessToken, createRefreshToken } from "../../utils/jwt";
 import sendOtp from "../../utils/sendOtp";
 import { UserRepository } from '../../repositories/user/userRepository';
 import { OtpRepository } from '../../repositories/otp/otpRepository';
@@ -176,27 +176,9 @@ export class AuthService implements IAuthService {
                 role: role,
             };
 
-            // Generate tokens
-            const accessToken = await generateAccessToken(payload);
-            const refreshToken = await generateRefreshToken(payload);
-
-            // Save accessToken to cookie
-            res.cookie('accessToken', accessToken, { 
-                httpOnly: true,
-                secure: false,
-                maxAge: 30 * 60 * 1000, // 30 mins
-                sameSite: 'strict',
-                path: '/'
-            });
-            
-            // Save refreshToken to cookie
-            res.cookie('refreshToken', refreshToken, { 
-                httpOnly: true,
-                secure: false,
-                maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
-                sameSite: 'strict',
-                path: '/'
-            });
+            // Generate tokens and create tokens
+            await createAccessToken(res, payload)
+            await createRefreshToken(res, payload)
 
             return {
                 success: true,

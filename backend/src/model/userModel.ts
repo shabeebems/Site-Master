@@ -16,8 +16,7 @@ const userSchema = new mongoose.Schema({
         type: String 
     },
     contractorId: { 
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'users'
+        type: String
     },
     password: { 
         type: String,
