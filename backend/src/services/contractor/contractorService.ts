@@ -14,7 +14,7 @@ const equipmentScheme = new EquipmentRepository()
 export class ContractorService implements IContractorService {
 
 
-    public addWorker = async(req: Request, data: AddUserData): Promise<ServiceResponse> => {
+    public addWorker = async(req: any, data: AddUserData): Promise<ServiceResponse> => {
         try {
 
             const { name, mobile, email, place } = data
@@ -57,10 +57,10 @@ export class ContractorService implements IContractorService {
             // Send password and email to workers's email
             sendPassword(email, password + '')
 
-            // Decode access token for get logged contractor id to save on worker db
             const accessToken = req.cookies.accessToken
-            const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
-            const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
+            
+            // Decode access token for get logged contractor id to save on worker db, 
+            const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
 
             // Create and add to db
             const worker = {
@@ -88,13 +88,11 @@ export class ContractorService implements IContractorService {
 
     public getWorkers = async(req: any, data: AddUserData): Promise<ServiceResponse> => {
         try {
-            console.log('service')
-            // Decode access token for get logged contractor id to get workers db
-            console.log('service')
+
             const accessToken = req.cookies.accessToken
-            const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
-            const decoded: any = accessToken ? await decode(accessToken, ACCESS_TOKEN_SECRET) : req.user
-            console.log(decoded)
+            
+            // Decode access token for get logged contractor id for get workers from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
+            const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
 
             // Find workers using contractor id
             const workers = await userScheme.findWorkersByContractorId(decoded._id)
@@ -113,7 +111,7 @@ export class ContractorService implements IContractorService {
         }
     }
 
-    public addEquipment = async (req: Request, data: any): Promise<ServiceResponse> => {
+    public addEquipment = async (req: any, data: any): Promise<ServiceResponse> => {
         try {
 
             const { tool, count } = data
@@ -133,10 +131,10 @@ export class ContractorService implements IContractorService {
                 }
             }
 
-            // Decode access token for get logged contractor id to save to equipment db
             const accessToken = req.cookies.accessToken
-            const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
-            const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
+            
+            // Decode access token for get logged contractor id to save to equipment db
+            const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
 
             // Save data to db
             await equipmentScheme.addEquipment(data, decoded._id)
@@ -157,10 +155,10 @@ export class ContractorService implements IContractorService {
     public getEquipment = async(req: any): Promise<ServiceResponse> => {
         try {
 
-            // Decode access token for get logged contractor id to get equipment
             const accessToken = req.cookies.accessToken
-            const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
-            const decoded: any = accessToken ? await decode(accessToken, ACCESS_TOKEN_SECRET) : req.user
+            
+            // Decode access token for get logged contractor id to get equipment, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
+            const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
 
             // Find equipment with contractor id
             const equipment = await equipmentScheme.findEquipmentByContractorId(decoded._id)

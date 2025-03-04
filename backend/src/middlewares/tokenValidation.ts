@@ -78,6 +78,11 @@ export const authenticateToken = async(
                         next()
                     }
                 })
+            } else {
+                res.status(406).json({
+                    success: false,
+                    message: Messages.NO_TOKEN
+                })
             }
 
         }

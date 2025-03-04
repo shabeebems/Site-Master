@@ -46,4 +46,5 @@ export const Messages = {
     // Tokens
     ACCESS_TOKEN_INVALID: 'Access token verification failed',
     REFRESH_TOKEN_INVALID: 'Refresh token verification failed',
+    NO_TOKEN: 'No tokens found in the request',
 }
