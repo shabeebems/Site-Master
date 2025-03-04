@@ -1,7 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { createAccessToken, deleteToken, findUserByToken } from "../utils/jwt";
+import { createAccessToken, deleteToken } from "../utils/jwt";
+import { UserRepository } from "../repositories/user/userRepository";
+import { Messages } from "../constants/messageConstants";
 
+const userSchema = new UserRepository()
 
 export const authenticateToken = async(
     req: any,
@@ -12,13 +15,17 @@ export const authenticateToken = async(
         const accessToken = req.cookies.accessToken
 
         if(accessToken) {
+            // Verify access token
             jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET as string, (err: any, decoded: any) => {
                 if(err) {
+                    // If didnt verify delete access and refresh token
                     deleteToken(res, 'accessToken')
                     deleteToken(res, 'refreshToken')
 
+                    // Pass error 406 to remove localStorage (Frontend validation in redux, and redux is persist, persist details are stored in local storage)
                     res.status(406).json({
-                        refreshToken: false
+                        success: false,
+                        message: Messages.ACCESS_TOKEN_INVALID
                     })
                     
                     return
@@ -30,27 +37,44 @@ export const authenticateToken = async(
             const refreshToken = req.cookies.refreshToken
 
             if(refreshToken) {
-
+                // Verify refresh token
                 jwt.verify (refreshToken, process.env.REFRESH_TOKEN_SECRET as string, async (err: any, decoded: any) => {
                     if(err) {
+                        // If didnt verify delete access and refresh token
                         deleteToken(res, 'accessToken')
                         deleteToken(res, 'refreshToken')
+
+                        // Pass error 406 to remove local Storage (Frontend validation in redux, and redux is persist, persist details are stored in local storage)
                         res.status(406).json({
-                            refreshToken: false
+                            success: false,
+                            message: Messages.REFRESH_TOKEN_INVALID
                         })
                         
                         return
+
                     } else {
-                        // Create new access Token
-                        const userDetails: any = await findUserByToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+
+                        // Creating new access Token
+                        // Finding user details by refresh token to payload for create access token
+                        const userDetails: any = await userSchema.findUserByToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+                        
+                        const { _id, email, role } = userDetails
+
                         const payload = { 
-                            _id: userDetails._id,
-                            email: userDetails.email,
-                            role: userDetails.role
+                            _id,
+                            email,
+                            role
                         }
+
+                        // Creating new access token
                         await createAccessToken(res, payload)
+
+                        // Change ObjectId to String to get details in this same request(accessToken only available next request)
                         payload._id = payload._id.toString()
+
+                        // For access details in ths same request, because access token is created in this same request(accessToken only available next request).
                         req.user = payload
+
                         next()
                     }
                 })

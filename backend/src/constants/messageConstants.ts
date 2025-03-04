@@ -43,4 +43,7 @@ export const Messages = {
     ADD_EQUIPMENT_SERVER_ERROR: "Server error during equipment addition",
     FETCH_EQUIPMENT_SERVER_ERROR: "Server error during equipment fetch",
 
+    // Tokens
+    ACCESS_TOKEN_INVALID: 'Access token verification failed',
+    REFRESH_TOKEN_INVALID: 'Refresh token verification failed',
 }

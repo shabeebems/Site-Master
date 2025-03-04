@@ -1,5 +1,6 @@
 import User from '../../model/userModel'
 import { IUser, IUserRepository } from './userInterface'
+import jwt from "jsonwebtoken";
 
 export class UserRepository implements IUserRepository {
 
@@ -13,6 +14,12 @@ export class UserRepository implements IUserRepository {
 
     public findWorkersByContractorId = async (_id: any): Promise<any | null> => {
         return await User.aggregate([{ $match: { contractorId: _id } }, { $project: { _id: 0, name: 1, email: 1, mobile: 1, place: 1 } }])
+    }
+
+    public findUserByToken = async (token: string, jwtSecret: any) => {
+        const verify: any = jwt.verify(token, jwtSecret);
+        const user = await this.findUserByEmail(verify.email)
+        return user
     }
 
 }

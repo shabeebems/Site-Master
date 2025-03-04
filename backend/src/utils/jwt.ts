@@ -51,9 +51,3 @@ export const decode = async (token: string, jwtSecret: any) => {
     return jwt.verify(token, jwtSecret);
 }
 
-// Find userDetails by jwt token
-export const findUserByToken = async (token: string, jwtSecret: any) => {
-    const verify: any = jwt.verify(token, jwtSecret);
-    const user = await userSchema.findUserByEmail(verify.email)
-    return user
-}
