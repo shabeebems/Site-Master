@@ -6,7 +6,11 @@ import "react-toastify/dist/ReactToastify.css";
 import Loading from './Loading';
 import { apiCheck } from '../api/api';
 
-const ForgetPasswordForm = () => {
+type AddFormProps = {
+    role: string
+};
+
+const ForgetPasswordForm: React.FC<AddFormProps> = ({ role }) => {
   
     const [isLoading, setIsLoading] = useState(false);
 
@@ -20,7 +24,7 @@ const ForgetPasswordForm = () => {
 
         try {
 
-            const response = await apiCheck({ email }, 'auth/forget_password')
+            const response = await apiCheck({ email, role }, 'auth/forget_password')
             
             if(response.success) {
                 toast.success(response.message, { position: "top-right" });
@@ -51,6 +55,9 @@ const ForgetPasswordForm = () => {
                 <p className="text-gray-600 text-base font-medium">
                     Forgot your password? Reset it here
                 </p>
+                <p className="text-gray-600 text-base font-medium">
+                    { role } 
+                </p>
             </div>
 
             <form className="space-y-6" onSubmit={handleSubmit}>
@@ -69,6 +76,12 @@ const ForgetPasswordForm = () => {
                             placeholder="Enter your email"
                         />
                     </div>
+                </div>
+
+                <div className="text-right">
+                    <a href={ role === 'Contractor' ? "/contractor/login" : "/worker/login" } className="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                        Login
+                    </a>
                 </div>
 
                 <button

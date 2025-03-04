@@ -28,7 +28,7 @@ export default function RootLayout({
     if(protect.email) return null
 
     return (
-        <div className="min-h-screen w-full flex flex-col md:flex-row">
+      <div className="min-h-screen w-full flex flex-col md:flex-row">
             {children}
             <Photos />
         </div>

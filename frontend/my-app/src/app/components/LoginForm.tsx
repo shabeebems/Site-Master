@@ -97,8 +97,11 @@ const LoginForm: React.FC<AddFormProps> = ({role}) => {
             Welcome to 
             <span className="bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent"> SiteMaster</span>
           </h2>
-          <p className="text-gray-600 text-base font-medium">
+          {/* <p className="text-gray-600 text-base font-medium">
             Sign in to manage your construction projects
+          </p> */}
+          <p className="text-gray-600 text-base font-medium">
+            { role } login
           </p>
         </div>
 

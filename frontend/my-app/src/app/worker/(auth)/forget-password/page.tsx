@@ -2,10 +2,9 @@ import ForgetPasswordForm from '@/app/components/ForgetPasswordForm'
 import React from 'react'
 
 const page = () => {
+  const role: string = 'Worker'
   return (
-    <div>
-      <ForgetPasswordForm />
-    </div>
+    <ForgetPasswordForm role={role} />
   )
 }
 

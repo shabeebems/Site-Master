@@ -141,8 +141,11 @@ export class AuthController implements IAuthController {
 
     public forgetPassword = async(req: Request, res: Response): Promise<void> => {
         try {
+            
+            const { email, role } = req.body
+
             // -- Calling the forget password service to update password
-            const response: AuthResponse = await authService.forgetPassword(req.body.email);
+            const response: AuthResponse = await authService.forgetPassword(email, role);
             
             const { success, message } = response
 

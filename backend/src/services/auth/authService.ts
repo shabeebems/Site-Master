@@ -156,7 +156,7 @@ export class AuthService implements IAuthService {
             if(role !== data.role) {
                 return {
                     success: false,
-                    message: `You are not ${role == 'Contractor' ? 'worker' : 'contractor'}`,
+                    message: `You are not ${data.role}, go to ${role} page`,
                 };
             }
 
@@ -241,7 +241,7 @@ export class AuthService implements IAuthService {
         }
     }
 
-    public forgetPassword = async(email: string): Promise<ServiceResponse> => {
+    public forgetPassword = async(email: string, role: string): Promise<ServiceResponse> => {
         try {
             const existingUser = await userSchema.findUserByEmail(email);
 
@@ -249,6 +249,13 @@ export class AuthService implements IAuthService {
                 return {
                     success: false,
                     message: Messages.USER_NOT_FOUND,
+                };
+            }
+
+            if(existingUser.role !== role) {
+                return {
+                    success: false,
+                    message: `you are not ${role}, go to ${existingUser.role} page`,
                 };
             }
 
