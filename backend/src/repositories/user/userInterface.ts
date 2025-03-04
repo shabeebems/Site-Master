@@ -7,6 +7,7 @@ export interface IUser {
     password: string;
     createdAt: Date;
     is_admin: boolean;
+    is_block: boolean;
     role: string;
     contractorId?: any;
 }

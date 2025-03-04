@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import hashedPassword from '../../utils/hashPassword'
 import { Response } from 'express';
 import { createAccessToken, createRefreshToken } from "../../utils/jwt";
+import sendPassword from "../../utils/sendPassword";
 import sendOtp from "../../utils/sendOtp";
 import { UserRepository } from '../../repositories/user/userRepository';
 import { OtpRepository } from '../../repositories/otp/otpRepository';
@@ -169,6 +170,13 @@ export class AuthService implements IAuthService {
                 };
             }
 
+            if (existingUser.is_block) {
+                return {
+                    success: false,
+                    message: Messages.BLOCK_USER,
+                };
+            }
+
             // Create payload to create tokens
             const payload = {
                 _id: _id,
@@ -198,7 +206,7 @@ export class AuthService implements IAuthService {
         }
     }
 
-    public logout = async(res: Response) => {
+    public logout = async(res: Response): Promise<ServiceResponse> => {
         try {
 
             // Clear cookies
@@ -223,13 +231,50 @@ export class AuthService implements IAuthService {
 
         } catch (error) {
 
-            console.error('Resend error:', error);
+            console.error(Messages.LOGOUT_FAILED, error);
             return {
                 success: false,
                 message: Messages.LOGOUT_FAILED,
                 error: 'SERVER_ERROR'
             };
             
+        }
+    }
+
+    public forgetPassword = async(email: string): Promise<ServiceResponse> => {
+        try {
+            const existingUser = await userSchema.findUserByEmail(email);
+
+            if (!existingUser) {
+                return {
+                    success: false,
+                    message: Messages.USER_NOT_FOUND,
+                };
+            }
+
+            // Create a random password to sent contractor email
+            const password = Math.floor(100000 + Math.random() * 900000);
+
+            const hashPassword = await hashedPassword(password + '')
+
+            // Update new password after hashing
+            userSchema.changePasswordByEmail(email, hashPassword)
+
+            // Send password and email to contractor's email
+            sendPassword(email, password + '')
+
+            return {
+                success: true,
+                message: Messages.RESET_PASSWORD_SUCCESS,
+            };
+
+        } catch (error) {
+            console.error(Messages.RESET_PASSWORD_FAILED, error);
+            return {
+                success: false,
+                message: Messages.RESET_PASSWORD_FAILED,
+                error: 'SERVER_ERROR'
+            };
         }
     }
 

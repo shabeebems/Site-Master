@@ -12,6 +12,10 @@ export class UserRepository implements IUserRepository {
         return await User.findOne({ email })
     }
 
+    public changePasswordByEmail = async (email: string, password: string | undefined): Promise<void> => {
+        await User.updateOne({ email }, { password })
+    }
+
     public findWorkersByContractorId = async (_id: any): Promise<any | null> => {
         return await User.aggregate([{ $match: { contractorId: _id } }, { $project: { _id: 0, name: 1, email: 1, mobile: 1, place: 1 } }])
     }

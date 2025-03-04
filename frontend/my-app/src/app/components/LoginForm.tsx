@@ -136,7 +136,7 @@ const LoginForm: React.FC<AddFormProps> = ({role}) => {
 
           {/* Forgot Password Link */}
           <div className="text-right">
-            <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors">
+            <a href={ role === 'Contractor' ? "/contractor/forget-password" : "/worker/forget-password" } className="text-sm font-medium text-blue-600 hover:text-blue-500 transition-colors">
               Forgot your password?
             </a>
           </div>

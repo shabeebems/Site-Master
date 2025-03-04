@@ -138,6 +138,30 @@ export class AuthController implements IAuthController {
             });
         }
     }
+
+    public forgetPassword = async(req: Request, res: Response): Promise<void> => {
+        try {
+            // -- Calling the forget password service to update password
+            const response: AuthResponse = await authService.forgetPassword(req.body.email);
+            
+            const { success, message } = response
+
+            res.status(201).json({
+                success,
+                message
+            });
+            return;
+
+        } catch (error) {
+
+            console.error(Messages.RESET_PASSWORD_FAILED, error);
+            
+            res.status(500).json({
+                success: false,
+                message: Messages.RESET_PASSWORD_FAILED,
+            });
+        }
+    }
     
 }
 

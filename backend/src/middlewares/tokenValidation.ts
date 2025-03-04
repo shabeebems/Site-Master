@@ -34,6 +34,11 @@ export const authenticateToken = async(
                 const userDetails: any = await userSchema.findUserByToken(accessToken, process.env.ACCESS_TOKEN_SECRET)
                 
                 if(userDetails.is_block) {
+                    
+                    // If user blocked, delete access and refresh token
+                    deleteToken(res, 'accessToken')
+                    deleteToken(res, 'refreshToken')
+
                     res.status(406).json({
                         success: false,
                         message: Messages.BLOCK_USER
@@ -46,6 +51,7 @@ export const authenticateToken = async(
             })
 
         } else {
+            // If no Access Token
             const refreshToken = req.cookies.refreshToken
 
             if(refreshToken) {
@@ -71,6 +77,10 @@ export const authenticateToken = async(
                         const userDetails: any = await userSchema.findUserByToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
                         
                         if(userDetails.is_block) {
+
+                            // If user blocked, delete refresh token
+                            deleteToken(res, 'refreshToken')
+
                             res.status(406).json({
                                 success: false,
                                 message: Messages.BLOCK_USER

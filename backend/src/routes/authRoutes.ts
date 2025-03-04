@@ -10,5 +10,7 @@ router.post('/signup', authController.signup)
       .post('/resendOtp', authController.resendOtp)
       .post('/login', authController.login)
       .delete('/logout', authController.logout)
+      .post('/forget_password', authController.forgetPassword)
+      
 
 export default router;

@@ -21,6 +21,8 @@ export const Messages = {
     LOGOUT_FAILED: "Failed to complete logout",
     FIELDS_REQUIRED: "Please fill in all required fields",
     BLOCK_USER: 'User is blocked',
+    RESET_PASSWORD_SUCCESS: "Password reset. Check your email",
+    RESET_PASSWORD_FAILED: 'Password reset failed. Please try again.',
     // Worker
     WORKER_CREATED_SUCCESS: "Worker created successfully",
     WORKER_CREATION_FAILED: "Failed to add worker",
