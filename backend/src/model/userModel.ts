@@ -9,6 +9,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    is_block: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     mobile: { 
         type: String 
     },

@@ -20,6 +20,7 @@ export const Messages = {
     LOGOUT_SUCCESS: "Tokens cleared, logout successful!",
     LOGOUT_FAILED: "Failed to complete logout",
     FIELDS_REQUIRED: "Please fill in all required fields",
+    BLOCK_USER: 'User is blocked',
     // Worker
     WORKER_CREATED_SUCCESS: "Worker created successfully",
     WORKER_CREATION_FAILED: "Failed to add worker",
@@ -47,4 +48,6 @@ export const Messages = {
     ACCESS_TOKEN_INVALID: 'Access token verification failed',
     REFRESH_TOKEN_INVALID: 'Refresh token verification failed',
     NO_TOKEN: 'No tokens found in the request',
+
+
 }

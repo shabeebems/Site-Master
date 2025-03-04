@@ -16,7 +16,7 @@ export const authenticateToken = async(
 
         if(accessToken) {
             // Verify access token
-            jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET as string, (err: any, decoded: any) => {
+            jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET as string, async(err: any, decoded: any) => {
                 if(err) {
                     // If didnt verify delete access and refresh token
                     deleteToken(res, 'accessToken')
@@ -27,9 +27,21 @@ export const authenticateToken = async(
                         success: false,
                         message: Messages.ACCESS_TOKEN_INVALID
                     })
-                    
+    
                     return
                 }
+
+                const userDetails: any = await userSchema.findUserByToken(accessToken, process.env.ACCESS_TOKEN_SECRET)
+                
+                if(userDetails.is_block) {
+                    res.status(406).json({
+                        success: false,
+                        message: Messages.BLOCK_USER
+                    })
+
+                    return
+                }
+                
                 next()
             })
 
@@ -58,6 +70,15 @@ export const authenticateToken = async(
                         // Finding user details by refresh token to payload for create access token
                         const userDetails: any = await userSchema.findUserByToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
                         
+                        if(userDetails.is_block) {
+                            res.status(406).json({
+                                success: false,
+                                message: Messages.BLOCK_USER
+                            })
+        
+                            return
+                        }
+
                         const { _id, email, role } = userDetails
 
                         const payload = { 
@@ -78,11 +99,13 @@ export const authenticateToken = async(
                         next()
                     }
                 })
+
             } else {
                 res.status(406).json({
                     success: false,
                     message: Messages.NO_TOKEN
                 })
+                return
             }
 
         }
