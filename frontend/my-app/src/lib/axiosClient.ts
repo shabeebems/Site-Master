@@ -7,13 +7,13 @@ const apiClient = axios.create({
 
 apiClient.interceptors.response.use(
   (response) => {
-    console.log('sss',response);
+    console.log('response',response);
     return response;
   },
   (error) => {
     
     if(error.response.status == 406) {
-        console.log('sss')
+        console.log('ert')
         localStorage.clear();
     }
     console.log('Error', error.response.status);

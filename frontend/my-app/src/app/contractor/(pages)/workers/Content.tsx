@@ -70,7 +70,7 @@ const Content = () => {
         </div>
 
         <ul className="pt-6 space-y-3">
-          {workers.length ? workers.map((user, index) => (
+          {workers&&workers.length ? workers.map((user, index) => (
             <li 
               key={index} 
               className="flex items-center justify-between p-4 rounded-lg bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:bg-blue-50 hover:scale-[1.01]"

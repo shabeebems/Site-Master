@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-import { deleteToken, generateAccessToken } from "../utils/jwt";
+import { deleteToken, findUserByToken, generateAccessToken } from "../utils/jwt";
 
 
 export const authenticateToken = async(
-    req: Request,
+    req: any,
     res: Response,
     next: NextFunction
 ) => {
@@ -14,6 +14,7 @@ export const authenticateToken = async(
         if(accessToken) {
             jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET as string, (err: any, decoded: any) => {
                 if(err) {
+                    console.log('wrong')
                     deleteToken(res, 'accessToken')
                     deleteToken(res, 'refreshToken')
 
@@ -25,24 +26,30 @@ export const authenticateToken = async(
                 }
                 next()
             })
-        } else {
 
+        } else {
+            console.log('Middle')
             const refreshToken = req.cookies.refreshToken
 
             if(refreshToken) {
-                jwt.verify(refreshToken, process.env.RESSFRESH_TOKEN_SECRET as string, (err: any, decoded: any) => {
+            console.log('Middle')
+
+                jwt.verify (refreshToken, process.env.REFRESH_TOKEN_SECRET as string, async (err: any, decoded: any) => {
                     if(err) {
                         deleteToken(res, 'accessToken')
                         deleteToken(res, 'refreshToken')
-    
+                        console.log('ASES')
                         res.status(406).json({
                             refreshToken: false
                         })
                         
                         return
                     } else {
+                        console.log('wert')
                         // Create new access Token
-                        const accessToken = generateAccessToken({_id: 'Shabeeb', email: 'shabeeb'});
+                        const payload: any = await findUserByToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+                        const details = { _id: payload._id, email: payload.email, role: payload.role }
+                        const accessToken = await generateAccessToken(details);
                         res.cookie('accessToken', accessToken, { 
                             httpOnly: true,
                             secure: false,
@@ -50,6 +57,9 @@ export const authenticateToken = async(
                             sameSite: 'strict',
                             path: '/'
                         });
+                        console.log('Middle')
+                        details._id = details._id.toString()
+                        req.user = details
                         next()
                     }
                 })

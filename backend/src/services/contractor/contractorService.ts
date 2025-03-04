@@ -86,16 +86,19 @@ export class ContractorService implements IContractorService {
         }
     }
 
-    public getWorkers = async(req: Request, data: AddUserData): Promise<ServiceResponse> => {
+    public getWorkers = async(req: any, data: AddUserData): Promise<ServiceResponse> => {
         try {
+            console.log('service')
             // Decode access token for get logged contractor id to get workers db
+            console.log('service')
             const accessToken = req.cookies.accessToken
             const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
-            const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
+            const decoded: any = accessToken ? await decode(accessToken, ACCESS_TOKEN_SECRET) : req.user
+            console.log(decoded)
 
             // Find workers using contractor id
             const workers = await userScheme.findWorkersByContractorId(decoded._id)
-
+            // console.log(workers)
             return {
                 success: true,
                 data: workers,
@@ -151,13 +154,13 @@ export class ContractorService implements IContractorService {
         }
     }
 
-    public getEquipment = async(req: Request): Promise<ServiceResponse> => {
+    public getEquipment = async(req: any): Promise<ServiceResponse> => {
         try {
 
             // Decode access token for get logged contractor id to get equipment
             const accessToken = req.cookies.accessToken
             const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET
-            const decoded: any = await decode(accessToken, ACCESS_TOKEN_SECRET)
+            const decoded: any = accessToken ? await decode(accessToken, ACCESS_TOKEN_SECRET) : req.user
 
             // Find equipment with contractor id
             const equipment = await equipmentScheme.findEquipmentByContractorId(decoded._id)
