@@ -1,8 +1,5 @@
-'use client'
+import ProtectWrapper from "./ProtectWrapper";
 
-import { useEffect } from "react";
-import { useAppSelector } from "@/app/store/hooks";
-import { useRouter } from "next/navigation";
 
 export default function RootLayout({
   children,
@@ -10,20 +7,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
     
-    const protect = useAppSelector(state => state.protect)
-    const router = useRouter()
-
-    useEffect(() => {
-        if(!protect.email) {
-          router.push('/contractor/login')
-        } else if(protect.role === 'Worker') {
-          router.push('/worker/dashboard')
-        }
-    }, [protect.email])
-
-    if(!protect.email || protect.role === 'Worker') return null
-
     return (
-            <>{children}</>
-    );
+      <ProtectWrapper>
+        {children}
+      </ProtectWrapper>
+)
+    
 }
