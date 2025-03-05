@@ -1,10 +1,4 @@
-'use client'
-// import Aoth
-
-import Photos from "@/app/components/AuthPhoto";
-import { useAppSelector } from "@/app/store/hooks";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import ProtectWrapper from "./ProtectWrapper";
 
 export default function RootLayout({
     children,
@@ -12,23 +6,10 @@ export default function RootLayout({
     children: React.ReactNode;
   }>) {
 
-    const protect = useAppSelector(state => state.protect)
-    const router = useRouter()
-
-    useEffect(() => {
-        if(!protect.email) {
-          router.push('/worker/login')
-        } else if(protect.role === 'Contractor') {
-          router.push('/contractor/dashboard')
-        }
-    }, [protect.email])
-
-    if(!protect.email || protect.role === 'Contractor') return null
-
     return (
-        <>
+        <ProtectWrapper>
           {children}
-        </>
+        </ProtectWrapper>
     )
 
   }
