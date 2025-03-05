@@ -8,9 +8,11 @@ export default function RootLayout({
 }>) {
     
     return (
-      <ProtectWrapper>
-        {children}
-      </ProtectWrapper>
+      <>
+        <ProtectWrapper>
+          {children}
+        </ProtectWrapper>
+      </>
 )
     
 }

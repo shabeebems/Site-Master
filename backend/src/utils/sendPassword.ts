@@ -21,7 +21,7 @@ const sendOtp = async(email: string, password: string)=>{
         `
       });
 
-    console.log('Password sended to workers')
+    console.log('Password sended to users', password)
 
 }
 
