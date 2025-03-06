@@ -14,6 +14,7 @@ import { setProtect } from '@/app/store/protect';
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { signIn, useSession } from 'next-auth/react';
 
 interface FormData {
   email: string,
@@ -27,9 +28,10 @@ type AddFormProps = {
 
 const LoginForm: React.FC<AddFormProps> = ({role}) => {
 
+  const { data: session } = useSession()
+
   // Define a custon dispatch hook
   const dispatch = useAppDispatch();
-
   const router = useRouter();
 
   // Make true while loading
@@ -159,7 +161,18 @@ const LoginForm: React.FC<AddFormProps> = ({role}) => {
                 Don't have an account?{' '}
                 <a href="/contractor/register" className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
                   Register here
-                </a>
+                </a> <br />
+
+                <button onClick={() => signIn() } className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                  Google
+                </button>
+
+                { session && <>
+                   <h2>Name: { session?.user?.name }</h2>  
+                   <h2>Name: { session?.user?.email }</h2>  
+                   {/* <img src={session?.user?.image} />                 */}
+                </> }
+
               </p>
             ): null
           }
