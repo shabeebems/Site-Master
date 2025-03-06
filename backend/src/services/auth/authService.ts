@@ -285,4 +285,21 @@ export class AuthService implements IAuthService {
         }
     }
 
+    public checkGoogleAuth = async(email: string, name: string): Promise<ServiceResponse> => {
+        try {
+            console.log(email, name)
+            return {
+                success: true,
+                message: Messages.RESET_PASSWORD_SUCCESS,
+            };
+        } catch (error) {
+            console.error(Messages.RESET_PASSWORD_FAILED, error);
+            return {
+                success: false,
+                message: Messages.RESET_PASSWORD_FAILED,
+                error: 'SERVER_ERROR'
+            };
+        }
+    }
+
 }

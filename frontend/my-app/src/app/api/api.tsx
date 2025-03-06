@@ -1,7 +1,7 @@
 import apiClient from "@/lib/axiosClient";
 import axios from "axios";
 
-// Check and validate inputs
+// Check and validate datas
 export const apiCheck = async (data: object, route: string) => {
     try {
         const response = await axios.post(`http://localhost:5000/api/${route}`, data, { withCredentials: true })
@@ -12,7 +12,7 @@ export const apiCheck = async (data: object, route: string) => {
     }
 }
 
-// Get datas
+// Get datas for contractor
 export const fetchDetails = async (route: string) => {
     try {
         const response = await apiClient.get(`http://localhost:5000/api/contractor/${route}`, { withCredentials: true })

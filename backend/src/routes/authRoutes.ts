@@ -11,6 +11,6 @@ router.post('/signup', authController.signup)
       .post('/login', authController.login)
       .delete('/logout', authController.logout)
       .post('/forget_password', authController.forgetPassword)
-      
+      .post('/check_google_auth', authController.checkGoogleAuth)
 
 export default router;
