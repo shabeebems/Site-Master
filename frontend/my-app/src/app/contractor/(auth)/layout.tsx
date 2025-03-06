@@ -11,11 +11,11 @@ export default function RootLayout({
     
 
     return (
+      <ProtectWrapper>
         <div className="min-h-screen w-full flex flex-col md:flex-row">
             <Photos />
-            <ProtectWrapper>
-                {children}
-            </ProtectWrapper>
+            {children}
         </div>
+      </ProtectWrapper>
     );
 }

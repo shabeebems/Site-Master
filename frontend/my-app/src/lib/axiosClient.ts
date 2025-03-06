@@ -1,5 +1,8 @@
 import axios from 'axios';
 
+// Google authentication signOut
+import { signOut } from 'next-auth/react';
+
 const apiClient = axios.create({
   baseURL: 'http://localhost:5000',
   withCredentials: true,
@@ -13,7 +16,9 @@ apiClient.interceptors.response.use(
   (error) => {
     
     if(error.response.status == 406) {
-        console.log('ert')
+        // Google authentication session deleting function
+        signOut()
+        // Deleting local storage(including redux persist)
         localStorage.clear();
     }
     console.log('Error', error.response.status);

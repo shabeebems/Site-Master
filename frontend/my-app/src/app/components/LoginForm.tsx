@@ -14,7 +14,9 @@ import { setProtect } from '@/app/store/protect';
 
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { signIn, useSession } from 'next-auth/react';
+
+// Google authentication signIn
+import { signIn } from 'next-auth/react';
 
 interface FormData {
   email: string,
@@ -28,7 +30,6 @@ type AddFormProps = {
 
 const LoginForm: React.FC<AddFormProps> = ({role}) => {
 
-  const { data: session } = useSession()
 
   // Define a custon dispatch hook
   const dispatch = useAppDispatch();
@@ -71,7 +72,11 @@ const LoginForm: React.FC<AddFormProps> = ({role}) => {
         dispatch(setProtect({email, role}))
 
         // Navigation logic is applied in the layouts, so no need extra navigation
-        // router.push('/dasboard');
+        if(role === 'Contractor') {
+          router.push('/contractor/dasboard');
+        } else if(role === 'Worker') {
+          router.push('/worker/dasboard');
+        }
 
       } else {
         toast.error(response.message || "Server side error!", { position: "top-right" });
@@ -88,6 +93,7 @@ const LoginForm: React.FC<AddFormProps> = ({role}) => {
       setIsLoading(false)
     }
   };
+
 
   return (
     <div className="w-full md:w-1/2 flex items-center justify-center p-8 bg-white">
@@ -163,15 +169,9 @@ const LoginForm: React.FC<AddFormProps> = ({role}) => {
                   Register here
                 </a> <br />
 
-                <button onClick={() => signIn() } className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
+                <button onClick={async() => await signIn() } className="font-medium text-blue-600 hover:text-blue-500 transition-colors">
                   Google
-                </button>
-
-                { session && <>
-                   <h2>Name: { session?.user?.name }</h2>  
-                   <h2>Name: { session?.user?.email }</h2>  
-                   {/* <img src={session?.user?.image} />                 */}
-                </> }
+                </button> <br /> <br />
 
               </p>
             ): null

@@ -7,6 +7,9 @@ import { logoutApi } from '@/app/api/api';
 
 import { useAppDispatch } from '@/app/store/hooks';
 
+// Google authentication signOut
+import { signOut } from 'next-auth/react';
+
 // Redux to clear email for logout
 import { clearProtect } from '@/app/store/protect';
 
@@ -24,6 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ active }) => {
   const dispatch = useAppDispatch()
 
   const logout = async() => {
+    await signOut()
     // Calling logout api
     await logoutApi()
     // Clear email from redux
