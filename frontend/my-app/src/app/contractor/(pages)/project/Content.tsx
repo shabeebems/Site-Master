@@ -1,6 +1,7 @@
 'use client'
 import { useState } from "react";
 import { FaTasks } from "react-icons/fa";
+import AddModal from "./AddModal";
 
 
 const Content = () => {
@@ -13,11 +14,9 @@ const Content = () => {
     { title: "Project F", status: "Completed", date: "Feb 02, 2025" },
   ];
 
-  const statusColors = {
-    "In Progress": "bg-blue-500",
-    "Completed": "bg-green-500",
-    "On Hold": "bg-red-500"
-  };
+  const cancelModal = () => {
+    setIsModalOpen(false)
+  }
 
   return (
     <>
@@ -75,34 +74,7 @@ const Content = () => {
 
         {/* Modal */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-xl shadow-xl w-full max-w-md">
-              <h2 className="text-xl font-semibold mb-4">Add New Project</h2>
-
-              {/* Example form fields */}
-              <input
-                type="text"
-                placeholder="Project Title"
-                className="w-full border border-gray-300 rounded-md p-2 mb-4"
-              />
-              <input
-                type="date"
-                className="w-full border border-gray-300 rounded-md p-2 mb-4"
-              />
-
-              <div className="flex justify-end gap-2">
-                <button 
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-gray-300 rounded-md"
-                >
-                  Cancel
-                </button>
-                <button className="px-4 py-2 bg-blue-500 text-white rounded-md">
-                  Save
-                </button>
-              </div>
-            </div>
-          </div>
+          <AddModal cancel={cancelModal} />
         )}
 
 

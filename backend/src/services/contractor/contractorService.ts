@@ -1,5 +1,5 @@
 import { emailValidation } from "../../utils/emailValidation";
-import { AddUserData, IContractorService, ServiceResponse } from "./contractorInterface";
+import { AddProject, AddUserData, IContractorService, ServiceResponse } from "./contractorInterface";
 import hashedPassword from '../../utils/hashPassword'
 import sendPassword from "../../utils/sendPassword";
 import { Request } from 'express';
@@ -167,6 +167,31 @@ export class ContractorService implements IContractorService {
                 success: true,
                 message: Messages.EQUIPMENT_FETCH_SUCCESS,
                 data: equipment
+            }
+            
+        } catch (error) {
+            return {
+                success: false,
+                message: Messages.EQUIPMENT_FETCH_FAILED
+            }
+        }
+    }
+
+    public newProject = async(data: AddProject): Promise<ServiceResponse> => {
+        try {
+
+            const { name, location, startingDate, endingDate } = data
+
+            if(!name || !location || !startingDate || !endingDate) {
+                return {
+                    success: false,
+                    message: 'Fill',
+                }
+            }
+
+            return {
+                success: true,
+                message: 'Success',
             }
             
         } catch (error) {

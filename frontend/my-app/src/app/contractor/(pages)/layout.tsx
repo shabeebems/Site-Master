@@ -1,6 +1,5 @@
 import ProtectWrapper from "./ProtectWrapper";
 
-
 export default function RootLayout({
   children,
 }: Readonly<{

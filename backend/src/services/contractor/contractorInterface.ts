@@ -7,6 +7,13 @@ export interface AddUserData {
     place: string
 }
 
+export interface AddProject {
+    name: string,
+    location: string,
+    startingDate: string,
+    endingDate: string
+}
+
 export interface ServiceResponse {
     success: boolean
     message: string
