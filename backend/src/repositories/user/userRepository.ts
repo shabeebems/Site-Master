@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 export class UserRepository implements IUserRepository {
 
     public createUser = async (userData: object): Promise<IUser> => {
-        return await User.create({ ...userData, is_admin: false })
+        return await User.create({ ...userData })
     }
 
     public findUserByEmail = async (email: string): Promise<IUser | null> => {

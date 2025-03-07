@@ -14,7 +14,7 @@ const handler = NextAuth({
                 throw new Error('No profile')
             }
             return true
-        },
+        }
     },
 })
 

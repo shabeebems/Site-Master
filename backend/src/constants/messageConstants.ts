@@ -23,23 +23,27 @@ export const Messages = {
     BLOCK_USER: 'User is blocked',
     RESET_PASSWORD_SUCCESS: "Password reset. Check your email",
     RESET_PASSWORD_FAILED: 'Password reset failed. Please try again.',
+
     // Worker
     WORKER_CREATED_SUCCESS: "Worker created successfully",
     WORKER_CREATION_FAILED: "Failed to add worker",
     FETCH_WORKER_SUCCESS: "Fetch worker successful!",
     FETCH_WORKER_FAILED: "Failed to fetch worker data",
+
     // Equipment
     INVALID_COUNT: "Count must be a positive number",
     EQUIPMENT_ADDED_SUCCESS: "Equipment added successfully",
     EQUIPMENT_ADDED_FAILED: "Equipment added failed",
     EQUIPMENT_FETCH_SUCCESS: "Equipment fetched successfully",
     EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching equipment",
+
     // Controller auth
     REGISTER_CONTROLLER_ERROR: "Unexpected error in register controller",
     OTP_SERVER_ERROR: "Server error during OTP verification",
     OTP_RESEND_SERVER_ERROR: "Server error during OTP resend",
     LOGIN_SERVER_ERROR: "Server error during login",
     LOGOUT_SERVER_ERROR: "Server error during logout",
+
     // Controller contractor
     ADD_WORKER_SERVER_ERROR: "Server error during worker addition",
     FETCH_WORKERS_SERVER_ERROR: "Server error during workers fetch",
@@ -50,6 +54,10 @@ export const Messages = {
     ACCESS_TOKEN_INVALID: 'Access token verification failed',
     REFRESH_TOKEN_INVALID: 'Refresh token verification failed',
     NO_TOKEN: 'No tokens found in the request',
+
+    // Google auth
+    GOOGLE_AUTH_SUCCESS: "Google authentication successful",
+    GOOGLE_AUTH_FAILED: "Google authentication failed",
 
 
 }

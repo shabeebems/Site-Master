@@ -285,18 +285,57 @@ export class AuthService implements IAuthService {
         }
     }
 
-    public checkGoogleAuth = async(email: string, name: string): Promise<ServiceResponse> => {
+    public checkGoogleAuth = async(res: Response, email: string, name: string): Promise<ServiceResponse> => {
         try {
-            console.log(email, name)
+            // Finding users with email
+            let existingUser = await userSchema.findUserByEmail(email);
+
+            // If user didn't exists, creating new user
+            if(!existingUser) {
+
+                // Create a random password to sent contractor's email
+                const password = Math.floor(100000 + Math.random() * 900000);
+                const hashPassword = await hashedPassword(password + '')
+
+                // Send password and email to contractor's email
+                sendPassword(email, password + '')
+
+                const newUser = {
+                    name,
+                    email,
+                    password: hashPassword,
+                    role: 'Contractor'
+                }
+
+                // Creating new user
+                existingUser = await userSchema.createUser(newUser)
+
+            }
+
+            const { _id, role } = existingUser
+
+            // Create payload to create tokens
+            const payload = {
+                _id,
+                email,
+                role,
+            };
+
+            // Generate tokens and create tokens
+            await createAccessToken(res, payload)
+            await createRefreshToken(res, payload)
+
             return {
                 success: true,
-                message: Messages.RESET_PASSWORD_SUCCESS,
+                message: Messages.GOOGLE_AUTH_SUCCESS,
+                data: existingUser
             };
+
         } catch (error) {
-            console.error(Messages.RESET_PASSWORD_FAILED, error);
+            console.error(Messages.GOOGLE_AUTH_FAILED, error);
             return {
                 success: false,
-                message: Messages.RESET_PASSWORD_FAILED,
+                message: Messages.GOOGLE_AUTH_FAILED,
                 error: 'SERVER_ERROR'
             };
         }

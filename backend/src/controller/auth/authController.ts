@@ -172,13 +172,14 @@ export class AuthController implements IAuthController {
             const { email, name } = req.body
 
             // -- Calling the forget password service to update password
-            const response: AuthResponse = await authService.checkGoogleAuth(email, name);
+            const response: AuthResponse = await authService.checkGoogleAuth(res, email, name);
             
-            const { success, message } = response
+            const { success, message, data } = response
 
             res.status(201).json({
                 success,
-                message
+                message,
+                data
             });
             return;
 
