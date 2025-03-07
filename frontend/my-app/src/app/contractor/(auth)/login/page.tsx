@@ -19,9 +19,10 @@ export default function LoginPage() {
 
     const dispatch = useAppDispatch()
 
+    // For google authentication
     useEffect(() => {
-      console.log('dreaseca')
       const checkGoogleAuth = async() => {
+        // Calling the api to check user and create tokens
         const response = await apiCheck({ email: session?.user?.email, name: session?.user?.name }, 'auth/check_google_auth')
         if(response.success) {
           // Adding google authenticated user details to redux
