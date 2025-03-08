@@ -2,11 +2,13 @@ import { emailValidation } from "../../utils/emailValidation";
 import { AddProject, AddUserData, IContractorService, ServiceResponse } from "./contractorInterface";
 import hashedPassword from '../../utils/hashPassword'
 import sendPassword from "../../utils/sendPassword";
-import { Request } from 'express';
 import { decode } from "../../utils/jwt";
+import { Messages } from "../../constants/messageConstants";
+
 import { UserRepository } from "../../repositories/user/userRepository";
 import { EquipmentRepository } from "../../repositories/equipment/equipmentRepository";
-import { Messages } from "../../constants/messageConstants";
+import projectModel from "../../model/projectModel";
+import { ProjectRepository } from "../../repositories/project/projectRepository";
 
 const userScheme = new UserRepository()
 const equipmentScheme = new EquipmentRepository()
@@ -177,7 +179,7 @@ export class ContractorService implements IContractorService {
         }
     }
 
-    public newProject = async(data: AddProject): Promise<ServiceResponse> => {
+    public newProject = async(req: any, data: AddProject): Promise<ServiceResponse> => {
         try {
 
             const { name, location, startingDate, endingDate } = data
@@ -189,12 +191,35 @@ export class ContractorService implements IContractorService {
                 }
             }
 
+            if(startingDate > endingDate) {
+                return {
+                    success: false,
+                    message: 'Starting date is greater than ending date',
+                }
+            }
+
+            const accessToken = req.cookies.accessToken
+            
+            // Decode access token for get logged contractor id for get workers from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
+            const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
+
+            const projectDetails = {
+                ...data,
+                contractorId: decoded._id,
+                status: 'Pending'
+            }
+
+            const projectSchema = new ProjectRepository()
+
+            await projectSchema.addProject(projectDetails)
+
             return {
                 success: true,
                 message: 'Success',
             }
             
         } catch (error) {
+            console.log(error)
             return {
                 success: false,
                 message: Messages.EQUIPMENT_FETCH_FAILED

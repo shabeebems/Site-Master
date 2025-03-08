@@ -50,8 +50,7 @@ const AddForm: React.FC<AddFormProps> = ({cancel, onWorkerAdded}) => {
           toast.success(response.message, { 
             position: "top-right",
             style: { fontSize: "12px", padding: "8px", maxWidth: "250px" }
-          })
-          ;
+          });
           // Parent function to display latest added user details
           onWorkerAdded(newUser);
 

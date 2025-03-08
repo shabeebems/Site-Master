@@ -1,17 +1,38 @@
 'use client'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaTasks } from "react-icons/fa";
 import AddModal from "./AddModal";
-
+import { fetchDetails } from "@/app/api/api";
 
 const Content = () => {
+
+    // Fetch workers under contractor to display
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+  
+          // Call api to get workers
+          const users = await fetchDetails('get_projects');
+  
+          // Store workers details to state
+          // setWorkers(users);
+  
+        } catch (error) {
+          console.error("Error fetching workers:", error);
+        }
+      };
+    
+      // Call function
+      fetchData();
+  
+    }, [])
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const projects = [
-    { title: "Project A", status: "In Progress", date: "Feb 19, 2025" },
-    { title: "Project E", status: "On Hold", date: "Feb 05, 2025" },
-    { title: "Project F", status: "Completed", date: "Feb 02, 2025" },
+    { title: "Project A", location: 'England', status: "In Progress", startingDate: "Feb 19, 2025", endingDate: "Feb 19, 2025" },
+    { title: "Project E", location: 'England', status: "On Hold", startingDate: "Feb 05, 2025", endingDate: "Feb 19, 2025" },
+    { title: "Project F", location: 'England', status: "Completed", startingDate: "Feb 02, 2025", endingDate: "Feb 19, 2025" },
   ];
 
   const cancelModal = () => {
@@ -56,11 +77,12 @@ const Content = () => {
                 <div className="p-4 flex flex-col justify-between h-32">
                   {/* Project Title */}
                   <h2 className="text-lg font-semibold text-gray-800">{project.title}</h2>
-
+                  <p className="text-sm text-gray-500">{project.location}</p>
                   {/* Bottom Section: Date + Icon */}
                   <div className="flex justify-between items-center mt-3">
-                    <p className="text-sm text-gray-500">{project.date}</p>
-
+                    {/* <p className="text-sm text-gray-500">{project.startingDate}</p> */}
+                    <p className="text-sm text-gray-500"><strong>Start:</strong> {project.startingDate}</p>
+                    <p className="text-sm text-gray-500"><strong>End:</strong> {project.endingDate}</p>
                     {/* Notification Icon */}
                     <div className="p-2 bg-gray-200 rounded-full">
                       <FaTasks size={16} className="text-gray-600" />

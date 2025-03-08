@@ -99,7 +99,7 @@ export class ContractorController implements IContractorController {
 
     public newProject = async(req: Request, res: Response): Promise<any> => {
         try {
-            const result: ControllerResponse = await contractorService.newProject(req.body)
+            const result: ControllerResponse = await contractorService.newProject(req, req.body)
          
             const { success, message } = result
             
@@ -117,5 +117,24 @@ export class ContractorController implements IContractorController {
         }
     }
 
+    public getProjects = async(req: Request, res: Response): Promise<any> => {
+        try {
+            // const result: ControllerResponse = await contractorService.newProject(req, req.body)
+         
+            // const { success, message } = result
+            
+            // return res.status(201).json({
+            //     success,
+            //     message,
+            // });
 
+        } catch (error) {
+            console.error(Messages.FETCH_EQUIPMENT_SERVER_ERROR, error);
+            return res.status(500).json({
+                success: false,
+                message: Messages.FETCH_EQUIPMENT_SERVER_ERROR,
+            });
+        }
+
+    }
 }
