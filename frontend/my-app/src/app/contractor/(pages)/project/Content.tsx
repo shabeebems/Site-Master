@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { FaTasks } from "react-icons/fa";
 import AddModal from "./AddModal";
 import { fetchDetails } from "@/app/api/api";
+import { useRouter } from "next/navigation";
 
 interface Project {
   name: string;
@@ -10,9 +11,12 @@ interface Project {
   status: string;
   startingDate: Date;
   endingDate: Date;
+  _id: any;
 }
 
 const Content = () => {
+
+  const router = useRouter()
 
     const [projects, setProjects] = useState<Project[]>([])
 
@@ -62,8 +66,9 @@ const Content = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, index) => (
               <div 
-                key={index} 
-                className="bg-white shadow-xl rounded-xl overflow-hidden transition-transform transform hover:scale-105 duration-300"
+                key={index}
+                onClick={() => router.push(`/contractor/project/single_project/${project._id}`)}
+                className="bg-white shadow-xl rounded-xl overflow-hidden transition-transform transform cursor-pointer hover:scale-105 duration-300"
               >
                 {/* Image */}
                 <div className="relative">

@@ -36,12 +36,12 @@ const Sidebar: React.FC<SidebarProps> = ({ active }) => {
 
   // Sidebar details
   const menus = [
-    { title: 'Dashboard', path: 'dashboard', icon: <MdOutlineDashboard color='#030032' /> },
-    { title: 'Project', path: 'project', icon: <BiTask color='#030032' /> },
-    { title: 'Workers', path: 'workers', icon: <GrUserWorker color='#030032' />},
-    { title: 'Equipment', path: 'equipment', icon: <VscTools color='#030032' />},
-    { title: 'Messages', path: 'messages', icon: <MdOutlineMessage color='#030032' />},
-    { title: 'Profile', path: 'profile', icon: <LuCircleUser color='#030032' />},
+    { title: 'Dashboard', path: '/contractor/dashboard', icon: <MdOutlineDashboard color='#030032' /> },
+    { title: 'Project', path: '/contractor/project', icon: <BiTask color='#030032' /> },
+    { title: 'Workers', path: '/contractor/workers', icon: <GrUserWorker color='#030032' />},
+    { title: 'Equipment', path: '/contractor/equipment', icon: <VscTools color='#030032' />},
+    { title: 'Messages', path: '/contractor/messages', icon: <MdOutlineMessage color='#030032' />},
+    { title: 'Profile', path: '/contractor/profile', icon: <LuCircleUser color='#030032' />},
   ]
 
   

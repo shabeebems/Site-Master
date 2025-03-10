@@ -15,7 +15,6 @@ const equipmentScheme = new EquipmentRepository()
 
 export class ContractorService implements IContractorService {
 
-
     public addWorker = async(req: any, data: AddUserData): Promise<ServiceResponse> => {
         try {
 
