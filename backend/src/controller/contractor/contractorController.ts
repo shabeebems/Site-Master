@@ -109,30 +109,31 @@ export class ContractorController implements IContractorController {
             });
 
         } catch (error) {
-            console.error(Messages.FETCH_EQUIPMENT_SERVER_ERROR, error);
+            console.error(Messages.ADD_PROJECT_SERVER_ERROR, error);
             return res.status(500).json({
                 success: false,
-                message: Messages.FETCH_EQUIPMENT_SERVER_ERROR,
+                message: Messages.ADD_PROJECT_SERVER_ERROR,
             });
         }
     }
 
     public getProjects = async(req: Request, res: Response): Promise<any> => {
         try {
-            // const result: ControllerResponse = await contractorService.newProject(req, req.body)
+            const result: ControllerResponse = await contractorService.getProjects(req)
          
-            // const { success, message } = result
+            const { success, message, data } = result
             
-            // return res.status(201).json({
-            //     success,
-            //     message,
-            // });
+            return res.status(201).json({
+                success,
+                message,
+                data
+            });
 
         } catch (error) {
-            console.error(Messages.FETCH_EQUIPMENT_SERVER_ERROR, error);
+            console.error(Messages.FETCH_PROJECTS_SERVER_ERROR, error);
             return res.status(500).json({
                 success: false,
-                message: Messages.FETCH_EQUIPMENT_SERVER_ERROR,
+                message: Messages.FETCH_PROJECTS_SERVER_ERROR,
             });
         }
 

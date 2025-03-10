@@ -3,10 +3,11 @@ export interface IPtoject {
     location: string;
     startingDate: Date;
     endingDate: Date;
-    status: string;
     contractorId?: any;
+    status: string;
 }
 
 export interface IProjectRepository {
     addProject(data: object): Promise<IPtoject>;
+    getProjects(_id: any): Promise<IPtoject | undefined>;
 }

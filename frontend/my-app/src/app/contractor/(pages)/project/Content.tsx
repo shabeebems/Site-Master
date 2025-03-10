@@ -4,21 +4,31 @@ import { FaTasks } from "react-icons/fa";
 import AddModal from "./AddModal";
 import { fetchDetails } from "@/app/api/api";
 
+interface Project {
+  name: string;
+  location: string;
+  status: string;
+  startingDate: Date;
+  endingDate: Date;
+}
+
 const Content = () => {
 
-    // Fetch workers under contractor to display
+    const [projects, setProjects] = useState<Project[]>([])
+
+    // Fetch projects under contractor to display
     useEffect(() => {
       const fetchData = async () => {
         try {
   
-          // Call api to get workers
-          const users = await fetchDetails('get_projects');
-  
-          // Store workers details to state
-          // setWorkers(users);
+          // Call api to get projects
+          const getProjects = await fetchDetails('get_projects');
+
+          // Store projects details to state
+          setProjects(getProjects);
   
         } catch (error) {
-          console.error("Error fetching workers:", error);
+          console.error("Error fetching projects:", error);
         }
       };
     
@@ -28,12 +38,6 @@ const Content = () => {
     }, [])
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const projects = [
-    { title: "Project A", location: 'England', status: "In Progress", startingDate: "Feb 19, 2025", endingDate: "Feb 19, 2025" },
-    { title: "Project E", location: 'England', status: "On Hold", startingDate: "Feb 05, 2025", endingDate: "Feb 19, 2025" },
-    { title: "Project F", location: 'England', status: "Completed", startingDate: "Feb 02, 2025", endingDate: "Feb 19, 2025" },
-  ];
 
   const cancelModal = () => {
     setIsModalOpen(false)
@@ -63,7 +67,7 @@ const Content = () => {
               >
                 {/* Image */}
                 <div className="relative">
-                  <img src='/project.jpg' alt={project.title} className="w-full h-44 " />
+                  <img src='/project.jpg' alt={project.name} className="w-full h-44 " />
                   
                   {/* Status Badge (Top Right) */}
                   <span
@@ -76,13 +80,13 @@ const Content = () => {
                 {/* Card Content */}
                 <div className="p-4 flex flex-col justify-between h-32">
                   {/* Project Title */}
-                  <h2 className="text-lg font-semibold text-gray-800">{project.title}</h2>
+                  <h2 className="text-lg font-semibold text-gray-800">{project.name}</h2>
                   <p className="text-sm text-gray-500">{project.location}</p>
                   {/* Bottom Section: Date + Icon */}
                   <div className="flex justify-between items-center mt-3">
                     {/* <p className="text-sm text-gray-500">{project.startingDate}</p> */}
-                    <p className="text-sm text-gray-500"><strong>Start:</strong> {project.startingDate}</p>
-                    <p className="text-sm text-gray-500"><strong>End:</strong> {project.endingDate}</p>
+                    <p className="text-sm text-gray-500"><strong>Start:</strong> {new Date(project.startingDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
+                    <p className="text-sm text-gray-500"><strong>End:</strong> {new Date(project.endingDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                     {/* Notification Icon */}
                     <div className="p-2 bg-gray-200 rounded-full">
                       <FaTasks size={16} className="text-gray-600" />

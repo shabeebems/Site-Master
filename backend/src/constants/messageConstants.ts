@@ -19,10 +19,10 @@ export const Messages = {
     LOGIN_VERIFICATION_FAILED: "Failed to complete login credentials check",
     LOGOUT_SUCCESS: "Tokens cleared, logout successful!",
     LOGOUT_FAILED: "Failed to complete logout",
-    FIELDS_REQUIRED: "Please fill in all required fields",
     BLOCK_USER: 'User is blocked',
     RESET_PASSWORD_SUCCESS: "Password reset. Check your email",
     RESET_PASSWORD_FAILED: 'Password reset failed. Please try again.',
+    FIELDS_REQUIRED: "Please fill in all required fields",
 
     // Worker
     WORKER_CREATED_SUCCESS: "Worker created successfully",
@@ -37,6 +37,13 @@ export const Messages = {
     EQUIPMENT_FETCH_SUCCESS: "Equipment fetched successfully",
     EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching equipment",
 
+    // Project
+    STARTING_DATE_GREATER: "Starting date is greater than ending date",
+    PROJECT_ADDED_SUCCESS: "Successfully added new project",
+    PROJECT_ADD_SERVER_ERROR: "Server error occurred while adding the project",
+    PROJECTS_FETCH_SUCCESS: "Successfully fetched products",
+    PROJECTS_FETCH_FAILED: "Server error occurred while fetching products",
+
     // Controller auth
     REGISTER_CONTROLLER_ERROR: "Unexpected error in register controller",
     OTP_SERVER_ERROR: "Server error during OTP verification",
@@ -49,6 +56,8 @@ export const Messages = {
     FETCH_WORKERS_SERVER_ERROR: "Server error during workers fetch",
     ADD_EQUIPMENT_SERVER_ERROR: "Server error during equipment addition",
     FETCH_EQUIPMENT_SERVER_ERROR: "Server error during equipment fetch",
+    ADD_PROJECT_SERVER_ERROR: "Server error during project addition",
+    FETCH_PROJECTS_SERVER_ERROR: "Server error during projects fetch",
 
     // Tokens
     ACCESS_TOKEN_INVALID: 'Access token verification failed',

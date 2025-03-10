@@ -7,9 +7,9 @@ import { Messages } from "../../constants/messageConstants";
 
 import { UserRepository } from "../../repositories/user/userRepository";
 import { EquipmentRepository } from "../../repositories/equipment/equipmentRepository";
-import projectModel from "../../model/projectModel";
 import { ProjectRepository } from "../../repositories/project/projectRepository";
 
+const projectSchema = new ProjectRepository()
 const userScheme = new UserRepository()
 const equipmentScheme = new EquipmentRepository()
 
@@ -187,14 +187,14 @@ export class ContractorService implements IContractorService {
             if(!name || !location || !startingDate || !endingDate) {
                 return {
                     success: false,
-                    message: 'Fill',
+                    message: Messages.FIELDS_REQUIRED,
                 }
             }
 
             if(startingDate > endingDate) {
                 return {
                     success: false,
-                    message: 'Starting date is greater than ending date',
+                    message: Messages.STARTING_DATE_GREATER,
                 }
             }
 
@@ -209,20 +209,44 @@ export class ContractorService implements IContractorService {
                 status: 'Pending'
             }
 
-            const projectSchema = new ProjectRepository()
 
             await projectSchema.addProject(projectDetails)
 
             return {
                 success: true,
-                message: 'Success',
+                message: Messages.PROJECT_ADDED_SUCCESS,
             }
             
         } catch (error) {
             console.log(error)
             return {
                 success: false,
-                message: Messages.EQUIPMENT_FETCH_FAILED
+                message: Messages.PROJECT_ADD_SERVER_ERROR
+            }
+        }
+    }
+
+    public getProjects = async(req: any): Promise<ServiceResponse> => {
+        try {
+
+            const accessToken = req.cookies.accessToken
+            
+            // Decode access token for get logged contractor id for get workers from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
+            const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
+
+            const projects = await projectSchema.getProjects(decoded._id)
+
+            return {
+                success: true,
+                message: Messages.PROJECTS_FETCH_SUCCESS,
+                data: projects
+            }
+            
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.PROJECTS_FETCH_FAILED
             }
         }
     }

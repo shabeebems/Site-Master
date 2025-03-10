@@ -7,10 +7,11 @@ type AddFormProps = {
     cancel: Function;
 };
 
-type Worker = { name: string; location: string; startingDate: string; endingDate: string };
+type Project = { name: string; location: string; startingDate: string; endingDate: string };
 
 const AddModal: React.FC<AddFormProps> = ({cancel}) => {
-    const [newProject, setNewProject] = useState<Worker>({
+
+    const [newProject, setNewProject] = useState<Project>({
         name: "",
         location: "",
         startingDate: "",
@@ -25,7 +26,9 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault()
         try {
+            // Calling the api to validate and add new projects
             const response = await apiCheck(newProject, 'contractor/new_project')
+
             if(response.success) {
                 toast.success(response.message, { position: "top-right", });
                 setNewProject({
@@ -38,8 +41,9 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
             } else {
                 toast.error(response.message, { position: "top-right", });
             }
-        } catch (error) {
             
+        } catch (error) {
+            toast.error("Error from server side while adding projects", { position: "top-right", });
         }
     }
 
