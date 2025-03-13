@@ -34,6 +34,22 @@ const AddForm: React.FC<AddFormProps> = ({cancel, onWorkerAdded}) => {
       setNewUser({ ...newUser, [name]: value })
     }
 
+    const [image, setImage] = useState<any>(null)
+
+    const handleImage = (e: any) => {
+      const files = e.target.files[0]
+      setFileToBase(files)
+    }
+
+    const setFileToBase = (file: any) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setImage(reader.result);
+        console.log(reader.result)
+      };
+    };
+
     // Trigger while submitting
     const handleSubmit = async(e: React.FormEvent) => {
 
@@ -43,7 +59,7 @@ const AddForm: React.FC<AddFormProps> = ({cancel, onWorkerAdded}) => {
       try {
       
         // Call api to validate and save new user details
-        const response = await apiCheck(newUser, 'contractor/newWorker')
+        const response = await apiCheck({ ...newUser, image }, 'contractor/newWorker')
 
         if(response.success) {
 
@@ -97,6 +113,13 @@ const AddForm: React.FC<AddFormProps> = ({cancel, onWorkerAdded}) => {
               required
             />
           ))}
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            onChange={handleImage}
+            className="p-2 border rounded w-full md:w-32 text-sm outline-none focus:border-blue-500"
+          />
           
           {/* Buttons */}
           <div className="flex items-center gap-2 mt-2 md:mt-0">

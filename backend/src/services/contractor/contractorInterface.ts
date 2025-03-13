@@ -4,7 +4,8 @@ export interface AddUserData {
     name: string,
     mobile: string,
     email: string,
-    place: string
+    place: string,
+    image?: string | undefined
 }
 
 export interface AddProject {

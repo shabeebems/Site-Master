@@ -5,6 +5,8 @@ import sendPassword from "../../utils/sendPassword";
 import { decode } from "../../utils/jwt";
 import { Messages } from "../../constants/messageConstants";
 
+import cloudinary from '../../utils/cloudinary'
+
 import { UserRepository } from "../../repositories/user/userRepository";
 import { EquipmentRepository } from "../../repositories/equipment/equipmentRepository";
 import { ProjectRepository } from "../../repositories/project/projectRepository";
@@ -18,8 +20,7 @@ export class ContractorService implements IContractorService {
     public addWorker = async(req: any, data: AddUserData): Promise<ServiceResponse> => {
         try {
 
-            const { name, mobile, email, place } = data
-
+            const { name, mobile, email, place, image } = data
             if(!name || !mobile || !email || !place) {
                 return {
                     success: false,
@@ -50,6 +51,13 @@ export class ContractorService implements IContractorService {
                 }
             }
 
+            let result;
+            if(image) {
+                result = await cloudinary.uploader.upload(image, {
+                    folder: "user",
+                });
+            }
+
             // After validation success
             // Create a random password to sent worker email
             const password = Math.floor(100000 + Math.random() * 900000);
@@ -69,6 +77,7 @@ export class ContractorService implements IContractorService {
                 ...data,
                 password: hashPassword,
                 role: 'Worker',
+                image: result?.url || ''
             }
             await userScheme.createUser(worker)
     

@@ -10,6 +10,7 @@ export interface IUser {
     is_block: boolean;
     role: string;
     contractorId?: any;
+    image?: any;
 }
 
 export interface IUserRepository {
