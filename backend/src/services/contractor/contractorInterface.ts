@@ -5,14 +5,14 @@ export interface AddUserData {
     mobile: string,
     email: string,
     place: string,
-    image?: string | undefined
 }
 
 export interface AddProject {
     name: string,
     location: string,
     startingDate: string,
-    endingDate: string
+    endingDate: string,
+    image: string
 }
 
 export interface ServiceResponse {

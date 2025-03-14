@@ -11,6 +11,9 @@ const projectSchema = new mongoose.Schema({
         required: true,
         enum: ["In progress", "On hold", "Completed", "Pending"] 
     },
+    image: {
+        type: String
+    }
 });
 
 export default mongoose.model('Project', projectSchema);

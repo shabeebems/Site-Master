@@ -20,7 +20,7 @@ export class ContractorService implements IContractorService {
     public addWorker = async(req: any, data: AddUserData): Promise<ServiceResponse> => {
         try {
 
-            const { name, mobile, email, place, image } = data
+            const { name, mobile, email, place } = data
             if(!name || !mobile || !email || !place) {
                 return {
                     success: false,
@@ -51,13 +51,6 @@ export class ContractorService implements IContractorService {
                 }
             }
 
-            let result;
-            if(image) {
-                result = await cloudinary.uploader.upload(image, {
-                    folder: "user",
-                });
-            }
-
             // After validation success
             // Create a random password to sent worker email
             const password = Math.floor(100000 + Math.random() * 900000);
@@ -76,8 +69,7 @@ export class ContractorService implements IContractorService {
                 contractorId: decoded._id,
                 ...data,
                 password: hashPassword,
-                role: 'Worker',
-                image: result?.url || ''
+                role: 'Worker'
             }
             await userScheme.createUser(worker)
     
@@ -190,9 +182,9 @@ export class ContractorService implements IContractorService {
     public newProject = async(req: any, data: AddProject): Promise<ServiceResponse> => {
         try {
 
-            const { name, location, startingDate, endingDate } = data
+            const { name, location, startingDate, endingDate, image } = data
 
-            if(!name || !location || !startingDate || !endingDate) {
+            if(!name || !location || !startingDate || !endingDate || !image) {
                 return {
                     success: false,
                     message: Messages.FIELDS_REQUIRED,
@@ -206,6 +198,11 @@ export class ContractorService implements IContractorService {
                 }
             }
 
+            // Upload image to cloudinary
+            let result = await cloudinary.uploader.upload(image, {
+                folder: "user",
+            });
+
             const accessToken = req.cookies.accessToken
             
             // Decode access token for get logged contractor id for get workers from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
@@ -214,7 +211,8 @@ export class ContractorService implements IContractorService {
             const projectDetails = {
                 ...data,
                 contractorId: decoded._id,
-                status: 'Pending'
+                status: 'Pending',
+                image: result.url
             }
 
 

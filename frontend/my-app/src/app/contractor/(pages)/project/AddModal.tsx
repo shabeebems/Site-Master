@@ -17,17 +17,33 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
         startingDate: "",
         endingDate: "",
     });
-
+    
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
         setNewProject({ ...newProject, [name]: value })
     }
 
+    // For adding image
+    const [image, setImage] = useState<any>(null)
+    const handleImage = (e: any) => {
+        const files = e.target.files[0]
+        setFileToBase(files)
+    }
+
+    const setFileToBase = (file: any) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          setImage(reader.result);
+          console.log(reader.result)
+        };
+    };
+
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault()
         try {
             // Calling the api to validate and add new projects
-            const response = await apiCheck(newProject, 'contractor/new_project')
+            const response = await apiCheck({ ...newProject, image }, 'contractor/new_project')
 
             if(response.success) {
                 toast.success(response.message, { position: "top-right", });
@@ -37,6 +53,7 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
                     startingDate: "",
                     endingDate: "",
                 })
+                setImage(null)
                 cancel()
             } else {
                 toast.error(response.message, { position: "top-right", });
@@ -102,6 +119,18 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
                     value={newProject.endingDate}
                     onChange={handleChange}
                     min={new Date().toISOString().split("T")[0]} // Restricts past dates
+                    className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+            </div>
+
+            {/* Image */}
+            <div>
+                <label className="block text-sm font-medium text-gray-600 mb-1">Image</label>
+                <input
+                    type="file"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleImage}
                     className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
             </div>

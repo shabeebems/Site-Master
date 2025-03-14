@@ -12,6 +12,7 @@ interface Project {
   startingDate: Date;
   endingDate: Date;
   _id: any;
+  image: string;
 }
 
 const Content = () => {
@@ -72,7 +73,7 @@ const Content = () => {
               >
                 {/* Image */}
                 <div className="relative">
-                  <img src='/project.jpg' alt={project.name} className="w-full h-44 " />
+                  <img src={project.image} alt={project.name} className="w-full h-44 " />
                   
                   {/* Status Badge (Top Right) */}
                   <span
