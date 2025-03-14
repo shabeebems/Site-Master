@@ -2,7 +2,6 @@ import { apiCheck } from "@/app/api/api";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import cloudinary from '../../../../lib/cloudinary'
 
 type AddFormProps = {
     cancel: Function;
@@ -28,8 +27,12 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
     const [image, setImage] = useState<any>(null)
     const handleImage = (e: any) => {
         const files = e.target.files[0]
-        setFileToBase(files)
-        
+        if(files.size > 2 * 1024 * 1024) {
+            e.target.value = ''
+            toast.success('Image size must be less than 2 mb', { position: "top-right", });
+        } else {
+            setFileToBase(files)
+        }
     }
 
     const setFileToBase = async(file: any) => {
@@ -37,12 +40,8 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
         reader.readAsDataURL(file);
         reader.onloadend = () => {
           setImage(reader.result);
-          console.log(reader.result)
+        //   console.log(reader.result)
         };
-        // let result = await cloudinary.uploader.upload(image, {
-        //     folder: "user",
-        // });
-        // console.log(result.url)
     };
 
     const handleSubmit = async(e: React.FormEvent) => {
