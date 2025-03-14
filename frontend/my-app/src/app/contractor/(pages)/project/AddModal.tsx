@@ -2,6 +2,7 @@ import { apiCheck } from "@/app/api/api";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+// import cloudinary from '../../../../lib/cloudinary'
 
 type AddFormProps = {
     cancel: Function;
@@ -28,15 +29,20 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
     const handleImage = (e: any) => {
         const files = e.target.files[0]
         setFileToBase(files)
+        
     }
 
-    const setFileToBase = (file: any) => {
+    const setFileToBase = async(file: any) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = () => {
           setImage(reader.result);
           console.log(reader.result)
         };
+        // let result = await cloudinary.uploader.upload(image, {
+        //     folder: "user",
+        // });
+        // console.log(result.url)
     };
 
     const handleSubmit = async(e: React.FormEvent) => {
