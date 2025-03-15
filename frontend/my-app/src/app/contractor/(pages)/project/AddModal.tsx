@@ -163,7 +163,7 @@ const AddModal: React.FC<AddFormProps> = ({cancel, afterModal}) => {
                         <button
                             onClick={handleSubmit}
                             className="px-5 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
-                            >
+                        >
                             Save
                         </button>
                     </div>
