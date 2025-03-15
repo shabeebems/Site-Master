@@ -48,6 +48,10 @@ const Content = () => {
     setIsModalOpen(false)
   }
 
+  const afterModalSuccess = (newProject: Project) => {
+    setProjects((prevProjects) => [...prevProjects, newProject])
+  }
+
   return (
     <>
         <div className="p-7 text-2xl font-medium flex-1 max-h-screen">
@@ -106,7 +110,7 @@ const Content = () => {
 
         {/* Modal */}
         {isModalOpen && (
-          <AddModal cancel={cancelModal} />
+          <AddModal cancel={cancelModal} afterModal={afterModalSuccess} />
         )}
 
 

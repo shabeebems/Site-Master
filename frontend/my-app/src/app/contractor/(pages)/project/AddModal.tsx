@@ -1,15 +1,19 @@
 import { apiCheck } from "@/app/api/api";
+import Loading from "@/app/components/Loading";
 import { useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 type AddFormProps = {
     cancel: Function;
+    afterModal: Function;
 };
 
 type Project = { name: string; location: string; startingDate: string; endingDate: string };
 
-const AddModal: React.FC<AddFormProps> = ({cancel}) => {
+const AddModal: React.FC<AddFormProps> = ({cancel, afterModal}) => {
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const [newProject, setNewProject] = useState<Project>({
         name: "",
@@ -25,11 +29,12 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
 
     // For adding image
     const [image, setImage] = useState<any>(null)
+
     const handleImage = (e: any) => {
         const files = e.target.files[0]
         if(files.size > 2 * 1024 * 1024) {
             e.target.value = ''
-            toast.success('Image size must be less than 2 mb', { position: "top-right", });
+            toast.error('Image size must be less than 2 mb', { position: "top-right", });
         } else {
             setFileToBase(files)
         }
@@ -46,6 +51,7 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
 
     const handleSubmit = async(e: React.FormEvent) => {
         e.preventDefault()
+        setIsLoading(true)
         try {
             // Calling the api to validate and add new projects
             const response = await apiCheck({ ...newProject, image }, 'contractor/new_project')
@@ -59,13 +65,15 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
                     endingDate: "",
                 })
                 setImage(null)
-                cancel()
+                afterModal({ ...newProject, image })
             } else {
                 toast.error(response.message, { position: "top-right", });
             }
             
         } catch (error) {
             toast.error("Error from server side while adding projects", { position: "top-right", });
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -142,18 +150,24 @@ const AddModal: React.FC<AddFormProps> = ({cancel}) => {
 
             {/* Buttons */}
             <div className="flex justify-end gap-3">
-                <button 
-                    onClick={() => cancel()}
-                    className="px-5 py-2.5 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
-                >
-                    Cancel
-                </button>
-                <button
-                    onClick={handleSubmit}
-                    className="px-5 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
-                >
-                    Save
-                </button>
+                {isLoading ? 
+                    <Loading />
+                : ( 
+                    <div>
+                        <button 
+                            onClick={() => cancel()}
+                            className="px-5 py-2.5 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition"
+                            >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={handleSubmit}
+                            className="px-5 py-2.5 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition"
+                            >
+                            Save
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     </div>
