@@ -257,4 +257,13 @@ export class ContractorService implements IContractorService {
         }
     }
 
+    public getSingleProject = async(_id: string): Promise<ServiceResponse> => {
+        const project = await projectSchema.findProjectById(_id)
+        return {
+            success: true,
+            message: Messages.PROJECTS_FETCH_SUCCESS,
+            data: project
+        }
+    }
+
 }

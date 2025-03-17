@@ -12,6 +12,7 @@ router.post('/newWorker', authenticateToken, contractorController.addWorker)
       .get('/get_equipment', authenticateToken, contractorController.getEquipment)
       .post('/new_project', authenticateToken, contractorController.newProject)
       .get('/get_projects', authenticateToken, contractorController.getProjects)
+      .get('/get_single_project/:_id', authenticateToken, contractorController.getSingleProject)
       
 
 export default router

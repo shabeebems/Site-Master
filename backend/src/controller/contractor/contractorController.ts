@@ -138,4 +138,24 @@ export class ContractorController implements IContractorController {
         }
 
     }
+
+    public getSingleProject = async(req: Request, res: Response): Promise<any> => {
+        try {
+            const result: ControllerResponse = await contractorService.getSingleProject(req.params._id)
+         
+            const { success, message, data } = result
+            
+            return res.status(201).json({
+                success,
+                message,
+                data
+            });
+        } catch (error) {
+            console.error('FETCH_PROJECT_SERVER_ERROR', error);
+            return res.status(500).json({
+                success: false,
+                message: 'FETCH_PROJECT_SERVER_ERROR',
+            });
+        }
+    }
 }

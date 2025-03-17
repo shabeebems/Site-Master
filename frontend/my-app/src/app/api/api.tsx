@@ -16,7 +16,17 @@ export const apiCheck = async (data: object, route: string) => {
 export const fetchDetails = async (route: string) => {
     try {
         const response = await apiClient.get(`http://localhost:5000/api/contractor/${route}`, { withCredentials: true })
-        console.log('api', response.data)
+        return response?.data.data
+    } catch (error) {
+        console.error("Error during fetching workers", error);
+        throw error;
+    }
+}
+
+// Get datas of single (equipment / project / worker) with _id
+export const fetchSingleData = async (route: string, _id: string) => {
+    try {
+        const response = await apiClient.get(`http://localhost:5000/api/contractor/${route}/${_id}`, { withCredentials: true })
         return response?.data.data
     } catch (error) {
         console.error("Error during fetching workers", error);
