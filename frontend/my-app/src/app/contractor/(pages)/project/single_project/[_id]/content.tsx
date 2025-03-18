@@ -78,6 +78,10 @@ const Content: React.FC<PageProps> = ({ _id }) => {
         return new Date(dateString).toLocaleDateString();
     };
 
+    const closeModal = () => {
+        setIsModalOpen(false)
+    }
+
     return (
         <div className="max-w-6xl mx-auto p-4 md:p-6">
             {/* Header Section */}
@@ -173,7 +177,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
             </div>
             {/* Modal */}
             {isModalOpen && (
-                <AddTask/>
+                <AddTask closeModal={closeModal}/>
             )}
         </div>
     )
