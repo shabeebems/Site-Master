@@ -150,31 +150,32 @@ export class ContractorController implements IContractorController {
                 message,
                 data
             });
+            
         } catch (error) {
-            console.error('FETCH_PROJECT_SERVER_ERROR', error);
+            console.error(Messages.SINGLE_PROJECTS_FETCH_FAILED, error);
             return res.status(500).json({
                 success: false,
-                message: 'FETCH_PROJECT_SERVER_ERROR',
+                message: Messages.SINGLE_PROJECTS_FETCH_FAILED,
             });
         }
     }
 
     public addTask = async(req: Request, res: Response): Promise<any> => {
         try {
-            // const result: ControllerResponse = 
-            await contractorService.addTask(req)
+            const result: ControllerResponse = await contractorService.addTask(req)
          
-            // const { success, message, data } = result
+            const { success, message } = result
             
             return res.status(201).json({
-                success: true,
-                message: 'ss',
+                success,
+                message,
             });
+
         } catch (error) {
-            console.error('FETCH_PROJECT_SERVER_ERROR', error);
+            console.error(Messages.ADD_TASK_SERVER_ERROR, error);
             return res.status(500).json({
                 success: false,
-                message: 'FETCH_PROJECT_SERVER_ERROR',
+                message: Messages.ADD_TASK_SERVER_ERROR,
             });
         }
     }

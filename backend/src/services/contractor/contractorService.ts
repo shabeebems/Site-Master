@@ -10,6 +10,7 @@ import cloudinary from '../../utils/cloudinary'
 import { UserRepository } from "../../repositories/user/userRepository";
 import { EquipmentRepository } from "../../repositories/equipment/equipmentRepository";
 import { ProjectRepository } from "../../repositories/project/projectRepository";
+import taskModel from "../../model/taskModel";
 
 const projectSchema = new ProjectRepository()
 const userScheme = new UserRepository()
@@ -258,34 +259,51 @@ export class ContractorService implements IContractorService {
     }
 
     public getSingleProject = async(_id: string): Promise<ServiceResponse> => {
-        const project = await projectSchema.findProjectById(_id)
-        return {
-            success: true,
-            message: Messages.PROJECTS_FETCH_SUCCESS,
-            data: project
+        try {
+            const project = await projectSchema.findProjectById(_id)
+            return {
+                success: true,
+                message: Messages.SINGLE_PROJECTS_FETCH_SUCCESS,
+                data: project
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.SINGLE_PROJECTS_FETCH_FAILED
+            }
         }
     }
 
     public addTask = async(req: any): Promise<ServiceResponse> => {
         try {
+            const { name, startingDate, endingDate } = req.body
+            if(!name || !startingDate || !endingDate) {
+                return {
+                    success: false,
+                    message: Messages.FIELDS_REQUIRED,
+                }
+            }
 
-            // const accessToken = req.cookies.accessToken
-            
-            // // Decode access token for get logged contractor id for get workers from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
-            // const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
+            if(startingDate > endingDate) {
+                return {
+                    success: false,
+                    message: Messages.STARTING_DATE_GREATER,
+                }
+            }
 
-            // const projects = await projectSchema.getProjects(decoded._id)
+            await taskModel.insertOne({ ...req.params, ...req.body })
 
             return {
                 success: true,
-                message: Messages.PROJECTS_FETCH_SUCCESS,
+                message: Messages.TASK_ADDED_SUCCESS,
             }
             
         } catch (error) {
             console.log(error)
             return {
                 success: false,
-                message: Messages.PROJECTS_FETCH_FAILED
+                message: Messages.TASK_ADDED_FAILED
             }
         }
     }

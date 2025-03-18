@@ -41,8 +41,11 @@ export const Messages = {
     STARTING_DATE_GREATER: "Starting date is greater than ending date",
     PROJECT_ADDED_SUCCESS: "Successfully added new project",
     PROJECT_ADD_SERVER_ERROR: "Server error occurred while adding the project",
-    PROJECTS_FETCH_SUCCESS: "Successfully fetched products",
-    PROJECTS_FETCH_FAILED: "Server error occurred while fetching products",
+    PROJECTS_FETCH_SUCCESS: "Successfully fetched projects",
+    PROJECTS_FETCH_FAILED: "Server error occurred while fetching projects",
+    SINGLE_PROJECTS_FETCH_SUCCESS: "Successfully fetched single project details",
+    SINGLE_PROJECTS_FETCH_FAILED: "Server error occurred while fetching single project details",
+
 
     // Controller auth
     REGISTER_CONTROLLER_ERROR: "Unexpected error in register controller",
@@ -58,15 +61,20 @@ export const Messages = {
     FETCH_EQUIPMENT_SERVER_ERROR: "Server error during equipment fetch",
     ADD_PROJECT_SERVER_ERROR: "Server error during project addition",
     FETCH_PROJECTS_SERVER_ERROR: "Server error during projects fetch",
-
+    
     // Tokens
     ACCESS_TOKEN_INVALID: 'Access token verification failed',
     REFRESH_TOKEN_INVALID: 'Refresh token verification failed',
     NO_TOKEN: 'No tokens found in the request',
-
+    
     // Google auth
     GOOGLE_AUTH_SUCCESS: "Google authentication successful",
     GOOGLE_AUTH_FAILED: "Google authentication failed",
+    
+    // Tasks
+    TASK_ADDED_SUCCESS: "Task added successfully",
+    TASK_ADDED_FAILED: "Task added failed",
+    ADD_TASK_SERVER_ERROR: "Server error during task addition",
 
 
 }
