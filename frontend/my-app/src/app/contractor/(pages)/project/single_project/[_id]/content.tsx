@@ -59,9 +59,9 @@ const Content: React.FC<PageProps> = ({ _id }) => {
       const fetchData = async () => {
         try {
   
-          // Call api to get projects
+          // Call api to get project
           const getProject = await fetchSingleData('get_single_project', _id);
-          // Store projects details to state
+          // Store project details to state
           setProject(getProject);
   
         } catch (error) {

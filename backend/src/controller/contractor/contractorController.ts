@@ -150,7 +150,7 @@ export class ContractorController implements IContractorController {
                 message,
                 data
             });
-            
+
         } catch (error) {
             console.error(Messages.SINGLE_PROJECTS_FETCH_FAILED, error);
             return res.status(500).json({
@@ -163,6 +163,26 @@ export class ContractorController implements IContractorController {
     public addTask = async(req: Request, res: Response): Promise<any> => {
         try {
             const result: ControllerResponse = await contractorService.addTask(req)
+         
+            const { success, message } = result
+            
+            return res.status(201).json({
+                success,
+                message,
+            });
+
+        } catch (error) {
+            console.error(Messages.ADD_TASK_SERVER_ERROR, error);
+            return res.status(500).json({
+                success: false,
+                message: Messages.ADD_TASK_SERVER_ERROR,
+            });
+        }
+    }
+
+    public getAvailableEquipment = async(req: Request, res: Response): Promise<any> => {
+        try {
+            const result: ControllerResponse = await contractorService.getAvailableEquipment(req)
          
             const { success, message } = result
             

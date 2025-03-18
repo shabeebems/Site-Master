@@ -1,6 +1,6 @@
-import { apiCheck } from '@/app/api/api';
+import { apiCheck, fetchDetails } from '@/app/api/api';
 import Loading from '@/app/components/Loading';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -32,6 +32,24 @@ const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
         startingDate: "",
         endingDate: ""
     })
+
+    const [availableEquipment, setAvailableEquipment] = useState<[]>([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+        
+                // Call api to get project
+                const getAvailableEquipment = await fetchDetails('get_available_equipment');
+                // Store project details to state
+                setAvailableEquipment(getAvailableEquipment);
+        
+            } catch (error) {
+                console.error("Error fetching projects:", error);
+            }
+        };
+        fetchData();
+    }, [])
 
     const [isLoading, setIsLoading] = useState(false);
 
