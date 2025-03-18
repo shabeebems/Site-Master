@@ -177,7 +177,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
             </div>
             {/* Modal */}
             {isModalOpen && (
-                <AddTask closeModal={closeModal}/>
+                <AddTask closeModal={closeModal} projectId={_id}/>
             )}
         </div>
     )

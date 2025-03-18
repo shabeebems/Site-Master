@@ -1,3 +1,4 @@
+import { apiCheck } from '@/app/api/api';
 import React, { useState } from 'react'
 
 interface Equipment {
@@ -5,17 +6,30 @@ interface Equipment {
     count: number;
 }
 
-interface ProjectModalProps {
-    closeModal: () => void;
+interface TaskData {
+    name: string;
+    startingDate: string;
+    endingDate: string;
 }
 
-const AddTask = ({closeModal}: ProjectModalProps) => {
+interface ProjectModalProps {
+    closeModal: () => void;
+    projectId: any;
+}
+
+const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
+
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     const [workers, setWorkers] = useState<string[]>([]);
     const [equipmentName, setEquipmentName] = useState<string>("");
     const [equipmentCount, setEquipmentCount] = useState<string>("");
     const [workerName, setWorkerName] = useState<string>("");
-  
+    const [taskData, setTaskData] = useState<TaskData>({
+        name: '',
+        startingDate: "",
+        endingDate: ""
+    })
+
     const addEquipment = () => {
         if (equipmentName && equipmentCount) {
             setEquipment([...equipment, { name: equipmentName, count: Number(equipmentCount) }]);
@@ -38,6 +52,21 @@ const AddTask = ({closeModal}: ProjectModalProps) => {
     const removeWorker = (index: number) => {
         setWorkers(workers.filter((_, i) => i !== index));
     };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setTaskData({ ...taskData, [name]: value })
+    }
+
+    const handleSubmit = async(e: React.FormEvent) => {
+        e.preventDefault()
+        try {
+            const response = await apiCheck({ ...taskData, workers, equipment }, `contractor/add_task/${projectId}`)
+            console.log(workers, equipment, taskData)
+        } catch (error) {
+            console.log('Task adding error', error)
+        }
+    }
   
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-auto">
@@ -46,17 +75,17 @@ const AddTask = ({closeModal}: ProjectModalProps) => {
                 
                 <div>
                     <label className="block text-sm font-medium text-gray-600 mb-1">Task Name</label>
-                    <input type="text" placeholder="Enter task name" className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500" />
+                    <input onChange={handleChange} type="text" name='name' placeholder="Enter task name" className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500" />
                 </div>
 
                 <div>
                     <label className="block text-sm font-medium text-gray-600 mb-1">Starting Date</label>
-                    <input type="date" min={new Date().toISOString().split("T")[0]} className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500" />
+                    <input onChange={handleChange} type="date" name='startingDate' min={new Date().toISOString().split("T")[0]} className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500" />
                 </div>
 
                 <div>
                     <label className="block text-sm font-medium text-gray-600 mb-1">Ending Date</label>
-                    <input type="date" min={new Date().toISOString().split("T")[0]} className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500" />
+                    <input onChange={handleChange} type="date" name='endingDate' min={new Date().toISOString().split("T")[0]} className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500" />
                 </div>
 
                 {/* Equipment */}
@@ -97,7 +126,7 @@ const AddTask = ({closeModal}: ProjectModalProps) => {
                 {/* Buttons */}
                 <div className="flex justify-end gap-3">
                     <button onClick={closeModal} className="px-5 py-2 rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300 transition">Cancel</button>
-                    <button className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">Save</button>
+                    <button onClick={handleSubmit} className="px-5 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition">Save</button>
                 </div>
             </div>
         </div>

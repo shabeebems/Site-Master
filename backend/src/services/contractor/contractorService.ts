@@ -266,4 +266,28 @@ export class ContractorService implements IContractorService {
         }
     }
 
+    public addTask = async(req: any): Promise<ServiceResponse> => {
+        try {
+
+            // const accessToken = req.cookies.accessToken
+            
+            // // Decode access token for get logged contractor id for get workers from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
+            // const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
+
+            // const projects = await projectSchema.getProjects(decoded._id)
+
+            return {
+                success: true,
+                message: Messages.PROJECTS_FETCH_SUCCESS,
+            }
+            
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.PROJECTS_FETCH_FAILED
+            }
+        }
+    }
+
 }
