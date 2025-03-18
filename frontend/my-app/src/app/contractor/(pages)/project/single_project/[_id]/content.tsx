@@ -1,4 +1,8 @@
-import React from 'react'
+'use client'
+import React, { useEffect, useState } from 'react'
+import AddTask from './AddTask';
+
+import { fetchSingleData } from '@/app/api/api';
 
 interface Project {
     name: string;
@@ -6,18 +10,69 @@ interface Project {
     status: string;
     startingDate: Date;
     endingDate: Date;
-    _id: any;
+    // _id: any;
     image: string;
 }
 
 type PageProps = {
-    tasks: any[];
-    equipment: any[];
-    project: Project | undefined;
+    _id: any;
 };
 
 
-const Content: React.FC<PageProps> = ({tasks, equipment, project}) => {
+const Content: React.FC<PageProps> = ({ _id }) => {
+
+    const tasks = [
+        { 
+          name: "Foundation Work", 
+          startDate: "2024-03-01", 
+          endDate: "2024-05-15", 
+          status: "in-progress" 
+        },
+        { 
+          name: "Steel Framework Installation", 
+          startDate: "2024-05-20", 
+          endDate: "2024-08-30", 
+          status: "planned" 
+        }
+    ];
+
+    const equipment = [
+    { 
+        name: "Tower Crane", 
+        count: 2, 
+        startDate: "2024-03-01", 
+        expireDate: "2025-12-31" 
+    },
+    { 
+        name: "Concrete Mixer", 
+        count: 4, 
+        startDate: "2024-02-15", 
+        expireDate: "2024-12-31" 
+    }
+    ];
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [project, setProject] = useState<Project>()
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+  
+          // Call api to get projects
+          const getProject = await fetchSingleData('get_single_project', _id);
+          // Store projects details to state
+          setProject(getProject);
+  
+        } catch (error) {
+          console.error("Error fetching projects:", error);
+        }
+      };
+    
+      // Call function
+      fetchData();
+    }, [])
+
     const formatDate = (dateString: any) => {
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return new Date(dateString).toLocaleDateString();
@@ -64,8 +119,10 @@ const Content: React.FC<PageProps> = ({tasks, equipment, project}) => {
                 <div>
                     <div className="flex justify-between items-center mb-6 border-b pb-3">
                         <h2 className="text-2xl font-semibold">Project Tasks</h2>
-                        <button className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition">
-                        + New Task
+                        <button
+                            onClick={() => setIsModalOpen(true)}
+                            className="bg-blue-600 text-white px-4 py-2 rounded-xl text-sm font-medium hover:bg-blue-700 transition">
+                            + New Task
                         </button>
                     </div>
                     <div className="grid gap-4">
@@ -114,6 +171,10 @@ const Content: React.FC<PageProps> = ({tasks, equipment, project}) => {
                 </div>
                 </div>
             </div>
+            {/* Modal */}
+            {isModalOpen && (
+                <AddTask/>
+            )}
         </div>
     )
 }
