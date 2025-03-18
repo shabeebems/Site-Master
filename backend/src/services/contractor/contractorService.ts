@@ -315,9 +315,12 @@ export class ContractorService implements IContractorService {
             // Decode access token for get logged contractor id for get equipment from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
             const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
 
+            const availableEquipment = await equipmentScheme.findAvailableEquipment(decoded._id)
+            
             return {
                 success: true,
                 message: Messages.TASK_ADDED_SUCCESS,
+                data: availableEquipment
             }
             
         } catch (error) {

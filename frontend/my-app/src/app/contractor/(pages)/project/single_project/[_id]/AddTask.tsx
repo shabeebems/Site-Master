@@ -33,7 +33,7 @@ const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
         endingDate: ""
     })
 
-    const [availableEquipment, setAvailableEquipment] = useState<[]>([]);
+    const [availableEquipment, setAvailableEquipment] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -43,7 +43,6 @@ const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
                 const getAvailableEquipment = await fetchDetails('get_available_equipment');
                 // Store project details to state
                 setAvailableEquipment(getAvailableEquipment);
-        
             } catch (error) {
                 console.error("Error fetching projects:", error);
             }
@@ -54,11 +53,20 @@ const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const addEquipment = () => {
+        
         if (equipmentName && equipmentCount) {
-            setEquipment([...equipment, { name: equipmentName, count: Number(equipmentCount) }]);
-            setEquipmentName("");
-            setEquipmentCount("");
-          }
+            let availableCount = availableEquipment.find(t => t.tool === equipmentName)
+
+            if (equipment.find((item) => item.name === equipmentName)) {
+                toast.error(`${equipmentName} already added`, { position: "top-right", });
+            } else if(availableCount.available >= equipmentCount) {
+                setEquipment([...equipment, { name: equipmentName, count: Number(equipmentCount) }]);
+                setEquipmentName("");
+                setEquipmentCount("");
+            } else {
+                toast.error(`Only ${availableCount.available} ${equipmentName} are available`, { position: "top-right", });
+            }
+        }
     };
 
     const removeEquipment = (index: number) => {
@@ -131,8 +139,19 @@ const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
                 <div>
                     <label className="block text-sm font-medium text-gray-600 mb-1">Equipment</label>
                     <div className="flex gap-2">
-                        <input type="text" value={equipmentName} onChange={(e) => setEquipmentName(e.target.value)} placeholder="Equipment name" className="w-2/3 border border-gray-300 rounded-lg p-2" />
-                        <input type="number" value={equipmentCount} onChange={(e) => setEquipmentCount(e.target.value)} placeholder="Count" className="w-1/3 border border-gray-300 rounded-lg p-2" />
+                        <select
+                            value={equipmentName}
+                            onChange={(e) => setEquipmentName(e.target.value)}
+                            className="w-2/3 border border-gray-300 rounded-lg p-2"
+                        >
+                            <option value="">Select Equipment</option>
+                            {availableEquipment.map((tool, index) => (
+                                <option key={index} value={tool.tool}>{tool.tool}</option>
+                            ))}
+                        </select>
+                        <input 
+                            type="number" value={equipmentCount} onChange={(e) => setEquipmentCount(e.target.value)} placeholder="Count" className="w-1/3 border border-gray-300 rounded-lg p-2" 
+                        />
                         <button onClick={addEquipment} className="px-3 py-2 bg-blue-600 text-white rounded-lg">Add</button>
                     </div>
                     <ul className="mt-2 space-y-1 max-h-32 overflow-y-auto">

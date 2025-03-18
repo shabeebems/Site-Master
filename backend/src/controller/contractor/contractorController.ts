@@ -184,11 +184,12 @@ export class ContractorController implements IContractorController {
         try {
             const result: ControllerResponse = await contractorService.getAvailableEquipment(req)
          
-            const { success, message } = result
+            const { success, message, data } = result
             
             return res.status(201).json({
                 success,
                 message,
+                data
             });
 
         } catch (error) {
