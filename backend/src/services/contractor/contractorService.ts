@@ -11,6 +11,7 @@ import { UserRepository } from "../../repositories/user/userRepository";
 import { EquipmentRepository } from "../../repositories/equipment/equipmentRepository";
 import { ProjectRepository } from "../../repositories/project/projectRepository";
 import taskModel from "../../model/taskModel";
+import toolModel from "../../model/toolModel";
 
 const projectSchema = new ProjectRepository()
 const userScheme = new UserRepository()
@@ -293,6 +294,14 @@ export class ContractorService implements IContractorService {
             }
 
             await taskModel.insertOne({ ...req.params, ...req.body })
+
+            // decrease count from available and increase from onSite equipment 
+            for (const item of req.body.equipment) {
+                await toolModel.updateOne(
+                    { _id: item.equipmentId }, // Find by equipmentId
+                    { $inc: { available: -item.count, onSite: item.count } } // Decrease available count
+                );
+            }
 
             return {
                 success: true,

@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 interface Equipment {
     name: string;
     count: number;
+    equipmentId: any;
 }
 
 interface TaskData {
@@ -33,15 +34,15 @@ const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
         endingDate: ""
     })
 
+    // To store available equipment from db
     const [availableEquipment, setAvailableEquipment] = useState<any[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-        
-                // Call api to get project
+                // Call api to get available equipment
                 const getAvailableEquipment = await fetchDetails('get_available_equipment');
-                // Store project details to state
+                // Store equipment details to state
                 setAvailableEquipment(getAvailableEquipment);
             } catch (error) {
                 console.error("Error fetching projects:", error);
@@ -53,20 +54,31 @@ const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const addEquipment = () => {
-        
-        if (equipmentName && equipmentCount) {
-            let availableCount = availableEquipment.find(t => t.tool === equipmentName)
-
-            if (equipment.find((item) => item.name === equipmentName)) {
-                toast.error(`${equipmentName} already added`, { position: "top-right", });
-            } else if(availableCount.available >= equipmentCount) {
-                setEquipment([...equipment, { name: equipmentName, count: Number(equipmentCount) }]);
-                setEquipmentName("");
-                setEquipmentCount("");
-            } else {
-                toast.error(`Only ${availableCount.available} ${equipmentName} are available`, { position: "top-right", });
-            }
+        if (!equipmentName || !equipmentCount) {
+            toast.error("Please select equipment and enter a valid count.", { position: "top-right" });
+            return;
         }
+
+        // Find the equipment to get available count
+        const availableItem = availableEquipment.find(t => t.tool === equipmentName)
+        
+        // Check if the equipment is already added
+        if (equipment.some((item) => item.name === equipmentName)) {
+            toast.error(`${equipmentName} is already added`, { position: "top-right", });
+            return
+        }
+        
+        if(availableItem.available < equipmentCount) {
+            // While input number is gt available number
+            toast.error(`Only ${availableItem.available} ${equipmentName} are available`, { position: "top-right", });
+            return
+        }
+        
+        // Add equipment to the list
+        setEquipment([...equipment, { equipmentId: availableItem._id, name: equipmentName, count: Number(equipmentCount) }]);
+
+        setEquipmentName("");
+        setEquipmentCount("");
     };
 
     const removeEquipment = (index: number) => {

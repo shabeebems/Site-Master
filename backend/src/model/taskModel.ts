@@ -10,6 +10,11 @@ const taskSchema = new mongoose.Schema({
     startingDate: { type: Date, required: true },
     endingDate: { type: Date, required: true },
     equipment: [{
+        equipmentId : {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'equipment'
+        },
         name: {
             type:String,
             required: true
