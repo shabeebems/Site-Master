@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import AddTask from './AddTask';
+import { useRouter } from "next/navigation";
 
 import { fetchSingleData } from '@/app/api/api';
 
@@ -28,6 +29,8 @@ type PageProps = {
 
 const Content: React.FC<PageProps> = ({ _id }) => {
 
+    const router = useRouter()
+    
     const [tasks, setTasks] = useState<ITask[]>([])
 
     // const [equipment, setEquipment] = useState([])
@@ -98,7 +101,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 🏗️ View Workers
                 </button>
                 <button
-                //   onClick={() => navigate('/equipment')}
+                onClick={() => router.push(`/contractor/project/single_project/${_id}/equipment`)}
                 className="bg-purple-600 text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:bg-purple-700 transition-transform transform hover:scale-105">
                 🏢 View Equipment
                 </button>
