@@ -34,6 +34,17 @@ export const fetchSingleData = async (route: string, _id: string) => {
     }
 }
 
+// Patch works
+export const simpleEdits = async (route: string, _id: string) => {
+    try {
+        const response = await apiClient.patch(`http://localhost:5000/api/contractor/${route}/${_id}`, { withCredentials: true })
+        return response?.data.data
+    } catch (error) {
+        console.error("Error during fetching workers", error);
+        throw error;
+    }
+}
+
 // Logout
 export const logoutApi = async () => {
     try {

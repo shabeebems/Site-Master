@@ -200,4 +200,47 @@ export class ContractorController implements IContractorController {
             });
         }
     }
+
+    public getTaskEquipment = async(req: Request, res: Response): Promise<any> => {
+        try {
+            const result: ControllerResponse = await contractorService.getTaskEquipment(req.params.projectId)
+         
+            const { success, message, data } = result
+            
+            return res.status(201).json({
+                success,
+                message,
+                data
+            });
+
+        } catch (error) {
+            console.error(Messages.ADD_TASK_SERVER_ERROR, error);
+            return res.status(500).json({
+                success: false,
+                message: Messages.ADD_TASK_SERVER_ERROR,
+            });
+        }
+    }
+
+    public returnEquipment = async(req: Request, res: Response): Promise<any> => {
+        try {
+            // const result: ControllerResponse = 
+            await contractorService.returnEquipment(req.params.taskEquipmentId)
+         
+            // const { success, message, data } = result
+            
+            return res.status(201).json({
+                success: true,
+                message: 'ss',
+            });
+
+        } catch (error) {
+            console.error(Messages.ADD_TASK_SERVER_ERROR, error);
+            return res.status(500).json({
+                success: false,
+                message: Messages.ADD_TASK_SERVER_ERROR,
+            });
+        }
+    }
+
 }

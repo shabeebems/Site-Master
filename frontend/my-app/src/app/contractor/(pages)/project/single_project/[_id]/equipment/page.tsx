@@ -8,7 +8,7 @@ interface PageProps {
 const Page: React.FC<PageProps> = ({ params }) => {
   return (
     <>
-      <Content _id={params._id} />
+      <Content projectId={params._id} />
     </>
   )
 }

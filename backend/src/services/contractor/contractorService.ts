@@ -343,6 +343,7 @@ export class ContractorService implements IContractorService {
         }
     }
 
+    // For adding equipment to task
     public getAvailableEquipment = async(req: any): Promise<ServiceResponse> => {
         try {
             const accessToken = req.cookies.accessToken
@@ -358,6 +359,64 @@ export class ContractorService implements IContractorService {
                 data: availableEquipment
             }
             
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.TASK_ADDED_FAILED
+            }
+        }
+    }
+
+    public getTaskEquipment = async(projectId: any): Promise<ServiceResponse> => {
+        try {
+            const tasks = await taskScheme.getTasks(projectId)
+
+            // Type assertion for equipment on taking from tasks
+            type Equipment = {
+                equipmentId: string;
+                name: string;
+                count: number;
+                _id: any;
+            };
+            // Extract equipment from tasks
+            const equipments = tasks.flatMap(task =>
+                task.equipment.map(equipment => {
+                    const eq = equipment as Equipment; // Type assertion
+                
+                    return {
+                        taskName: task.name,
+                        equipmentId: eq.equipmentId,
+                        _id: eq._id,
+                        name: eq.name,
+                        count: eq.count,
+                        startingDate: task.startingDate,
+                        endingDate: task.endingDate
+                    };
+                })
+            );
+
+            return {
+                success: true,
+                message: Messages.TASK_ADDED_SUCCESS,
+                data: equipments
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.TASK_ADDED_FAILED
+            }
+        }
+    }
+
+    public returnEquipment = async(taskEquipmentId: string): Promise<ServiceResponse> => {
+        try {
+            console.log('3', taskEquipmentId)
+            return {
+                success: true,
+                message: Messages.TASK_ADDED_SUCCESS,
+            }
         } catch (error) {
             console.log(error)
             return {
