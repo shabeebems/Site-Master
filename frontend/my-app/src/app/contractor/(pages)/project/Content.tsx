@@ -28,7 +28,6 @@ const Content = () => {
   
           // Call api to get projects
           const getProjects = await fetchDetails('get_projects');
-
           // Store projects details to state
           setProjects(getProjects);
   

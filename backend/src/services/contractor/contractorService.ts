@@ -12,10 +12,12 @@ import { EquipmentRepository } from "../../repositories/equipment/equipmentRepos
 import { ProjectRepository } from "../../repositories/project/projectRepository";
 import taskModel from "../../model/taskModel";
 import toolModel from "../../model/toolModel";
+import { TaskRepository } from "../../repositories/tasks/taskRepository";
 
 const projectSchema = new ProjectRepository()
 const userScheme = new UserRepository()
 const equipmentScheme = new EquipmentRepository()
+const taskScheme = new TaskRepository()
 
 export class ContractorService implements IContractorService {
 
@@ -261,11 +263,35 @@ export class ContractorService implements IContractorService {
 
     public getSingleProject = async(_id: string): Promise<ServiceResponse> => {
         try {
+            
             const project = await projectSchema.findProjectById(_id)
+            const tasks = await taskScheme.getTasks(_id)
+
+            // Type assertion for equipment on taking from tasks
+            // type Equipment = {
+            //     equipmentId: string;
+            //     name: string;
+            //     count: number;
+            // };
+            // Extract equipment from tasks
+            // const equipments = tasks.flatMap(task =>
+            //     task.equipment.map(equipment => {
+            //         const eq = equipment as Equipment; // Type assertion
+                
+            //         return {
+            //             equipmentId: eq.equipmentId,
+            //             name: eq.name,
+            //             count: eq.count,
+            //             startingDate: task.startingDate,
+            //             endingDate: task.endingDate
+            //         };
+            //     })
+            // );
+              
             return {
                 success: true,
                 message: Messages.SINGLE_PROJECTS_FETCH_SUCCESS,
-                data: project
+                data: [project, tasks]
             }
         } catch (error) {
             console.log(error)
@@ -293,7 +319,7 @@ export class ContractorService implements IContractorService {
                 }
             }
 
-            await taskModel.insertOne({ ...req.params, ...req.body })
+            await taskModel.insertOne({ ...req.params, ...req.body, status: 'Pending' })
 
             // decrease count from available and increase from onSite equipment 
             for (const item of req.body.equipment) {

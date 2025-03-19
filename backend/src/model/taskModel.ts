@@ -27,6 +27,11 @@ const taskSchema = new mongoose.Schema({
     workers: { 
         type: Array
     },
+    status: {
+        type: String, 
+        required: true,
+        enum: ["In progress", "On hold", "Completed", "Pending"] 
+    },
 });
 
 export default mongoose.model('task', taskSchema);
