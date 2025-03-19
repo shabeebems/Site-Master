@@ -225,7 +225,7 @@ export class ContractorController implements IContractorController {
     public returnEquipment = async(req: Request, res: Response): Promise<any> => {
         try {
             // const result: ControllerResponse = 
-            await contractorService.returnEquipment(req.params.taskEquipmentId)
+            await contractorService.returnEquipment(req.body)
          
             // const { success, message, data } = result
             

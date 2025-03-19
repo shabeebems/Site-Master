@@ -388,6 +388,7 @@ export class ContractorService implements IContractorService {
                         taskName: task.name,
                         equipmentId: eq.equipmentId,
                         _id: eq._id,
+                        taskId: task._id,
                         name: eq.name,
                         count: eq.count,
                         startingDate: task.startingDate,
@@ -410,9 +411,11 @@ export class ContractorService implements IContractorService {
         }
     }
 
-    public returnEquipment = async(taskEquipmentId: string): Promise<ServiceResponse> => {
+    public returnEquipment = async(data: any): Promise<ServiceResponse> => {
         try {
-            console.log('3', taskEquipmentId)
+            const task = await taskScheme.getReturnEquipmentByTask(data.taskId, data._id)
+            console.log(task)
+            console.log('3', data)
             return {
                 success: true,
                 message: Messages.TASK_ADDED_SUCCESS,

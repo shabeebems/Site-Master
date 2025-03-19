@@ -1,4 +1,5 @@
 export interface ITask {
+    _id: any;
     projectId: any;
     name: string;
     startingDate: Date;
