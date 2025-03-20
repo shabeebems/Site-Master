@@ -8,6 +8,7 @@ interface Equipment {
     name: string;
     count: number;
     equipmentId: any;
+    status: string;
 }
 
 interface TaskData {
@@ -75,7 +76,7 @@ const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
         }
         
         // Add equipment to the list
-        setEquipment([...equipment, { equipmentId: availableItem._id, name: equipmentName, count: Number(equipmentCount) }]);
+        setEquipment([...equipment, { equipmentId: availableItem._id, name: equipmentName, count: Number(equipmentCount), status: 'Active' }]);
 
         setEquipmentName("");
         setEquipmentCount("");

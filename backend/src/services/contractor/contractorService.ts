@@ -318,7 +318,7 @@ export class ContractorService implements IContractorService {
                     message: Messages.STARTING_DATE_GREATER,
                 }
             }
-
+            console.log('23123', req.body)
             await taskModel.insertOne({ ...req.params, ...req.body, status: 'Pending' })
 
             // decrease count from available and increase from onSite equipment 
@@ -378,6 +378,7 @@ export class ContractorService implements IContractorService {
                 name: string;
                 count: number;
                 _id: any;
+                status: string;
             };
             // Extract equipment from tasks
             const equipments = tasks.flatMap(task =>
@@ -392,7 +393,8 @@ export class ContractorService implements IContractorService {
                         name: eq.name,
                         count: eq.count,
                         startingDate: task.startingDate,
-                        endingDate: task.endingDate
+                        endingDate: task.endingDate,
+                        status: eq.status,
                     };
                 })
             );

@@ -14,6 +14,7 @@ interface IEquipment {
   _id: string;
   taskId: string;
   equipmentId: string
+  status: string
 }
 
 type PageProps = {
@@ -83,19 +84,19 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
               <td className="p-4">{moment(item.startingDate).calendar()}</td>
               <td className="p-4">{moment(item.endingDate).calendar()}</td>
               <td className="p-4 flex gap-3 justify-center">
-                <button
-                  onClick={() => onReturn(item)}
-                  className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-green-700 transition-transform transform hover:scale-105"
-                >
-                  Return
-                </button>
-                <button
-                  // onClick={() => onRemove(item)}
-                  className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-red-700 transition-transform transform hover:scale-105"
-                >
-                  Remove
-                </button>
+                {item.status === 'Active' ? (
+                  <button
+                    onClick={() => onReturn(item)}
+                    className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105"
+                  >
+                    Return
+                  </button>
+                ) : (
+                  <p className="text-gray-600 font-medium">{item.status}</p>
+                )}
               </td>
+
+
             </tr>
           ))}
         </tbody>
