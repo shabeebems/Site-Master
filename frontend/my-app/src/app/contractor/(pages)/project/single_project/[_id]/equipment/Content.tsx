@@ -12,7 +12,8 @@ interface IEquipment {
   taskName: string;
   count: number;
   _id: string;
-  taskId: string
+  taskId: string;
+  equipmentId: string
 }
 
 type PageProps = {
@@ -51,9 +52,8 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
         confirmButtonText: "Yes, Return it!",
       }).then(async(result) => {
         if (result.isConfirmed) {
-          const { _id, taskId } = returnEquipment
-          const getEquipment = await simpleEdits(`return_equipment`, { _id, taskId });
-          console.log('ss')
+          const { _id, taskId, count, equipmentId } = returnEquipment
+          const getEquipment = await simpleEdits(`return_equipment`, { _id, taskId, count, equipmentId });
         }
       });
     } catch (error) {

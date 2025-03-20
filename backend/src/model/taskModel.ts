@@ -22,7 +22,12 @@ const taskSchema = new mongoose.Schema({
         count: {
             type:Number,
             required: true
-        }
+        },
+        status: {
+            type: String, 
+            required: true,
+            enum: ["Active", "Returned"] 
+        },
     }],
     workers: { 
         type: Array
