@@ -243,4 +243,24 @@ export class ContractorController implements IContractorController {
         }
     }
 
+    public changeProjectStatus = async(req: Request, res: Response): Promise<any> => {
+        try {
+            // const result: ControllerResponse = 
+            await contractorService.changeProjectStatus(req.body)
+            // const { success, message, data } = result
+            
+            return res.status(201).json({
+                success: true,
+                message: 'ss',
+            });
+
+        } catch (error) {
+            console.error(Messages.ADD_TASK_SERVER_ERROR, error);
+            return res.status(500).json({
+                success: false,
+                message: Messages.ADD_TASK_SERVER_ERROR,
+            });
+        }
+    }
+
 }

@@ -9,7 +9,7 @@ const projectSchema = new mongoose.Schema({
     status: {
         type: String, 
         required: true,
-        enum: ["In progress", "On hold", "Completed", "Pending"] 
+        enum: ["In progress", "On Hold", "Completed", "Pending"] 
     },
     image: {
         type: String

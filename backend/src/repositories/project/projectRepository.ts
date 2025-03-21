@@ -14,4 +14,9 @@ export class ProjectRepository implements IProjectRepository {
     public findProjectById = async(_id: any): Promise<any | undefined> => {
         return await projectModel.findOne({ _id })
     }
+
+    public editStatus = async(_id: string, status: string): Promise<void> => {
+        const a = await projectModel.updateOne({ _id }, { $set: { status } })
+        console.log(a)
+    }
 }

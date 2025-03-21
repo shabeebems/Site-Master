@@ -416,8 +416,7 @@ export class ContractorService implements IContractorService {
     public returnEquipment = async(data: any): Promise<ServiceResponse> => {
         try {
             await taskScheme.getReturnEquipmentByTask(data.taskId, data._id)
-            const returning = await equipmentScheme.returnEquipment(data.equipmentId, data.count)
-            console.log('qe', returning)
+            await equipmentScheme.returnEquipment(data.equipmentId, data.count)
             return {
                 success: true,
                 message: Messages.TASK_ADDED_SUCCESS,
@@ -431,4 +430,19 @@ export class ContractorService implements IContractorService {
         }
     }
 
+    public changeProjectStatus = async(data: any): Promise<ServiceResponse> => {
+        try {
+            projectSchema.editStatus(data._id, data.status)
+            return {
+                success: true,
+                message: Messages.TASK_ADDED_SUCCESS,
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.TASK_ADDED_FAILED
+            }
+        }
+    }
 }

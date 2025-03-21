@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { FaTasks } from "react-icons/fa";
 import AddModal from "./AddModal";
-import { fetchDetails } from "@/app/api/api";
+import { fetchDetails, simpleEdits } from "@/app/api/api";
 import { useRouter } from "next/navigation";
 
 interface Project {
@@ -51,6 +51,10 @@ const Content = () => {
     setProjects((prevProjects) => [...prevProjects, newProject])
   }
 
+  const colombo = async(_id: string, status: string) => {
+    await simpleEdits('change_project_status', { _id, status });
+  }
+
   return (
     <>
         <div className="p-7 text-2xl font-medium flex-1 max-h-screen">
@@ -82,14 +86,17 @@ const Content = () => {
                   {(() => {
                     const today = new Date();
                     const startDate = new Date(project.startingDate);
-                    const endDate = new Date(project.endingDate);
+                    const endDate: any = new Date(project.endingDate);
 
                     let projectStatus = project.status; // Default from DB
 
-                    if (today >= startDate && today < endDate) {
+                    if (today > startDate && today <= endDate && projectStatus === "Pending") {
                       projectStatus = "In Progress";
-                    } else if (today >= endDate) {
+                      colombo(project._id, projectStatus)
+                    } else if (today >= endDate && projectStatus !== "Completed" && projectStatus !== "On Hold") {
+                      console.log(today, endDate)
                       projectStatus = "Completed";
+                      colombo(project._id, projectStatus)
                     }
 
                     return (
