@@ -73,19 +73,39 @@ const Content = () => {
               key={index}
               onClick={() => router.push(`/contractor/project/single_project/${project._id}`)}
               className="bg-white shadow-xl rounded-xl overflow-hidden transition-transform transform cursor-pointer hover:scale-105 duration-300"
-            >
+              >
               {/* Image */}
-              <div className="relative">
-                <img src={project.image} alt={project.name} className="w-full h-44" />
+                <div className="relative">
+                  <img src={project.image} alt={project.name} className="w-full h-44" />
                 
-                {/* Status Badge (Top Right) */}
-                <span
-                  className={`absolute top-3 right-3 text-xs text-white px-3 py-1 rounded-full ${
-                    project.status === 'Completed' ? 'bg-green-500' : 'bg-red-500'
-                  }`}
-                >
-                  {project.status}
-                </span>
+                  {/* Status Badge (Top Right) */}
+                  {(() => {
+                    const today = new Date();
+                    const startDate = new Date(project.startingDate);
+                    const endDate = new Date(project.endingDate);
+
+                    let projectStatus = project.status; // Default from DB
+
+                    if (today >= startDate && today < endDate) {
+                      projectStatus = "In Progress";
+                    } else if (today >= endDate) {
+                      projectStatus = "Completed";
+                    }
+
+                    return (
+                      <span
+                      className={`absolute top-3 right-3 text-xs text-white px-3 py-1 rounded-full ${
+                        projectStatus === 'Completed' ? 'bg-green-500' :
+                        projectStatus === 'In Progress' ? 'bg-blue-500' :
+                        projectStatus === 'On Hold' ? 'bg-yellow-500' : // Yellow for "On Hold"
+                        'bg-red-500'
+                      }`}
+                      >
+                        {projectStatus}
+                      </span>
+                    );
+                  })()}
+
               </div>
             
               {/* Card Content */}
@@ -98,15 +118,29 @@ const Content = () => {
                 {(() => {
                   const today: any = new Date();
                   const startDate: any = new Date(project.startingDate);
-                  const timeDiff = startDate - today;
-                  const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-            
-                  if (daysRemaining === 0) {
+                  const endDate: any = new Date(project.endingDate);
+
+                  const startDiff = startDate - today;
+                  const endDiff = endDate - today;
+
+                  const startDaysRemaining = Math.ceil(startDiff / (1000 * 60 * 60 * 24));
+                  const endDaysRemaining = Math.ceil(endDiff / (1000 * 60 * 60 * 24));
+
+                  // Alert for starting date
+                  if (startDaysRemaining === 0) {
                     return <p className="text-sm text-green-600 font-medium">🚀 Starting Today!</p>;
-                  } else if (daysRemaining > 0 && daysRemaining <= 7) {
-                    return <p className="text-sm text-orange-600 font-medium">📅 Starting Soon ({daysRemaining} days left)!</p>;
+                  } else if (startDaysRemaining > 0 && startDaysRemaining <= 7) {
+                    return <p className="text-sm text-orange-600 font-medium">📅 Starting Soon ({startDaysRemaining} days left)!</p>;
+                  }
+
+                  // Alert for ending date
+                  if (endDaysRemaining === 0) {
+                    return <p className="text-sm text-red-600 font-medium">⚠️ Ends Today!</p>;
+                  } else if (endDaysRemaining > 0 && endDaysRemaining <= 7) {
+                    return <p className="text-sm text-purple-600 font-medium">⏳ Ending Soon ({endDaysRemaining} days left)!</p>;
                   }
                 })()}
+
             
                 {/* Bottom Section: Date + Icon */}
                 <div className="flex justify-between items-center mt-3">
