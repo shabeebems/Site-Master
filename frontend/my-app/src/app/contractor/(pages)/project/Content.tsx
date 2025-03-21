@@ -70,39 +70,57 @@ const Content = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, index) => (
               <div 
-                key={index}
-                onClick={() => router.push(`/contractor/project/single_project/${project._id}`)}
-                className="bg-white shadow-xl rounded-xl overflow-hidden transition-transform transform cursor-pointer hover:scale-105 duration-300"
-              >
-                {/* Image */}
-                <div className="relative">
-                  <img src={project.image} alt={project.name} className="w-full h-44 " />
+              key={index}
+              onClick={() => router.push(`/contractor/project/single_project/${project._id}`)}
+              className="bg-white shadow-xl rounded-xl overflow-hidden transition-transform transform cursor-pointer hover:scale-105 duration-300"
+            >
+              {/* Image */}
+              <div className="relative">
+                <img src={project.image} alt={project.name} className="w-full h-44" />
+                
+                {/* Status Badge (Top Right) */}
+                <span
+                  className={`absolute top-3 right-3 text-xs text-white px-3 py-1 rounded-full ${
+                    project.status === 'Completed' ? 'bg-green-500' : 'bg-red-500'
+                  }`}
+                >
+                  {project.status}
+                </span>
+              </div>
+            
+              {/* Card Content */}
+              <div className="p-4 flex flex-col justify-between h-32">
+                {/* Project Title */}
+                <h2 className="text-lg font-semibold text-gray-800">{project.name}</h2>
+                <p className="text-sm text-gray-500">{project.location}</p>
+            
+                {/* Action Message for Start Date */}
+                {(() => {
+                  const today: any = new Date();
+                  const startDate: any = new Date(project.startingDate);
+                  const timeDiff = startDate - today;
+                  const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            
+                  if (daysRemaining === 0) {
+                    return <p className="text-sm text-green-600 font-medium">🚀 Starting Today!</p>;
+                  } else if (daysRemaining > 0 && daysRemaining <= 7) {
+                    return <p className="text-sm text-orange-600 font-medium">📅 Starting Soon ({daysRemaining} days left)!</p>;
+                  }
+                })()}
+            
+                {/* Bottom Section: Date + Icon */}
+                <div className="flex justify-between items-center mt-3">
+                  <p className="text-sm text-gray-500"><strong>Start:</strong> {new Date(project.startingDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
+                  <p className="text-sm text-gray-500"><strong>End:</strong> {new Date(project.endingDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                   
-                  {/* Status Badge (Top Right) */}
-                  <span
-                    className={`absolute top-3 right-3 text-xs text-white px-3 py-1 rounded-full bg-red-500`}
-                  >
-                    {project.status}
-                  </span>
-                </div>
-
-                {/* Card Content */}
-                <div className="p-4 flex flex-col justify-between h-32">
-                  {/* Project Title */}
-                  <h2 className="text-lg font-semibold text-gray-800">{project.name}</h2>
-                  <p className="text-sm text-gray-500">{project.location}</p>
-                  {/* Bottom Section: Date + Icon */}
-                  <div className="flex justify-between items-center mt-3">
-                    {/* <p className="text-sm text-gray-500">{project.startingDate}</p> */}
-                    <p className="text-sm text-gray-500"><strong>Start:</strong> {new Date(project.startingDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
-                    <p className="text-sm text-gray-500"><strong>End:</strong> {new Date(project.endingDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
-                    {/* Notification Icon */}
-                    <div className="p-2 bg-gray-200 rounded-full">
-                      <FaTasks size={16} className="text-gray-600" />
-                    </div>
+                  {/* Notification Icon */}
+                  <div className="p-2 bg-gray-200 rounded-full">
+                    <FaTasks size={16} className="text-gray-600" />
                   </div>
                 </div>
               </div>
+            </div>
+            
             ))}
           </div>
         </div>
