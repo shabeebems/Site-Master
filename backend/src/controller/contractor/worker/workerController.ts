@@ -1,15 +1,15 @@
 import { Request, Response } from 'express';
 import { Messages } from "../../../constants/messageConstants";
-import { ContractorService } from "../../../services/contractor/contractorService";
 import { IWorkerController, WorkerControllerResponse } from "./workerInterface";
+import { WorkerService } from '../../../services/contractor/worker/workerService';
 
-const contractorService = new ContractorService()
+const workerService = new WorkerService()
 
 export class WorkerController implements IWorkerController {
     
     public addWorker = async(req: Request, res: Response): Promise<void> => {
         try {
-            const result: WorkerControllerResponse = await contractorService.addWorker(req, req.body)
+            const result: WorkerControllerResponse = await workerService.addWorker(req, req.body)
             
             const { success, message, data } = result
 
@@ -33,7 +33,7 @@ export class WorkerController implements IWorkerController {
     public getWorkers = async(req: Request, res: Response): Promise<void> => {
         try {
 
-            const result: WorkerControllerResponse = await contractorService.getWorkers(req, req.body)
+            const result: WorkerControllerResponse = await workerService.getWorkers(req, req.body)
             
             const { success, message, data } = result
             

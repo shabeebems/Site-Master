@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ProjectControllerResponse, IProjectController } from './projectInterface';
-import { ContractorService } from '../../../services/contractor/contractorService';
+import { ContractorService } from '../../../services/contractor/project/projectService';
 import { Messages } from '../../../constants/messageConstants';
 
 const projectService = new ContractorService()

@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
 import { EquipmentControllerResponse, IEquipmentController } from './equipmentInterface';
-import { ContractorService } from '../../../services/contractor/contractorService';
 import { Messages } from '../../../constants/messageConstants';
+import { EquipmentService } from '../../../services/contractor/equipment/equipmentService';
 
-const workerService = new ContractorService()
+const equipmentService = new EquipmentService()
 
 export class EquipmentController implements IEquipmentController {
 
     public addEquipment = async(req: Request, res: Response): Promise<void> => {
             try {
     
-                const result: EquipmentControllerResponse = await workerService.addEquipment(req, req.body)
+                const result: EquipmentControllerResponse = await equipmentService.addEquipment(req, req.body)
                 
                 const { success, message } = result
     
@@ -34,7 +34,7 @@ export class EquipmentController implements IEquipmentController {
         public getEquipment = async(req: Request, res: Response): Promise<void> => {
             try {
     
-                const result: EquipmentControllerResponse = await workerService.getEquipment(req)
+                const result: EquipmentControllerResponse = await equipmentService.getEquipment(req)
              
                 const { success, message, data } = result
                 console.log('poooda', data)
