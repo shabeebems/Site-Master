@@ -14,7 +14,9 @@ export interface IUser {
 }
 
 export interface IUserRepository {
-    createUser(userData: object): Promise<IUser>;
+    createUser(userData: IUser): Promise<IUser>;
     findUserByEmail(email: string): Promise<IUser | null>;
-    findWorkersByContractorId(_id: string): Promise<IUser | null>;
+    changePasswordByEmail(email: string, password: string): Promise<void>;
+    findWorkersByContractorId(_id: string): Promise<IUser[]>;
+    findUserByToken(token: string, jwtSecret: string): Promise<IUser | null>;
 }

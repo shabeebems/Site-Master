@@ -14,9 +14,10 @@ export const authenticateToken = async(
     try {
         const accessToken = req.cookies.accessToken
 
+        const { ACCESS_TOKEN_SECRET,REFRESH_TOKEN_SECRET } = process.env
         if(accessToken) {
             // Verify access token
-            jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET as string, async(err: any, decoded: any) => {
+            jwt.verify(accessToken, ACCESS_TOKEN_SECRET as string, async(err: any, decoded: any) => {
                 if(err) {
                     // If didnt verify delete access and refresh token
                     deleteToken(res, 'accessToken')
@@ -31,7 +32,7 @@ export const authenticateToken = async(
                     return
                 }
 
-                const userDetails: any = await userSchema.findUserByToken(accessToken, process.env.ACCESS_TOKEN_SECRET)
+                const userDetails: any = await userSchema.findUserByToken(accessToken, ACCESS_TOKEN_SECRET || '')
                 
                 if(userDetails.is_block) {
                     
@@ -56,7 +57,7 @@ export const authenticateToken = async(
 
             if(refreshToken) {
                 // Verify refresh token
-                jwt.verify (refreshToken, process.env.REFRESH_TOKEN_SECRET as string, async (err: any, decoded: any) => {
+                jwt.verify (refreshToken, REFRESH_TOKEN_SECRET as string, async (err: any, decoded: any) => {
                     if(err) {
                         // If didnt verify delete access and refresh token
                         deleteToken(res, 'accessToken')
@@ -74,7 +75,7 @@ export const authenticateToken = async(
 
                         // Creating new access Token
                         // Finding user details by refresh token to payload for create access token
-                        const userDetails: any = await userSchema.findUserByToken(refreshToken, process.env.REFRESH_TOKEN_SECRET)
+                        const userDetails: any = await userSchema.findUserByToken(refreshToken, REFRESH_TOKEN_SECRET || '')
                         
                         if(userDetails.is_block) {
 

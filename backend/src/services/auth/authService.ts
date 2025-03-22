@@ -264,8 +264,10 @@ export class AuthService implements IAuthService {
 
             const hashPassword = await hashedPassword(password + '')
 
-            // Update new password after hashing
-            userSchema.changePasswordByEmail(email, hashPassword)
+            if(hashPassword) {
+                // Update new password after hashing
+                userSchema.changePasswordByEmail(email, hashPassword)
+            }
 
             // Send password and email to contractor's email
             sendPassword(email, password + '')
