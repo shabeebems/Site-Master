@@ -13,5 +13,5 @@ export interface ServiceResponse {
 
 export interface IWorkerService {
     addWorker(req: Request, data: object): Promise<ServiceResponse>;
-    getWorkers(req: Request, data: AddWorkerData): Promise<ServiceResponse>
+    getWorkers(req: Request): Promise<ServiceResponse>
 }

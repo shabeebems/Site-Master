@@ -5,5 +5,6 @@ export interface ServiceResponse {
 }
 
 export interface IEquipmentService {
-
+    addEquipment(req: any, data: any): Promise<ServiceResponse>;
+    getEquipment(req: any): Promise<ServiceResponse>;
 }

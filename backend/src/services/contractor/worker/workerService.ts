@@ -81,7 +81,7 @@ export class WorkerService implements IWorkerService {
         }
     }
 
-    public getWorkers = async(req: any, data: AddWorkerData): Promise<ServiceResponse> => {
+    public getWorkers = async(req: any): Promise<ServiceResponse> => {
         try {
 
             const accessToken = req.cookies.accessToken
