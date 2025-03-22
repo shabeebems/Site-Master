@@ -7,48 +7,50 @@ const contractorService = new ContractorService()
 
 export class WorkerController implements IWorkerController {
     
-    public addWorker = async(req: Request, res: Response): Promise<any> => {
+    public addWorker = async(req: Request, res: Response): Promise<void> => {
         try {
             const result: WorkerControllerResponse = await contractorService.addWorker(req, req.body)
             
             const { success, message, data } = result
 
-            return res.status(201).json({
+            res.status(201).json({
                 success,
                 message,
                 data: data || null
             });
-
+            return
         } catch (error) {
 
             console.error(Messages.ADD_WORKER_SERVER_ERROR, error);
-            return res.status(500).json({
+            res.status(500).json({
                 success: false,
                 message: Messages.ADD_WORKER_SERVER_ERROR,
             });
+            return
         }
     }
 
-    public getWorkers = async(req: Request, res: Response): Promise<any> => {
+    public getWorkers = async(req: Request, res: Response): Promise<void> => {
         try {
 
             const result: WorkerControllerResponse = await contractorService.getWorkers(req, req.body)
             
             const { success, message, data } = result
             
-            return res.status(201).json({
+            res.status(201).json({
                 success,
                 message,
                 data
             });
-
+            return
         } catch (error) {
 
             console.error(Messages.FETCH_WORKERS_SERVER_ERROR, error);
-            return res.status(500).json({
+            res.status(500).json({
                 success: false,
                 message: Messages.FETCH_WORKERS_SERVER_ERROR,
             });
+            return
         }
     }
 }

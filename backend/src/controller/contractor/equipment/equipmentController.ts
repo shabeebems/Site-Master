@@ -6,48 +6,52 @@ import { Messages } from '../../../constants/messageConstants';
 const workerService = new ContractorService()
 
 export class EquipmentController implements IEquipmentController {
-    public addEquipment = async(req: Request, res: Response): Promise<any> => {
+
+    public addEquipment = async(req: Request, res: Response): Promise<void> => {
             try {
     
                 const result: EquipmentControllerResponse = await workerService.addEquipment(req, req.body)
                 
                 const { success, message } = result
     
-                return res.status(201).json({
+                res.status(201).json({
                     success,
                     message
                 });
+                return
                 
             } catch (error) {
     
                 console.error(Messages.ADD_EQUIPMENT_SERVER_ERROR, error);
-                return res.status(500).json({
+                res.status(500).json({
                     success: false,
                     message: Messages.ADD_EQUIPMENT_SERVER_ERROR,
                 });
+                return
             }
         }
     
-        public getEquipment = async(req: Request, res: Response): Promise<any> => {
+        public getEquipment = async(req: Request, res: Response): Promise<void> => {
             try {
     
                 const result: EquipmentControllerResponse = await workerService.getEquipment(req)
              
                 const { success, message, data } = result
-                
-                return res.status(201).json({
+                console.log('poooda', data)
+                res.status(201).json({
                     success,
                     message,
                     data
                 });
-            
+                return
             } catch (error) {
                 
                 console.error(Messages.FETCH_EQUIPMENT_SERVER_ERROR, error);
-                return res.status(500).json({
+                res.status(500).json({
                     success: false,
                     message: Messages.FETCH_EQUIPMENT_SERVER_ERROR,
                 });
+                return
             }
         }
 }

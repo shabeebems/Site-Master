@@ -7,6 +7,6 @@ export interface WorkerControllerResponse {
 }
 
 export interface IWorkerController {
-    addWorker(req: Request, res: Response): Promise<any>;
-    getWorkers(req: Request, res: Response): Promise<any>
+    addWorker(req: Request, res: Response): Promise<void>;
+    getWorkers(req: Request, res: Response): Promise<void>
 }
