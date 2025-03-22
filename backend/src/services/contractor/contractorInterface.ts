@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-export interface AddUserData {
+export interface AddWorkerData {
     name: string,
     mobile: string,
     email: string,
@@ -23,5 +23,5 @@ export interface ServiceResponse {
 
 export interface IContractorService {
     addWorker(req: Request, data: object): Promise<ServiceResponse>;
-    getWorkers(req: Request, data: AddUserData): Promise<ServiceResponse>
+    getWorkers(req: Request, data: AddWorkerData): Promise<ServiceResponse>
 }

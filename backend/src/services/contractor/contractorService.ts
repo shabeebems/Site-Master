@@ -1,5 +1,5 @@
 import { emailValidation } from "../../utils/emailValidation";
-import { AddProject, AddUserData, IContractorService, ServiceResponse } from "./contractorInterface";
+import { AddProject, AddWorkerData, IContractorService, ServiceResponse } from "./contractorInterface";
 import hashedPassword from '../../utils/hashPassword'
 import sendPassword from "../../utils/sendPassword";
 import { decode } from "../../utils/jwt";
@@ -21,7 +21,7 @@ const taskScheme = new TaskRepository()
 
 export class ContractorService implements IContractorService {
 
-    public addWorker = async(req: any, data: AddUserData): Promise<ServiceResponse> => {
+    public addWorker = async(req: any, data: AddWorkerData): Promise<ServiceResponse> => {
         try {
 
             const { name, mobile, email, place } = data
@@ -92,7 +92,7 @@ export class ContractorService implements IContractorService {
         }
     }
 
-    public getWorkers = async(req: any, data: AddUserData): Promise<ServiceResponse> => {
+    public getWorkers = async(req: any, data: AddWorkerData): Promise<ServiceResponse> => {
         try {
 
             const accessToken = req.cookies.accessToken
