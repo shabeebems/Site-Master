@@ -21,9 +21,10 @@ interface ProjectModalProps {
     closeModal: () => void;
     projectId: any;
     dates: any;
+    taskAdditionSuccess: Function;
 }
 
-const AddTask = ({closeModal, projectId, dates}: ProjectModalProps) => {
+const AddTask = ({closeModal, projectId, dates, taskAdditionSuccess}: ProjectModalProps) => {
 
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     const [workers, setWorkers] = useState<string[]>([]);
@@ -123,6 +124,7 @@ const AddTask = ({closeModal, projectId, dates}: ProjectModalProps) => {
                     startingDate: "",
                     endingDate: ""
                 })
+                taskAdditionSuccess({ ...taskData, status: "Pending" })
             } else {
                 toast.error(response.message, { position: "top-right", });
             }

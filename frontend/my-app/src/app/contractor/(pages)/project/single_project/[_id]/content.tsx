@@ -66,6 +66,10 @@ const Content: React.FC<PageProps> = ({ _id }) => {
         setIsModalOpen(false)
     }
 
+    const taskAdditionSuccess = (newTask: ITask) => {
+        setTasks((prevTasks) => [newTask, ...prevTasks])
+    }
+
     return (
         <div className="max-w-6xl mx-auto p-4 md:p-6">
             {/* Header Section */}
@@ -173,7 +177,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
 
             {/* Modal */}
             {isModalOpen && (
-                <AddTask closeModal={closeModal} projectId={_id} dates={{start: project?.startingDate, end: project?.endingDate}}/>
+                <AddTask taskAdditionSuccess={taskAdditionSuccess} closeModal={closeModal} projectId={_id} dates={{start: project?.startingDate, end: project?.endingDate}}/>
             )}
         </div>
     )
