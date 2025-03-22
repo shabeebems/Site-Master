@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { AuthService } from '../../services/auth/authService';
 import { AuthResponse, IAuthController } from './authInterface';
 import { Messages } from '../../constants/messageConstants';
@@ -90,11 +90,12 @@ export class AuthController implements IAuthController {
         }
     }
 
-    public login = async (req: Request, res: Response): Promise<void> => {
+    public login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
+            console.log('los')
             // -- Calling the loginUser to check login credentials
-            const result: AuthResponse = await authService.loginUser(req.body, res);
-
+            const result: AuthResponse = await authService.loginUser(req.body, res, next);
+            console.log('contro')
             const { success, message, data } = result
 
             res.status(201).json({

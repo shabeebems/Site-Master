@@ -20,7 +20,7 @@ export interface ServiceResponse<T = any> {
 }
 
 export interface IAuthService {
-    loginUser(data: UserLoginData, res: Response): Promise<ServiceResponse>;
+    loginUser(data: UserLoginData, res: Response, next: any): Promise<ServiceResponse>;
     registerUser(data: UserRegistrationData): Promise<ServiceResponse>;
     otp(data: any): Promise<ServiceResponse>;
     resendOtp(email: string): Promise<ServiceResponse>;

@@ -1,7 +1,8 @@
 'use client'
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+// import { useRequest } from '../hooks/useRequest';
 
 import { apiCheck } from '@/app/api/api';
 
@@ -30,6 +31,10 @@ type AddFormProps = {
 
 const LoginForm: React.FC<AddFormProps> = ({role}) => {
 
+  // const { doRequest, errors } = useRequest()
+  // useEffect(() => {
+  //   errors?.map((errors) => toast.error(errors.message))
+  // }, [errors])
 
   // Define a custon dispatch hook
   const dispatch = useAppDispatch();
@@ -57,6 +62,17 @@ const LoginForm: React.FC<AddFormProps> = ({role}) => {
     setIsLoading(true);
 
     try {
+      // doRequest(
+      //   {
+      //     url: 'http://localhost:5000/api/auth/login',
+      //     method: "post",
+      //     body:data,
+      //     onSuccess: (response) => {
+      //       console.log('12333', response)
+      //     }
+      //   }
+      // )
+
       // Assign role and formData to a variable, role changing based on parent components.
       // If worker login role will be worker, else contractor
       const data = { ...formData, role: role }

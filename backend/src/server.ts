@@ -7,6 +7,7 @@ import connectDB from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import contractorRoutes from "./routes/contractorRoutes";
 import cookieParser from 'cookie-parser';
+// import { errorHandling } from './middlewares/errorHandling';
 
 
 connectDB();
@@ -25,6 +26,8 @@ app.use(cors({
 
 app.use('/api/auth', authRoutes);
 app.use('/api/contractor', contractorRoutes);
+
+// app.use(errorHandling)
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

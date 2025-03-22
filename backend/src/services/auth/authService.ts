@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import hashedPassword from '../../utils/hashPassword'
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { createAccessToken, createRefreshToken } from "../../utils/jwt";
 import sendPassword from "../../utils/sendPassword";
 import sendOtp from "../../utils/sendOtp";
@@ -14,6 +14,7 @@ import {
     ServiceResponse
 } from './authInterfaces';
 import { Messages } from '../../constants/messageConstants';
+// import { NotFoundError } from '../../errors/notFountError';
 
 const userSchema = new UserRepository()
 const otpSchema = new OtpRepository()
@@ -137,7 +138,7 @@ export class AuthService implements IAuthService {
         }
     }
 
-    public loginUser = async (data: UserLoginData, res: Response): Promise<ServiceResponse> => {
+    public loginUser = async (data: UserLoginData, res: Response, next: NextFunction): Promise<ServiceResponse | any> => {
         // These code for contractor and worker login
         try {
             const existingUser = await userSchema.findUserByEmail(data.email);
@@ -147,6 +148,8 @@ export class AuthService implements IAuthService {
                     success: false,
                     message: Messages.USER_NOT_FOUND,
                 };
+                // console.log('ss')
+                // throw new NotFoundError()
             }
 
             const { _id, email, password, role } = existingUser
@@ -197,11 +200,12 @@ export class AuthService implements IAuthService {
         } catch (error) {
 
             console.error('Login error:', error);
-            return {
-                success: false,
-                message: Messages.LOGIN_VERIFICATION_FAILED,
-                error: 'SERVER_ERROR'
-            };
+            next(error)
+            // return {
+            //     success: false,
+            //     message: Messages.LOGIN_VERIFICATION_FAILED,
+            //     error: 'SERVER_ERROR'
+            // };
 
         }
     }

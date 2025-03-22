@@ -8,7 +8,7 @@ export interface AuthResponse {
 
 export interface IAuthController {
     signup(req: Request, res: Response): Promise<void>;
-    login(req: Request, res: Response): Promise<void>;
+    login(req: Request, res: Response, next: any): Promise<void>;
     otp(req: Request, res: Response): Promise<void>;
     resendOtp(req: Request, res: Response): Promise<void>;
     logout(req: Request, res: Response): Promise<void>;
