@@ -87,7 +87,13 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                     </svg>
                     {formatDate(project?.startingDate)} - {formatDate(project?.endingDate)}
                 </span>
-                <span className={`px-4 py-1.5 rounded-full text-sm bg-yellow-100 text-yellow-800`}>
+                <span className={`px-4 py-1.5 rounded-full text-sm text-white ${
+                    project?.status === 'Completed' ? 'bg-green-500' :
+                    project?.status === 'In Progress' ? 'bg-blue-500' :
+                    project?.status === 'On Hold' ? 'bg-yellow-500' :
+                    project?.status === 'Pending' ? 'bg-orange-500' : // Purple for "Pending"
+                    'bg-red-500'
+                }`}>
                     {project?.status}
                 </span>
                 </div>
@@ -118,7 +124,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
             {/* Tasks and Equipment Grid */}
             {/* <div className="grid  gap-8"> */}
             {/* Tasks Column */}
-            <div className="w-full min-h-screen bg-gray-100 flex justify-center">
+            <div className="w-full bg-gray-100 flex justify-center">
                 <div className="w-full max-w-7xl bg-white shadow-lg rounded-2xl p-8 border border-gray-300">
                     {/* Header Section */}
                     <div className="flex justify-between items-center border-b pb-4">
@@ -131,63 +137,43 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                     </div>
 
                     {/* Task List Section */}
+                    {tasks.length > 0 ? (
                     <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 mt-6">
-                    {tasks.map((task, index) => (
-                        <div 
-                        key={index} 
-                        className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-all">
-                        <div className="flex justify-between items-start mb-3">
-                            <h3 className="text-xl font-semibold text-gray-900">{task.name}</h3>
-                            <span 
-                            className={`px-4 py-1 rounded-full text-sm font-medium ${
-                                task.status === 'Pending' 
-                                ? 'bg-yellow-100 text-yellow-800' 
-                                : 'bg-green-100 text-green-800'
-                            }`}>
-                            {task.status}
-                            </span>
+                        {tasks.map((task, index) => (
+                        <div
+                            key={index}
+                            className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-all">
+                            <div className="flex justify-between items-start mb-3">
+                                <h3 className="text-xl font-semibold text-gray-900">{task.name}</h3>
+                                <span
+                                    className={`px-4 py-1 rounded-full text-sm font-medium ${
+                                    task.status === 'Pending'
+                                        ? 'bg-yellow-100 text-yellow-800'
+                                        : 'bg-green-100 text-green-800'
+                                    }`}>
+                                    {task.status}
+                                </span>
+                            </div>
+                            <div className="flex justify-between text-sm text-gray-600">
+                                <span>📅 Start: <strong>{formatDate(task.startingDate)}</strong></span>
+                                <span>📅 End: <strong>{formatDate(task.endingDate)}</strong></span>
+                            </div>
                         </div>
-                        <div className="flex justify-between text-sm text-gray-600">
-                            <span>📅 Start: <strong>{formatDate(task.startingDate)}</strong></span>
-                            <span>📅 End: <strong>{formatDate(task.endingDate)}</strong></span>
-                        </div>
-                        </div>
-                    ))}
+                        ))}
                     </div>
+                    ) : (
+                    <div className="text-center text-gray-500 mt-6">
+                        <p>No tasks available. Add a new task to get started.</p>
+                    </div>
+                    )}
                 </div>
             </div>
 
 
-                {/* Equipment Column */}
-                {/* <div>
-                <h2 className="text-2xl font-semibold mb-6 border-b pb-3">Equipment Inventory</h2>
-                <div className="grid gap-4">
-                    {equipment.map((item, index) => (
-                    <div key={index} className="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
-                        <div className="flex justify-between items-start mb-3">
-                        <h3 className="font-medium text-lg">{item.name}</h3>
-                        <span className="bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full text-sm">
-                            {item.count} units
-                        </span>
-                        </div>
-                        <div className="space-y-1.5 text-sm text-gray-600">
-                        <div className="flex justify-between">
-                            <span>Issued:</span>
-                            <span>{formatDate(item.startingDate)}</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span>Expiry:</span>
-                            <span>{formatDate(item.endingDate)}</span>
-                        </div>
-                        </div>
-                    </div>
-                    ))}
-                </div>
-                </div> */}
-            {/* </div> */}
+
             {/* Modal */}
             {isModalOpen && (
-                <AddTask closeModal={closeModal} projectId={_id}/>
+                <AddTask closeModal={closeModal} projectId={_id} dates={{start: project?.startingDate, end: project?.endingDate}}/>
             )}
         </div>
     )

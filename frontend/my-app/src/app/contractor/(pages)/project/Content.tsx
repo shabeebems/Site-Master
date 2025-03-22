@@ -48,7 +48,7 @@ const Content = () => {
   }
 
   const afterModalSuccess = (newProject: Project) => {
-    setProjects((prevProjects) => [...prevProjects, newProject])
+    setProjects((prevProjects) => [newProject, ...prevProjects])
   }
 
   const colombo = async(_id: string, status: string) => {
@@ -84,17 +84,14 @@ const Content = () => {
                 
                   {/* Status Badge (Top Right) */}
                   {(() => {
-                    const today = new Date();
-                    const startDate = new Date(project.startingDate);
-                    const endDate: any = new Date(project.endingDate);
-
+                    const today = new Date().toLocaleDateString();
+                    const startDate = new Date(project.startingDate).toLocaleDateString();
+                    const endDate: any = new Date(project.endingDate).toLocaleDateString();
                     let projectStatus = project.status; // Default from DB
-
-                    if (today > startDate && today <= endDate && projectStatus === "Pending") {
+                    if (today >= startDate && today <= endDate && projectStatus === "Pending") {
                       projectStatus = "In Progress";
                       colombo(project._id, projectStatus)
-                    } else if (today >= endDate && projectStatus !== "Completed" && projectStatus !== "On Hold") {
-                      console.log(today, endDate)
+                    } else if (today > endDate && projectStatus !== "Completed" && projectStatus !== "On Hold") {
                       projectStatus = "Completed";
                       colombo(project._id, projectStatus)
                     }
@@ -104,7 +101,8 @@ const Content = () => {
                       className={`absolute top-3 right-3 text-xs text-white px-3 py-1 rounded-full ${
                         projectStatus === 'Completed' ? 'bg-green-500' :
                         projectStatus === 'In Progress' ? 'bg-blue-500' :
-                        projectStatus === 'On Hold' ? 'bg-yellow-500' : // Yellow for "On Hold"
+                        projectStatus === 'On Hold' ? 'bg-yellow-500' :
+                        projectStatus === 'Pending' ? 'bg-orange-500' : // Purple for "Pending"
                         'bg-red-500'
                       }`}
                       >

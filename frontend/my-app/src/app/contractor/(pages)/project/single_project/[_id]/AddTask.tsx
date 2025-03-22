@@ -20,9 +20,10 @@ interface TaskData {
 interface ProjectModalProps {
     closeModal: () => void;
     projectId: any;
+    dates: any;
 }
 
-const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
+const AddTask = ({closeModal, projectId, dates}: ProjectModalProps) => {
 
     const [equipment, setEquipment] = useState<Equipment[]>([]);
     const [workers, setWorkers] = useState<string[]>([]);
@@ -99,6 +100,12 @@ const AddTask = ({closeModal, projectId}: ProjectModalProps) => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
+        if((name === 'startingDate' || name === 'endingDate') && value != new Date(dates.start).toLocaleDateString('en-GB').split('/').reverse().join('-')) {
+            if(value < dates.start || value > dates.end) {
+                toast.error("Please enter a date within the project dates", { position: "top-right", });
+                return
+            }
+        }
         setTaskData({ ...taskData, [name]: value })
     }
 

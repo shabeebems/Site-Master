@@ -8,7 +8,7 @@ export class ProjectRepository implements IProjectRepository {
     }
 
     public getProjects = async(contractor_id: any): Promise<any | undefined> => {
-        return await projectModel.find({ contractorId: contractor_id })
+        return await projectModel.find({ contractorId: contractor_id }).sort({ _id: -1 });
     }
 
     public findProjectById = async(_id: any): Promise<any | undefined> => {

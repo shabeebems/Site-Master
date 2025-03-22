@@ -101,11 +101,12 @@ export class ContractorController implements IContractorController {
         try {
             const result: ControllerResponse = await contractorService.newProject(req, req.body)
          
-            const { success, message } = result
+            const { success, message, data } = result
             
             return res.status(201).json({
                 success,
                 message,
+                data
             });
 
         } catch (error) {

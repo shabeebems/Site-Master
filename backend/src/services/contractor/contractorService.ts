@@ -220,11 +220,11 @@ export class ContractorService implements IContractorService {
             }
 
 
-            await projectSchema.addProject(projectDetails)
-
+            const newProject = await projectSchema.addProject(projectDetails)
             return {
                 success: true,
                 message: Messages.PROJECT_ADDED_SUCCESS,
+                data: newProject
             }
             
         } catch (error) {

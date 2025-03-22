@@ -55,7 +55,7 @@ const AddModal: React.FC<AddFormProps> = ({cancel, afterModal}) => {
         try {
             // Calling the api to validate and add new projects
             const response = await apiCheck({ ...newProject, image }, 'contractor/new_project')
-
+            console.log('23434', response.data._id)
             if(response.success) {
                 toast.success(response.message, { position: "top-right", });
                 setNewProject({
@@ -65,7 +65,7 @@ const AddModal: React.FC<AddFormProps> = ({cancel, afterModal}) => {
                     endingDate: "",
                 })
                 setImage(null)
-                afterModal({ ...newProject, image, status: "Pending" })
+                afterModal({ _id: response.data._id, ...newProject, image, status: "Pending" })
             } else {
                 toast.error(response.message, { position: "top-right", });
             }
