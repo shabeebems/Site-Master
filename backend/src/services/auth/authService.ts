@@ -11,7 +11,8 @@ import {
     IAuthService, 
     UserLoginData, 
     UserRegistrationData, 
-    ServiceResponse
+    ServiceResponse,
+    IOtpData
 } from './authInterfaces';
 import { Messages } from '../../constants/messageConstants';
 // import { NotFoundError } from '../../errors/notFountError';
@@ -61,11 +62,11 @@ export class AuthService implements IAuthService {
         }
     }
 
-    public otp = async (data: any): Promise<ServiceResponse> => {
+    public otp = async (data: IOtpData): Promise<ServiceResponse> => {
         try {
-            const { otp, password, ...rest } = data;
+            const { otp, password, email, name } = data;
 
-            const findOtp = await otpSchema.findOtp(data.email);
+            const findOtp = await otpSchema.findOtp(email);
 
             if (findOtp) {
                 if (findOtp.otp === otp) {
@@ -74,13 +75,13 @@ export class AuthService implements IAuthService {
                     const hashPassword = await hashedPassword(password)
 
                     // Extract user details from data and add some details
-                    const userData = { ...rest, password: hashPassword, role: 'Contractor' };
+                    const userData = { email, name, password: hashPassword, role: 'Contractor' };
 
                     // Create new User
                     await userSchema.createUser(userData);
 
                     // Delete Exissting otp
-                    await otpSchema.deleteOtp(data.email);
+                    await otpSchema.deleteOtp(email);
 
                     return {
                         success: true,
@@ -138,7 +139,7 @@ export class AuthService implements IAuthService {
         }
     }
 
-    public loginUser = async (data: UserLoginData, res: Response, next: NextFunction): Promise<ServiceResponse | any> => {
+    public loginUser = async (data: UserLoginData, res: Response, next: NextFunction): Promise<ServiceResponse> => {
         // These code for contractor and worker login
         try {
             const existingUser = await userSchema.findUserByEmail(data.email);
@@ -201,11 +202,11 @@ export class AuthService implements IAuthService {
 
             console.error('Login error:', error);
             next(error)
-            // return {
-            //     success: false,
-            //     message: Messages.LOGIN_VERIFICATION_FAILED,
-            //     error: 'SERVER_ERROR'
-            // };
+            return {
+                success: false,
+                message: Messages.LOGIN_VERIFICATION_FAILED,
+                error: 'SERVER_ERROR'
+            };
 
         }
     }
@@ -248,7 +249,7 @@ export class AuthService implements IAuthService {
     public forgetPassword = async(email: string, role: string): Promise<ServiceResponse> => {
         try {
             const existingUser = await userSchema.findUserByEmail(email);
-
+            
             if (!existingUser) {
                 return {
                     success: false,
