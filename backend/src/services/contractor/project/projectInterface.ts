@@ -1,5 +1,3 @@
-import { Request, Response } from 'express';
-
 export interface AddProject {
     name: string,
     location: string,
@@ -14,6 +12,13 @@ export interface ServiceResponse {
     data?: object
 }
 
-export interface IContractorService {
-    
+export interface IProjectService {
+    newProject(req: any, data: AddProject): Promise<ServiceResponse>;
+    getProjects(req: any): Promise<ServiceResponse>;
+    getSingleProject(_id: string): Promise<ServiceResponse>;
+    addTask(req: any): Promise<ServiceResponse>;
+    getAvailableEquipment(req: any): Promise<ServiceResponse>;
+    getTaskEquipment(projectId: any): Promise<ServiceResponse>;
+    returnEquipment(data: any): Promise<ServiceResponse>;
+    changeProjectStatus(data: any): Promise<ServiceResponse>;
 }

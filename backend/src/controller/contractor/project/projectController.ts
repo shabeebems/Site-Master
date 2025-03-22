@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { ProjectControllerResponse, IProjectController } from './projectInterface';
-import { ContractorService } from '../../../services/contractor/project/projectService';
+import { ProjectService } from '../../../services/contractor/project/projectService';
 import { Messages } from '../../../constants/messageConstants';
 
-const projectService = new ContractorService()
+const projectService = new ProjectService()
 
 export class ProjectController implements IProjectController {
 

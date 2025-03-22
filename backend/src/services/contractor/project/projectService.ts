@@ -1,4 +1,4 @@
-import { AddProject, IContractorService, ServiceResponse } from "./projectInterface";
+import { AddProject, IProjectService, ServiceResponse } from "./projectInterface";
 import { decode } from "../../../utils/jwt";
 import { Messages } from "../../../constants/messageConstants";
 
@@ -14,7 +14,7 @@ const projectSchema = new ProjectRepository()
 const equipmentScheme = new EquipmentRepository()
 const taskScheme = new TaskRepository()
 
-export class ContractorService implements IContractorService {
+export class ProjectService implements IProjectService {
 
     public newProject = async(req: any, data: AddProject): Promise<ServiceResponse> => {
         try {
@@ -100,27 +100,6 @@ export class ContractorService implements IContractorService {
             const project = await projectSchema.findProjectById(_id)
             const tasks = await taskScheme.getTasks(_id)
 
-            // Type assertion for equipment on taking from tasks
-            // type Equipment = {
-            //     equipmentId: string;
-            //     name: string;
-            //     count: number;
-            // };
-            // Extract equipment from tasks
-            // const equipments = tasks.flatMap(task =>
-            //     task.equipment.map(equipment => {
-            //         const eq = equipment as Equipment; // Type assertion
-                
-            //         return {
-            //             equipmentId: eq.equipmentId,
-            //             name: eq.name,
-            //             count: eq.count,
-            //             startingDate: task.startingDate,
-            //             endingDate: task.endingDate
-            //         };
-            //     })
-            // );
-              
             return {
                 success: true,
                 message: Messages.SINGLE_PROJECTS_FETCH_SUCCESS,
