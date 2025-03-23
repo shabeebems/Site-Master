@@ -226,8 +226,10 @@ export class ProjectService implements IProjectService {
 
     public returnEquipment = async(data: any): Promise<ServiceResponse> => {
         try {
-            await taskScheme.getReturnEquipmentByTask(data.taskId, data._id)
-            await equipmentScheme.returnEquipment(data.equipmentId, data.count)
+            const { taskId, _id, equipmentId, count, status } = data
+            const changeStatus = status === "Active" ? "Returned" : "Active"
+            await taskScheme.getReturnEquipmentByTask(taskId, _id, changeStatus)
+            await equipmentScheme.returnEquipment(equipmentId, count)
             return {
                 success: true,
                 message: Messages.TASK_ADDED_SUCCESS,

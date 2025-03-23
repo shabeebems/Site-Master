@@ -39,9 +39,8 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
     fetchData();
   }, [])
 
-  const onReturn = async(returnEquipment: IEquipment) => {
-    console.log('wqq', returnEquipment)
-
+  const onAction = async(returnEquipment: IEquipment) => {
+    const status = returnEquipment.status
     try {
       Swal.fire({
         title: `Are you sure?`,
@@ -50,11 +49,11 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
         showCancelButton: true,
         confirmButtonColor: "#28a745",
         cancelButtonColor: "#6c757d",
-        confirmButtonText: "Yes, Return it!",
+        confirmButtonText: `Yes, ${status === 'Pending' ? 'Use' : "Return"} it!`,
       }).then(async(result) => {
         if (result.isConfirmed) {
-          const { _id, taskId, count, equipmentId } = returnEquipment
-          const getEquipment = await simpleEdits(`return_equipment`, { _id, taskId, count, equipmentId });
+          const { _id, taskId, count, equipmentId, status } = returnEquipment
+          const getEquipment = await simpleEdits(`return_equipment`, { _id, taskId, count, equipmentId, status });
         }
       });
     } catch (error) {
@@ -72,48 +71,44 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
             <th className="p-4">Count</th>
             <th className="p-4">Start Date</th>
             <th className="p-4">End Date</th>
+            <th className="p-4">Status</th>
             <th className="p-4 text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {equipment.map((item, index) => {
-            const now = moment();
-            const startDate = moment(item.startingDate);
-            const endDate = moment(item.endingDate);
-
-            let status;
-            if (now.isBefore(startDate)) {
-              status = "Pending";
-            } else if (now.isBetween(startDate, endDate, null, "[]")) {
-              status = "Active";
-            } else {
-              status = "Returned";
-            }
-
-            return (
-              <tr key={index} className="border-b hover:bg-gray-100 transition">
-                <td className="p-4">{item.name}</td>
-                <td className="p-4">{item.taskName}</td>
-                <td className="p-4">{item.count}</td>
-                <td className="p-4">{startDate.calendar()}</td>
-                <td className="p-4">{endDate.calendar()}</td>
-                <td className="p-4 flex gap-3 justify-center">
-                  {status === "Active" ? (
+          {equipment.map((item, index) => (
+            <tr key={index} className="border-b hover:bg-gray-100 transition">
+              <td className="p-4">{item.name}</td>
+              <td className="p-4">{item.taskName}</td>
+              <td className="p-4">{item.count}</td>
+              <td className="p-4">{moment(item.startingDate).calendar()}</td>
+              <td className="p-4">{moment(item.endingDate).calendar()}</td>
+              <td className="p-4">{item.status}</td>
+              <td className="p-4 flex gap-3 justify-center">
+                {item.status === 'Active' ? (
+                  <button
+                    onClick={() => onAction(item)}
+                    className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105"
+                  >
+                    Return
+                  </button>
+                ) : (
+                  item.status === 'Pending' ? (
                     <button
-                      onClick={() => onReturn(item)}
-                      className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105"
+                      onClick={() => onAction(item)}
+                      className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105"
                     >
-                      Return
+                      Use
                     </button>
-                  ) : (
-                    <p className="text-gray-600 font-medium">{status}</p>
-                  )}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
+                  ) :
+                  <p className="text-gray-600 font-medium">N/A</p>
+                )}
+              </td>
 
+
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   )
