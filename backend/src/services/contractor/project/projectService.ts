@@ -130,7 +130,6 @@ export class ProjectService implements IProjectService {
                     message: Messages.STARTING_DATE_GREATER,
                 }
             }
-            console.log('23123', req.body)
             await taskModel.insertOne({ ...req.params, ...req.body, status: 'Pending' })
 
             // decrease count from available and increase from onSite equipment 

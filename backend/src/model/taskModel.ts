@@ -26,7 +26,7 @@ const taskSchema = new mongoose.Schema({
         status: {
             type: String, 
             required: true,
-            enum: ["Active", "Returned"] 
+            enum: ["Active", "Returned", "Pending"] 
         },
     }],
     workers: { 
