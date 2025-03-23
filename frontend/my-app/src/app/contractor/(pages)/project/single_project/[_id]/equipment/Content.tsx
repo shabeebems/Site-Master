@@ -76,30 +76,44 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
           </tr>
         </thead>
         <tbody>
-          {equipment.map((item, index) => (
-            <tr key={index} className="border-b hover:bg-gray-100 transition">
-              <td className="p-4">{item.name}</td>
-              <td className="p-4">{item.taskName}</td>
-              <td className="p-4">{item.count}</td>
-              <td className="p-4">{moment(item.startingDate).calendar()}</td>
-              <td className="p-4">{moment(item.endingDate).calendar()}</td>
-              <td className="p-4 flex gap-3 justify-center">
-                {item.status === 'Active' ? (
-                  <button
-                    onClick={() => onReturn(item)}
-                    className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105"
-                  >
-                    Return
-                  </button>
-                ) : (
-                  <p className="text-gray-600 font-medium">{item.status}</p>
-                )}
-              </td>
+          {equipment.map((item, index) => {
+            const now = moment();
+            const startDate = moment(item.startingDate);
+            const endDate = moment(item.endingDate);
 
+            let status;
+            if (now.isBefore(startDate)) {
+              status = "Pending";
+            } else if (now.isBetween(startDate, endDate, null, "[]")) {
+              status = "Active";
+            } else {
+              status = "Returned";
+            }
 
-            </tr>
-          ))}
+            return (
+              <tr key={index} className="border-b hover:bg-gray-100 transition">
+                <td className="p-4">{item.name}</td>
+                <td className="p-4">{item.taskName}</td>
+                <td className="p-4">{item.count}</td>
+                <td className="p-4">{startDate.calendar()}</td>
+                <td className="p-4">{endDate.calendar()}</td>
+                <td className="p-4 flex gap-3 justify-center">
+                  {status === "Active" ? (
+                    <button
+                      onClick={() => onReturn(item)}
+                      className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105"
+                    >
+                      Return
+                    </button>
+                  ) : (
+                    <p className="text-gray-600 font-medium">{status}</p>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
+
       </table>
     </div>
   )

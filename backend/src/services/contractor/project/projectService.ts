@@ -135,17 +135,6 @@ export class ProjectService implements IProjectService {
             // decrease count from available and increase from onSite equipment 
             for (const item of req.body.equipment) {
                 
-                // await equipmentHistory.updateMany(
-                //     { equipmentId: item.equipmentId },
-                //     { $push: { activities: {
-                //         taskId: newTask._id,
-                //         projectId: req.params.projectId,
-                //         start: startingDate,
-                //         end: endingDate,
-                //         count: item.count,
-                //         status: 'Pending'
-                //     } } }
-                // )
                 await equipmentScheme.pushHistory(item, newTask, req.body)
 
                 await equipmentScheme.update(item);
