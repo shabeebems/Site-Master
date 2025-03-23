@@ -1,4 +1,5 @@
 export interface IEquipment {
+    _id: any;
     tool: string;
     count: number;
     available: number;

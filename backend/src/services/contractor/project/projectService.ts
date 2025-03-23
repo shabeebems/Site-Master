@@ -6,9 +6,8 @@ import cloudinary from '../../../utils/cloudinary'
 
 import { EquipmentRepository } from "../../../repositories/equipment/equipmentRepository";
 import { ProjectRepository } from "../../../repositories/project/projectRepository";
-import taskModel from "../../../model/taskModel";
-import toolModel from "../../../model/toolModel";
 import { TaskRepository } from "../../../repositories/tasks/taskRepository";
+import equipmentHistory from "../../../model/equipmentHistory";
 
 const projectSchema = new ProjectRepository()
 const equipmentScheme = new EquipmentRepository()
@@ -130,14 +129,26 @@ export class ProjectService implements IProjectService {
                     message: Messages.STARTING_DATE_GREATER,
                 }
             }
-            await taskModel.insertOne({ ...req.params, ...req.body, status: 'Pending' })
 
+            const newTask = await taskScheme.createOne({ ...req.params, ...req.body, status: 'Pending' })
+            
             // decrease count from available and increase from onSite equipment 
             for (const item of req.body.equipment) {
-                await toolModel.updateOne(
-                    { _id: item.equipmentId }, // Find by equipmentId
-                    { $inc: { available: -item.count, onSite: item.count } } // Decrease available count
-                );
+                
+                // await equipmentHistory.updateMany(
+                //     { equipmentId: item.equipmentId },
+                //     { $push: { activities: {
+                //         taskId: newTask._id,
+                //         projectId: req.params.projectId,
+                //         start: startingDate,
+                //         end: endingDate,
+                //         count: item.count,
+                //         status: 'Pending'
+                //     } } }
+                // )
+                await equipmentScheme.pushHistory(item, newTask, req.body)
+
+                await equipmentScheme.update(item);
             }
 
             return {

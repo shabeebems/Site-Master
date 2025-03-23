@@ -33,7 +33,8 @@ export class EquipmentService implements IEquipmentService {
             const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
 
             // Save data to db
-            await equipmentScheme.addEquipment(data, decoded._id)
+            const newEquipment = await equipmentScheme.addEquipment(data, decoded._id)
+            await equipmentScheme.createHistory(newEquipment._id)
             
             return {
                 success: true,

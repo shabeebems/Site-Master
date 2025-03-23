@@ -3,6 +3,10 @@ import { ITask, ITaskRepository } from "./taskInterface";
 
 export class TaskRepository implements ITaskRepository {
 
+    public createOne = async(data: ITask): Promise<ITask> => {
+        return taskModel.insertOne(data)
+    }
+
     public getTasks = async(projectId: string): Promise<ITask[]> => {
         return await taskModel.find({ projectId }).sort({ _id: -1 })
     }
