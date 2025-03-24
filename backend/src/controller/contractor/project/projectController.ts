@@ -186,10 +186,31 @@ export class ProjectController implements IProjectController {
             return
 
         } catch (error) {
-            console.error(Messages.CHANGE_PROJECT_STATUS_FAILED, error);
+            console.error(Messages.PROJECT_STATUS_UPDATE_FAILURE, error);
             res.status(500).json({
                 success: false,
-                message: Messages.CHANGE_PROJECT_STATUS_FAILED,
+                message: Messages.PROJECT_STATUS_UPDATE_FAILURE,
+            });
+            return
+        }
+    }
+
+    public changeTaskStatus = async(req: Request, res: Response): Promise<void> => {
+        try {
+            const result: ProjectControllerResponse = await projectService.changeTaskStatus(req.body)
+            const { success, message } = result
+            
+            res.status(201).json({
+                success,
+                message
+            });
+            return
+
+        } catch (error) {
+            console.error(Messages.TASK_STATUS_UPDATE_FAILURE, error);
+            res.status(500).json({
+                success: false,
+                message: Messages.TASK_STATUS_UPDATE_FAILURE,
             });
             return
         }

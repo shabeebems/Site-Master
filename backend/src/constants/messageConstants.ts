@@ -50,8 +50,8 @@ export const Messages = {
     PROJECTS_FETCH_FAILED: "Server error occurred while fetching projects",
     SINGLE_PROJECTS_FETCH_SUCCESS: "Successfully fetched single project details",
     SINGLE_PROJECTS_FETCH_FAILED: "Server error occurred while fetching single project details",
-    CHANGE_PROJECT_STATUS_FAILED: "Project status update failed",
-
+    PROJECT_STATUS_UPDATE_SUCCESS: "Project status updated successfully",
+    PROJECT_STATUS_UPDATE_FAILURE: "Failed to update project status",
 
     // Controller auth
     REGISTER_CONTROLLER_ERROR: "Unexpected error in register controller",
@@ -81,6 +81,7 @@ export const Messages = {
     TASK_ADDED_SUCCESS: "Task added successfully",
     TASK_ADDED_FAILED: "Task added failed",
     ADD_TASK_SERVER_ERROR: "Server error during task addition",
-
+    TASK_STATUS_UPDATE_SUCCESS: "Task status updated successfully",
+    TASK_STATUS_UPDATE_FAILURE: "Failed to update task status",
 
 }

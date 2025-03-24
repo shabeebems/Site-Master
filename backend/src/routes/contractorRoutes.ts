@@ -24,5 +24,6 @@ router.post('/newWorker', authenticateToken, workerController.addWorker)
       .get('/get_taskEquipment/:projectId', authenticateToken, projectController.getProjectEquipment)
       .patch('/equipment_actions', authenticateToken, projectController.equipmentAction)
       .patch('/change_project_status', authenticateToken, projectController.changeProjectStatus)
+      .patch('/change_task_status', authenticateToken, projectController.changeTaskStatus)
       
 export default router

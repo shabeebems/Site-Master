@@ -18,4 +18,8 @@ export class TaskRepository implements ITaskRepository {
             { new: true }
         );
     }
+
+    public editStatus = async(_id: string, status: string): Promise<void> => {
+        await taskModel.updateOne({ _id }, { $set: { status } })
+    }
 }

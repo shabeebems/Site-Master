@@ -54,7 +54,7 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
         if (result.isConfirmed) {
 
           const { _id, taskId, count, equipmentId, status } = returnEquipment
-          const getEquipment = await simpleEdits(`equipment_actions`, { _id, taskId, count, equipmentId, status });
+          await simpleEdits(`equipment_actions`, { _id, taskId, count, equipmentId, status });
           
           // Update local state to reflect the status change
           setEquipment((prev) =>

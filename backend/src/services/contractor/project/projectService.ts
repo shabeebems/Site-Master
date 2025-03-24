@@ -238,16 +238,33 @@ export class ProjectService implements IProjectService {
     // Changing project status based on the current date
     public changeProjectStatus = async(data: any): Promise<ServiceResponse> => {
         try {
-            projectSchema.editStatus(data._id, data.status)
+            await projectSchema.editStatus(data._id, data.status)
             return {
                 success: true,
-                message: Messages.TASK_ADDED_SUCCESS,
+                message: Messages.PROJECT_STATUS_UPDATE_SUCCESS,
             }
         } catch (error) {
             console.log(error)
             return {
                 success: false,
-                message: Messages.TASK_ADDED_FAILED
+                message: Messages.PROJECT_STATUS_UPDATE_FAILURE
+            }
+        }
+    }
+
+    public changeTaskStatus = async(data: any): Promise<ServiceResponse> => {
+        try {
+            console.log(data)
+            await taskScheme.editStatus(data._id, data.status)
+            return {
+                success: true,
+                message: Messages.TASK_STATUS_UPDATE_SUCCESS
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.TASK_STATUS_UPDATE_FAILURE
             }
         }
     }

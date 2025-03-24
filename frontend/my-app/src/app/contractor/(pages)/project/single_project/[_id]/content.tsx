@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import AddTask from './AddTask';
 import { useRouter } from "next/navigation";
 
-import { fetchSingleData } from '@/app/api/api';
+import { fetchSingleData, statusEdits } from '@/app/api/api';
 
 interface IProject {
     name: string;
@@ -11,7 +11,6 @@ interface IProject {
     status: string;
     startingDate: Date;
     endingDate: Date;
-    // _id: any;
     image: string;
 }
 
@@ -20,6 +19,7 @@ interface ITask {
     startingDate: Date;
     endingDate: Date;
     status: string;
+    _id: any;
 }
 
 type PageProps = {
@@ -68,6 +68,10 @@ const Content: React.FC<PageProps> = ({ _id }) => {
 
     const taskAdditionSuccess = (newTask: ITask) => {
         setTasks((prevTasks) => [newTask, ...prevTasks])
+    }
+
+    const changeStatus = async(_id: string, status: string) => {
+        await statusEdits('change_task_status', { _id, status });
     }
 
     return (
@@ -149,14 +153,38 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                             className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-all">
                             <div className="flex justify-between items-start mb-3">
                                 <h3 className="text-xl font-semibold text-gray-900">{task.name}</h3>
-                                <span
+                                {(() => {
+                                    const today = new Date().toLocaleDateString();
+                                    const startDate = new Date(task.startingDate).toLocaleDateString();
+                                    const endDate: any = new Date(task.endingDate).toLocaleDateString();
+                                    let taskStatus = task.status; // Default from DB
+                                    if (today >= startDate && today <= endDate && taskStatus === "Pending") {
+                                        taskStatus = "In Progress"
+                                        changeStatus(task._id, taskStatus)
+                                    } else if (today > endDate && taskStatus !== "Completed" && taskStatus !== "On Hold") {
+                                        taskStatus = "Completed"
+                                        changeStatus(task._id, taskStatus)
+                                    }
+
+                                    return (
+                                        <span
+                                            className={`px-4 py-1 rounded-full text-sm font-medium ${
+                                            taskStatus === 'Pending'
+                                                ? 'bg-yellow-100 text-yellow-800'
+                                                : 'bg-green-100 text-green-800'
+                                            }`}>
+                                            {taskStatus}
+                                        </span>
+                                    )
+                                }) ()}
+                                {/* <span
                                     className={`px-4 py-1 rounded-full text-sm font-medium ${
                                     task.status === 'Pending'
                                         ? 'bg-yellow-100 text-yellow-800'
                                         : 'bg-green-100 text-green-800'
                                     }`}>
                                     {task.status}
-                                </span>
+                                </span> */}
                             </div>
                             <div className="flex justify-between text-sm text-gray-600">
                                 <span>📅 Start: <strong>{formatDate(task.startingDate)}</strong></span>
