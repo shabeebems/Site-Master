@@ -10,5 +10,5 @@ export interface ITask {
 
 export interface ITaskRepository {
     getTasks(projectId: string): Promise<ITask[]>;
-    getReturnEquipmentByTask(taskId: string, _id: string, status: string): Promise<ITask | null>;
+    updateEquipmentByTask(taskId: string, _id: string, status: string): Promise<ITask | null>;
 }

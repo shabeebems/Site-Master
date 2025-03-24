@@ -102,7 +102,7 @@ export class ProjectController implements IProjectController {
         }
     }
 
-    // Find available equipment for adding to task
+    // Find available equipment for adding to task (function trigger when try to add tasks)
     public getAvailableEquipment = async(req: Request, res: Response): Promise<void> => {
         try {
             const result: ProjectControllerResponse = await projectService.getAvailableEquipment(req)

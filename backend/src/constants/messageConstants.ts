@@ -36,8 +36,10 @@ export const Messages = {
     EQUIPMENT_ADDED_FAILED: "Equipment added failed",
     EQUIPMENT_FETCH_SUCCESS: "Equipment fetched successfully",
     EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching equipment",
+    AVAILABLE_EQUIPMENT_FETCH_SUCCESS: "Fetching available equipment success",
     AVAILABLE_EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching available equipment",
     PROJECT_EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching project equipment",
+    EQUIPMENT_ACTION_SUCCESS: "Equipment action success",
     EQUIPMENT_ACTION_FAILED: "Equipment action failed",
 
     // Project

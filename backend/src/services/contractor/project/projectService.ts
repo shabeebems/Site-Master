@@ -132,12 +132,9 @@ export class ProjectService implements IProjectService {
 
             const newTask = await taskScheme.createOne({ ...req.params, ...req.body, status: 'Pending' })
             
-            // decrease count from available and increase from onSite equipment 
+            // Pushing to equipment history
             for (const item of equipment) {
-                
                 await equipmentScheme.pushHistory(item, newTask, req.body)
-
-                // await equipmentScheme.update(item);
             }
 
             return {
@@ -154,7 +151,7 @@ export class ProjectService implements IProjectService {
         }
     }
 
-    // For adding equipment to task
+    // Find available equipment for adding to task (function trigger when try to add tasks)
     public getAvailableEquipment = async(req: any): Promise<ServiceResponse> => {
         try {
             const accessToken = req.cookies.accessToken
@@ -162,28 +159,31 @@ export class ProjectService implements IProjectService {
             // Decode access token for get logged contractor id for get equipment from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
             const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
 
+            // Finding available equipments
             const availableEquipment = await equipmentScheme.findAvailableEquipment(decoded._id)
             
             return {
                 success: true,
-                message: Messages.TASK_ADDED_SUCCESS,
+                message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,
                 data: availableEquipment
             }
             
         } catch (error) {
-            console.log(error)
+            console.log(error, Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED)
             return {
                 success: false,
-                message: Messages.TASK_ADDED_FAILED
+                message: Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED
             }
         }
     }
 
-    // Get equipment from task schema to show on Project equipment
+    // Get equipment from task schema to show on 'Project equipment' page
     public getProjectEquipment = async(projectId: any): Promise<ServiceResponse> => {
         try {
+            // Finding tasks under project
             const tasks = await taskScheme.getTasks(projectId)
 
+            // Extract all equipment using in the projects(saved in tasks)
             const equipments = extractEquipment(tasks as any)
 
             return {
@@ -200,30 +200,42 @@ export class ProjectService implements IProjectService {
         }
     }
 
+    // Controlling equipment actions (use, return)
     public equipmentAction = async(data: any): Promise<ServiceResponse> => {
         try {
             const { taskId, _id, equipmentId, count, status } = data
+
             const changeStatus = status === "Active" ? "Returned" : "Active"
-            await taskScheme.getReturnEquipmentByTask(taskId, _id, changeStatus)
+
+            // Updating status of equipment saved by tasks
+            await taskScheme.updateEquipmentByTask(taskId, _id, changeStatus)
+            
+            // Updating status of equipment history
             await equipmentScheme.editHistoryStatus(taskId, equipmentId, changeStatus)
+            
             if(status === "Active") {
+                // Returning equipment from project
                 await equipmentScheme.returnEquipment(equipmentId, count)
             } else {
+                // Make approve equipment to project
                 await equipmentScheme.active(equipmentId, count)
             }
+
             return {
                 success: true,
-                message: Messages.TASK_ADDED_SUCCESS,
+                message: Messages.EQUIPMENT_ACTION_SUCCESS,
             }
+
         } catch (error) {
             console.log(error)
             return {
                 success: false,
-                message: Messages.TASK_ADDED_FAILED
+                message: Messages.EQUIPMENT_ACTION_FAILED
             }
         }
     }
 
+    // Changing project status based on the current date
     public changeProjectStatus = async(data: any): Promise<ServiceResponse> => {
         try {
             projectSchema.editStatus(data._id, data.status)

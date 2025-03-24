@@ -11,7 +11,7 @@ export class TaskRepository implements ITaskRepository {
         return await taskModel.find({ projectId }).sort({ _id: -1 })
     }
 
-    public getReturnEquipmentByTask = async(taskId: string, _id: string, status: string): Promise<ITask | null> => {
+    public updateEquipmentByTask = async(taskId: string, _id: string, status: string): Promise<ITask | null> => {
         return await taskModel.findOneAndUpdate(
             { _id: taskId, "equipment._id": _id },
             { $set: { "equipment.$.status": status } },
