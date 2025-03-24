@@ -21,7 +21,7 @@ router.post('/newWorker', authenticateToken, workerController.addWorker)
       .get('/get_single_project/:_id', authenticateToken, projectController.getSingleProject)
       .post('/add_task/:projectId', authenticateToken, projectController.addTask)
       .get('/get_available_equipment', authenticateToken, projectController.getAvailableEquipment)
-      .get('/get_taskEquipment/:projectId', authenticateToken, projectController.getTaskEquipment)
+      .get('/get_taskEquipment/:projectId', authenticateToken, projectController.getProjectEquipment)
       .patch('/equipment_actions', authenticateToken, projectController.equipmentAction)
       .patch('/change_project_status', authenticateToken, projectController.changeProjectStatus)
       

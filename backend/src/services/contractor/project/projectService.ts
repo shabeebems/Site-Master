@@ -7,7 +7,7 @@ import cloudinary from '../../../utils/cloudinary'
 import { EquipmentRepository } from "../../../repositories/equipment/equipmentRepository";
 import { ProjectRepository } from "../../../repositories/project/projectRepository";
 import { TaskRepository } from "../../../repositories/tasks/taskRepository";
-import equipmentHistory from "../../../model/equipmentHistory";
+import { extractEquipment } from "../../../utils/extractEquipment";
 
 const projectSchema = new ProjectRepository()
 const equipmentScheme = new EquipmentRepository()
@@ -179,48 +179,23 @@ export class ProjectService implements IProjectService {
         }
     }
 
-    // Get equipment from task schema
-    public getTaskEquipment = async(projectId: any): Promise<ServiceResponse> => {
+    // Get equipment from task schema to show on Project equipment
+    public getProjectEquipment = async(projectId: any): Promise<ServiceResponse> => {
         try {
             const tasks = await taskScheme.getTasks(projectId)
 
-            // Type assertion for equipment on taking from tasks
-            type Equipment = {
-                equipmentId: string;
-                name: string;
-                count: number;
-                _id: any;
-                status: string;
-            };
-            // Extract equipment from tasks
-            const equipments = tasks.flatMap(task =>
-                task.equipment.map(equipment => {
-                    const eq = equipment as Equipment; // Type assertion
-                
-                    return {
-                        taskName: task.name,
-                        equipmentId: eq.equipmentId,
-                        _id: eq._id,
-                        taskId: task._id,
-                        name: eq.name,
-                        count: eq.count,
-                        startingDate: task.startingDate,
-                        endingDate: task.endingDate,
-                        status: eq.status,
-                    };
-                })
-            );
+            const equipments = extractEquipment(tasks as any)
 
             return {
                 success: true,
-                message: Messages.TASK_ADDED_SUCCESS,
+                message: Messages.EQUIPMENT_FETCH_SUCCESS,
                 data: equipments
             }
         } catch (error) {
             console.log(error)
             return {
                 success: false,
-                message: Messages.TASK_ADDED_FAILED
+                message: Messages.EQUIPMENT_FETCH_FAILED
             }
         }
     }

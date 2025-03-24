@@ -36,6 +36,9 @@ export const Messages = {
     EQUIPMENT_ADDED_FAILED: "Equipment added failed",
     EQUIPMENT_FETCH_SUCCESS: "Equipment fetched successfully",
     EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching equipment",
+    AVAILABLE_EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching available equipment",
+    PROJECT_EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching project equipment",
+    EQUIPMENT_ACTION_FAILED: "Equipment action failed",
 
     // Project
     STARTING_DATE_GREATER: "Starting date is greater than ending date",
@@ -45,6 +48,7 @@ export const Messages = {
     PROJECTS_FETCH_FAILED: "Server error occurred while fetching projects",
     SINGLE_PROJECTS_FETCH_SUCCESS: "Successfully fetched single project details",
     SINGLE_PROJECTS_FETCH_FAILED: "Server error occurred while fetching single project details",
+    CHANGE_PROJECT_STATUS_FAILED: "Project status update failed",
 
 
     // Controller auth

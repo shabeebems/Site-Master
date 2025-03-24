@@ -7,6 +7,7 @@ const projectService = new ProjectService()
 
 export class ProjectController implements IProjectController {
 
+    // Adding new Project
     public newProject = async(req: Request, res: Response): Promise<void> => {
         try {
             const result: ProjectControllerResponse = await projectService.newProject(req, req.body)
@@ -30,6 +31,7 @@ export class ProjectController implements IProjectController {
         }
     }
 
+    // Get all project to display
     public getProjects = async(req: Request, res: Response): Promise<void> => {
         try {
             const result: ProjectControllerResponse = await projectService.getProjects(req)
@@ -53,6 +55,7 @@ export class ProjectController implements IProjectController {
 
     }
 
+    // Find single project to display details
     public getSingleProject = async(req: Request, res: Response): Promise<void> => {
         try {
             const result: ProjectControllerResponse = await projectService.getSingleProject(req.params._id)
@@ -76,6 +79,7 @@ export class ProjectController implements IProjectController {
         }
     }
 
+    // Adding new task to project
     public addTask = async(req: Request, res: Response): Promise<void> => {
         try {
             const result: ProjectControllerResponse = await projectService.addTask(req)
@@ -98,6 +102,7 @@ export class ProjectController implements IProjectController {
         }
     }
 
+    // Find available equipment for adding to task
     public getAvailableEquipment = async(req: Request, res: Response): Promise<void> => {
         try {
             const result: ProjectControllerResponse = await projectService.getAvailableEquipment(req)
@@ -112,18 +117,19 @@ export class ProjectController implements IProjectController {
             return
 
         } catch (error) {
-            console.error(Messages.ADD_TASK_SERVER_ERROR, error);
+            console.error(Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED, error);
             res.status(500).json({
                 success: false,
-                message: Messages.ADD_TASK_SERVER_ERROR,
+                message: Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED,
             });
             return
         }
     }
 
-    public getTaskEquipment = async(req: Request, res: Response): Promise<void> => {
+    // Find all equipment used by projects (find from task schema)
+    public getProjectEquipment = async(req: Request, res: Response): Promise<void> => {
         try {
-            const result: ProjectControllerResponse = await projectService.getTaskEquipment(req.params.projectId)
+            const result: ProjectControllerResponse = await projectService.getProjectEquipment(req.params.projectId)
          
             const { success, message, data } = result
             
@@ -135,55 +141,55 @@ export class ProjectController implements IProjectController {
             return
 
         } catch (error) {
-            console.error(Messages.ADD_TASK_SERVER_ERROR, error);
+            console.error(Messages.PROJECT_EQUIPMENT_FETCH_FAILED, error);
             res.status(500).json({
                 success: false,
-                message: Messages.ADD_TASK_SERVER_ERROR,
+                message: Messages.PROJECT_EQUIPMENT_FETCH_FAILED,
             });
             return
         }
     }
 
+    // Controlling equipment actions (use, return)
     public equipmentAction = async(req: Request, res: Response): Promise<void> => {
         try {
-            // const result: ControllerResponse = 
-            await projectService.equipmentAction(req.body)
+            const result: ProjectControllerResponse = await projectService.equipmentAction(req.body)
          
-            // const { success, message, data } = result
+            const { success, message } = result
             
             res.status(201).json({
-                success: true,
-                message: 'ss',
+                success,
+                message
             });
             return
 
         } catch (error) {
-            console.error(Messages.ADD_TASK_SERVER_ERROR, error);
+            console.error(Messages.EQUIPMENT_ACTION_FAILED, error);
             res.status(500).json({
                 success: false,
-                message: Messages.ADD_TASK_SERVER_ERROR,
+                message: Messages.EQUIPMENT_ACTION_FAILED,
             });
             return
         }
     }
 
+    // Changing project status based on the current date
     public changeProjectStatus = async(req: Request, res: Response): Promise<void> => {
         try {
-            // const result: ControllerResponse = 
-            await projectService.changeProjectStatus(req.body)
-            // const { success, message, data } = result
+            const result: ProjectControllerResponse = await projectService.changeProjectStatus(req.body)
+            const { success, message } = result
             
             res.status(201).json({
-                success: true,
-                message: 'ss',
+                success,
+                message
             });
             return
 
         } catch (error) {
-            console.error(Messages.ADD_TASK_SERVER_ERROR, error);
+            console.error(Messages.CHANGE_PROJECT_STATUS_FAILED, error);
             res.status(500).json({
                 success: false,
-                message: Messages.ADD_TASK_SERVER_ERROR,
+                message: Messages.CHANGE_PROJECT_STATUS_FAILED,
             });
             return
         }
