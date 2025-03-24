@@ -52,8 +52,18 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
         confirmButtonText: `Yes, ${status === 'Pending' ? 'Use' : "Return"} it!`,
       }).then(async(result) => {
         if (result.isConfirmed) {
+
           const { _id, taskId, count, equipmentId, status } = returnEquipment
           const getEquipment = await simpleEdits(`equipment_actions`, { _id, taskId, count, equipmentId, status });
+          
+          // Update local state to reflect the status change
+          setEquipment((prev) =>
+            prev.map((item) =>
+              item._id === returnEquipment._id
+                ? { ...item, status: status === 'Pending' ? 'Active' : 'Returned' }
+                : item
+            )
+          );
         }
       });
     } catch (error) {
@@ -81,7 +91,7 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
               <td className="p-4">{item.name}</td>
               <td className="p-4">{item.taskName}</td>
               <td className="p-4">{item.count}</td>
-              <td className="p-4">{moment(item.startingDate).calendar()}</td>
+              <td className="p-4">{moment(item.startingDate).format("DD MM YYYY")}</td>
               <td className="p-4">{moment(item.endingDate).calendar()}</td>
               <td className="p-4">{item.status}</td>
               <td className="p-4 flex gap-3 justify-center">
@@ -89,19 +99,24 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
                   <button
                     onClick={() => onAction(item)}
                     className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105"
-                  >
+                    >
                     Return
                   </button>
                 ) : (
                   item.status === 'Pending' ? (
-                    <button
-                      onClick={() => onAction(item)}
-                      className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105"
-                    >
-                      Use
-                    </button>
-                  ) :
-                  <p className="text-gray-600 font-medium">N/A</p>
+                      new Date(item.startingDate) > new Date() ? (
+                        <p>Time not started</p>
+                      ) : (
+                        <button
+                          onClick={() => onAction(item)}
+                          className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-teal-700 transition-transform transform hover:scale-105"
+                          >
+                          Use
+                        </button>
+                      )
+                  ) : (
+                    <p className="text-gray-600 font-medium">N/A</p>
+                  )
                 )}
               </td>
 
