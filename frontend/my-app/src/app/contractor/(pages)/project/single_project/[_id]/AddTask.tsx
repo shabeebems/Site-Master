@@ -78,7 +78,7 @@ const AddTask = ({closeModal, projectId, dates, taskAdditionSuccess}: ProjectMod
         }
         
         // Add equipment to the list
-        setEquipment([...equipment, { equipmentId: availableItem._id, name: equipmentName, count: Number(equipmentCount), status: 'Active' }]);
+        setEquipment([...equipment, { equipmentId: availableItem._id, name: equipmentName, count: Number(equipmentCount), status: 'Pending' }]);
 
         setEquipmentName("");
         setEquipmentCount("");

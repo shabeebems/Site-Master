@@ -144,10 +144,10 @@ export class ProjectController implements IProjectController {
         }
     }
 
-    public returnEquipment = async(req: Request, res: Response): Promise<void> => {
+    public equipmentAction = async(req: Request, res: Response): Promise<void> => {
         try {
             // const result: ControllerResponse = 
-            await projectService.returnEquipment(req.body)
+            await projectService.equipmentAction(req.body)
          
             // const { success, message, data } = result
             

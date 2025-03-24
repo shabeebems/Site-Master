@@ -115,7 +115,7 @@ export class ProjectService implements IProjectService {
 
     public addTask = async(req: any): Promise<ServiceResponse> => {
         try {
-            const { name, startingDate, endingDate } = req.body
+            const { name, startingDate, endingDate, equipment } = req.body
             if(!name || !startingDate || !endingDate) {
                 return {
                     success: false,
@@ -133,11 +133,11 @@ export class ProjectService implements IProjectService {
             const newTask = await taskScheme.createOne({ ...req.params, ...req.body, status: 'Pending' })
             
             // decrease count from available and increase from onSite equipment 
-            for (const item of req.body.equipment) {
+            for (const item of equipment) {
                 
                 await equipmentScheme.pushHistory(item, newTask, req.body)
 
-                await equipmentScheme.update(item);
+                // await equipmentScheme.update(item);
             }
 
             return {
@@ -179,6 +179,7 @@ export class ProjectService implements IProjectService {
         }
     }
 
+    // Get equipment from task schema
     public getTaskEquipment = async(projectId: any): Promise<ServiceResponse> => {
         try {
             const tasks = await taskScheme.getTasks(projectId)
@@ -224,12 +225,17 @@ export class ProjectService implements IProjectService {
         }
     }
 
-    public returnEquipment = async(data: any): Promise<ServiceResponse> => {
+    public equipmentAction = async(data: any): Promise<ServiceResponse> => {
         try {
             const { taskId, _id, equipmentId, count, status } = data
             const changeStatus = status === "Active" ? "Returned" : "Active"
             await taskScheme.getReturnEquipmentByTask(taskId, _id, changeStatus)
-            await equipmentScheme.returnEquipment(equipmentId, count)
+            await equipmentScheme.editHistoryStatus(taskId, equipmentId, changeStatus)
+            if(status === "Active") {
+                await equipmentScheme.returnEquipment(equipmentId, count)
+            } else {
+                await equipmentScheme.active(equipmentId, count)
+            }
             return {
                 success: true,
                 message: Messages.TASK_ADDED_SUCCESS,

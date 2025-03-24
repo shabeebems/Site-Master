@@ -8,10 +8,6 @@ export class EquipmentRepository implements IEquipmentRepository {
         return await toolModel.create({ ...data, available: data.count, onSite: 0, contractorId: _id })
     }
 
-    public update = async(data: any): Promise<any> => {
-        return toolModel.updateOne({ _id: data.equipmentId }, { $inc: { available: -data.count, onSite: data.count } })
-    }
-
     public findEquipmentByContractorId = async(_id: any): Promise<IEquipment[]> => {
         return await toolModel.find({ contractorId: _id })
     }
@@ -22,6 +18,11 @@ export class EquipmentRepository implements IEquipmentRepository {
 
     public returnEquipment = async(_id: any, count: number): Promise<void> => {
         await toolModel.updateOne({ _id }, { $inc: { available: count, onSite: -count } })
+        // return
+    }
+
+    public active = async(_id: any, count: number): Promise<void> => {
+        await toolModel.updateOne({ _id }, { $inc: { available: -count, onSite: count } })
         // return
     }
 
@@ -43,5 +44,15 @@ export class EquipmentRepository implements IEquipmentRepository {
                 }
             }
         })
+    }
+
+    public editHistoryStatus = async(taskId: any, equipmentId: any, status: string): Promise<void> => {
+        await equipmentHistory.updateOne({
+            _id: equipmentId, 
+            'activities.taskId': taskId
+        }, {
+            $set: { 'activities.$.status': status }
+        })
+        return
     }
 }

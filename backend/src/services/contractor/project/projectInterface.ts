@@ -19,6 +19,6 @@ export interface IProjectService {
     addTask(req: any): Promise<ServiceResponse>;
     getAvailableEquipment(req: any): Promise<ServiceResponse>;
     getTaskEquipment(projectId: any): Promise<ServiceResponse>;
-    returnEquipment(data: any): Promise<ServiceResponse>;
+    equipmentAction(data: any): Promise<ServiceResponse>;
     changeProjectStatus(data: any): Promise<ServiceResponse>;
 }

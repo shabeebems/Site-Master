@@ -22,7 +22,7 @@ router.post('/newWorker', authenticateToken, workerController.addWorker)
       .post('/add_task/:projectId', authenticateToken, projectController.addTask)
       .get('/get_available_equipment', authenticateToken, projectController.getAvailableEquipment)
       .get('/get_taskEquipment/:projectId', authenticateToken, projectController.getTaskEquipment)
-      .patch('/return_equipment', authenticateToken, projectController.returnEquipment)
+      .patch('/equipment_actions', authenticateToken, projectController.equipmentAction)
       .patch('/change_project_status', authenticateToken, projectController.changeProjectStatus)
       
 export default router

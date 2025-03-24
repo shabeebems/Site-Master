@@ -53,7 +53,7 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
       }).then(async(result) => {
         if (result.isConfirmed) {
           const { _id, taskId, count, equipmentId, status } = returnEquipment
-          const getEquipment = await simpleEdits(`return_equipment`, { _id, taskId, count, equipmentId, status });
+          const getEquipment = await simpleEdits(`equipment_actions`, { _id, taskId, count, equipmentId, status });
         }
       });
     } catch (error) {
