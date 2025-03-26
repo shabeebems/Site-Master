@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchDetails, simpleEdits } from '@/app/api/api';
+import { fetchDetails, statusEdits } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
 import moment from "moment"; // Import Moment.js
 import Swal from "sweetalert2"; // Import SweetAlert2
@@ -54,7 +54,7 @@ const Content: React.FC<PageProps> = ({ projectId }) => {
         if (result.isConfirmed) {
 
           const { _id, taskId, count, equipmentId, status } = returnEquipment
-          await simpleEdits(`equipment_actions`, { _id, taskId, count, equipmentId, status });
+          await statusEdits(`equipment_actions`, { _id, taskId, count, equipmentId, status });
           
           // Update local state to reflect the status change
           setEquipment((prev) =>

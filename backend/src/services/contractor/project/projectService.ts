@@ -119,14 +119,14 @@ export class ProjectService implements IProjectService {
             if(!name || !startingDate || !endingDate) {
                 return {
                     success: false,
-                    message: Messages.FIELDS_REQUIRED,
+                    message: Messages.FIELDS_REQUIRED
                 }
             }
 
             if(startingDate > endingDate) {
                 return {
                     success: false,
-                    message: Messages.STARTING_DATE_GREATER,
+                    message: Messages.STARTING_DATE_GREATER
                 }
             }
 

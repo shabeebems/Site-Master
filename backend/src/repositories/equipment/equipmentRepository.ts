@@ -13,7 +13,7 @@ export class EquipmentRepository implements IEquipmentRepository {
     }
 
     public findAvailableEquipment = async(_id: any): Promise<IEquipment[]> => {
-        return await toolModel.aggregate([{ $match: { contractorId: _id, available: { $gt: 0 } } }, { $project: { tool: 1, available: 1 } }])
+        return await toolModel.aggregate([{ $match: { contractorId: _id, count: { $gt: 0 } } }])
     }
 
     public returnEquipment = async(_id: any, count: number): Promise<void> => {

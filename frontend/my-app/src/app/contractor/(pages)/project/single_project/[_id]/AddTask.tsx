@@ -1,15 +1,8 @@
-import { apiCheck, fetchDetails } from '@/app/api/api';
+import { apiCheck } from '@/app/api/api';
 import Loading from '@/app/components/Loading';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-interface Equipment {
-    name: string;
-    count: number;
-    equipmentId: any;
-    status: string;
-}
 
 interface TaskData {
     name: string;
@@ -26,78 +19,13 @@ interface ProjectModalProps {
 
 const AddTask = ({closeModal, projectId, dates, taskAdditionSuccess}: ProjectModalProps) => {
 
-    const [equipment, setEquipment] = useState<Equipment[]>([]);
-    const [workers, setWorkers] = useState<string[]>([]);
-    const [equipmentName, setEquipmentName] = useState<string>("");
-    const [equipmentCount, setEquipmentCount] = useState<string>("");
-    const [workerName, setWorkerName] = useState<string>("");
     const [taskData, setTaskData] = useState<TaskData>({
         name: '',
         startingDate: "",
         endingDate: ""
     })
 
-    // To store available equipment from db
-    const [availableEquipment, setAvailableEquipment] = useState<any[]>([]);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Call api to get available equipment
-                const getAvailableEquipment = await fetchDetails('get_available_equipment');
-                // Store equipment details to state
-                setAvailableEquipment(getAvailableEquipment);
-            } catch (error) {
-                console.error("Error fetching projects:", error);
-            }
-        };
-        fetchData();
-    }, [])
-
     const [isLoading, setIsLoading] = useState(false);
-
-    const addEquipment = () => {
-        if (!equipmentName || !equipmentCount) {
-            toast.error("Please select equipment and enter a valid count.", { position: "top-right" });
-            return;
-        }
-
-        // Find the equipment to get available count
-        const availableItem = availableEquipment.find(t => t.tool === equipmentName)
-        
-        // Check if the equipment is already added
-        if (equipment.some((item) => item.name === equipmentName)) {
-            toast.error(`${equipmentName} is already added`, { position: "top-right", });
-            return
-        }
-        
-        if(availableItem.available < equipmentCount) {
-            // While input number is gt available number
-            toast.error(`Only ${availableItem.available} ${equipmentName} are available`, { position: "top-right", });
-            return
-        }
-        
-        // Add equipment to the list
-        setEquipment([...equipment, { equipmentId: availableItem._id, name: equipmentName, count: Number(equipmentCount), status: 'Pending' }]);
-
-        setEquipmentName("");
-        setEquipmentCount("");
-    };
-
-    const removeEquipment = (index: number) => {
-        setEquipment(equipment.filter((_, i) => i !== index));
-    };
-  
-    const addWorker = () => {
-      if (workerName) {
-        setWorkers([...workers, workerName]);
-        setWorkerName("");
-      }
-    };
-
-    const removeWorker = (index: number) => {
-        setWorkers(workers.filter((_, i) => i !== index));
-    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target
@@ -114,11 +42,9 @@ const AddTask = ({closeModal, projectId, dates, taskAdditionSuccess}: ProjectMod
         e.preventDefault()
         setIsLoading(true)
         try {
-            const response = await apiCheck({ ...taskData, workers, equipment }, `contractor/add_task/${projectId}`)
+            const response = await apiCheck({ ...taskData }, `contractor/add_task/${projectId}`)
             if(response.success) {
                 toast.success(response.message, { position: "top-right", });
-                setEquipment([])
-                setWorkers([])
                 setTaskData({
                     name: '',
                     startingDate: "",
@@ -155,52 +81,6 @@ const AddTask = ({closeModal, projectId, dates, taskAdditionSuccess}: ProjectMod
                 <div>
                     <label className="block text-sm font-medium text-gray-600 mb-1">Ending Date</label>
                     <input onChange={handleChange} type="date" name='endingDate' min={new Date().toISOString().split("T")[0]} value={taskData.endingDate} className="w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500" />
-                </div>
-
-                {/* Equipment */}
-                <div>
-                    <label className="block text-sm font-medium text-gray-600 mb-1">Equipment</label>
-                    <div className="flex gap-2">
-                        <select
-                            value={equipmentName}
-                            onChange={(e) => setEquipmentName(e.target.value)}
-                            className="w-2/3 border border-gray-300 rounded-lg p-2"
-                        >
-                            <option value="">Select Equipment</option>
-                            {availableEquipment.map((tool, index) => (
-                                <option key={index} value={tool.tool}>{tool.tool}</option>
-                            ))}
-                        </select>
-                        <input 
-                            type="number" value={equipmentCount} onChange={(e) => setEquipmentCount(e.target.value)} placeholder="Count" className="w-1/3 border border-gray-300 rounded-lg p-2" 
-                        />
-                        <button onClick={addEquipment} className="px-3 py-2 bg-blue-600 text-white rounded-lg">Add</button>
-                    </div>
-                    <ul className="mt-2 space-y-1 max-h-32 overflow-y-auto">
-                        {equipment.map((eq, index) => (
-                        <li key={index} className="bg-gray-100 p-2 rounded-md flex justify-between items-center">
-                            {eq.name} - {eq.count}
-                            <button onClick={() => removeEquipment(index)} className="text-red-600">Remove</button>
-                        </li>
-                        ))}
-                    </ul>
-                </div>
-
-                {/* Workers */}
-                <div>
-                    <label className="block text-sm font-medium text-gray-600 mb-1">Workers</label>
-                        <div className="flex gap-2">
-                            <input type="text" value={workerName} onChange={(e) => setWorkerName(e.target.value)} placeholder="Worker name" className="w-3/4 border border-gray-300 rounded-lg p-2" />
-                            <button onClick={addWorker} className="px-3 py-2 bg-blue-600 text-white rounded-lg">Add</button>
-                        </div>
-                    <ul className="mt-2 space-y-1 max-h-32 overflow-y-auto">
-                        {workers.map((worker, index) => (
-                        <li key={index} className="bg-gray-100 p-2 rounded-md flex justify-between items-center">
-                            {worker}
-                            <button onClick={() => removeWorker(index)} className="text-red-600">Remove</button>
-                        </li>
-                        ))}
-                    </ul>
                 </div>
 
                 {/* Buttons */}
