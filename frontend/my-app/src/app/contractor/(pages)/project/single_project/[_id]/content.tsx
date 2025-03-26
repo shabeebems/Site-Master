@@ -146,11 +146,16 @@ const Content: React.FC<PageProps> = ({ _id }) => {
 
                     {/* Task List Section */}
                     {tasks.length > 0 ? (
-                    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 mt-6">
+                    <div 
+                    className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 mt-6"
+                    
+                    >
                         {tasks.map((task, index) => (
                         <div
                             key={index}
-                            className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-all">
+                            className="bg-white p-6 rounded-xl shadow-md border border-gray-200 hover:shadow-lg transition-all cursor-pointer"
+                            onClick={() => router.push(`/contractor/project/single_project/${_id}/single_task/${task._id}`)}
+                        >
                             <div className="flex justify-between items-start mb-3">
                                 <h3 className="text-xl font-semibold text-gray-900">{task.name}</h3>
                                 {(() => {

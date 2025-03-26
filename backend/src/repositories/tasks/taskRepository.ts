@@ -11,6 +11,10 @@ export class TaskRepository implements ITaskRepository {
         return await taskModel.find({ projectId }).sort({ _id: -1 })
     }
 
+    public findTaskById = async(_id: string): Promise<ITask | any> => {
+        return await taskModel.findOne({ _id })
+    }
+
     public updateEquipmentByTask = async(taskId: string, _id: string, status: string): Promise<ITask | null> => {
         return await taskModel.findOneAndUpdate(
             { _id: taskId, "equipment._id": _id },
@@ -22,4 +26,5 @@ export class TaskRepository implements ITaskRepository {
     public editStatus = async(_id: string, status: string): Promise<void> => {
         await taskModel.updateOne({ _id }, { $set: { status } })
     }
+
 }

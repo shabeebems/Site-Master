@@ -115,7 +115,7 @@ export class ProjectService implements IProjectService {
 
     public addTask = async(req: any): Promise<ServiceResponse> => {
         try {
-            const { name, startingDate, endingDate, equipment } = req.body
+            const { name, startingDate, endingDate } = req.body
             if(!name || !startingDate || !endingDate) {
                 return {
                     success: false,
@@ -130,12 +130,12 @@ export class ProjectService implements IProjectService {
                 }
             }
 
-            const newTask = await taskScheme.createOne({ ...req.params, ...req.body, status: 'Pending' })
+            await taskScheme.createOne({ ...req.params, ...req.body, status: 'Pending' })
             
             // Pushing to equipment history
-            for (const item of equipment) {
-                await equipmentScheme.pushHistory(item, newTask, req.body)
-            }
+            // for (const item of equipment) {
+            //     await equipmentScheme.pushHistory(item, newTask, req.body)
+            // }
 
             return {
                 success: true,
@@ -254,11 +254,57 @@ export class ProjectService implements IProjectService {
 
     public changeTaskStatus = async(data: any): Promise<ServiceResponse> => {
         try {
-            console.log(data)
             await taskScheme.editStatus(data._id, data.status)
             return {
                 success: true,
                 message: Messages.TASK_STATUS_UPDATE_SUCCESS
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.TASK_STATUS_UPDATE_FAILURE
+            }
+        }
+    }
+
+    public getSingleTask = async(_id: string): Promise<ServiceResponse> => {
+        try {
+            const task = await taskScheme.findTaskById(_id)
+            return {
+                success: true,
+                message: Messages.TASK_STATUS_UPDATE_SUCCESS,
+                data: task
+            }
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.TASK_STATUS_UPDATE_FAILURE
+            }
+        }
+    }
+
+    public checkEquipmentCount = async(data: any): Promise<ServiceResponse> => {
+        try {
+            const {  equipmentId, count, start, end } = data.data
+            const check = await equipmentScheme.equipmentAvalability(equipmentId)
+            let totalCount = 0;
+            // ഓരോ ദിവസവും iterate ചെയ്യുക
+            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+                let currentDate = new Date(d); // Object mutation ഒഴിവാക്കാൻ copy ചെയ്യുന്നു
+
+                check.activities.forEach((activity: any) => {
+                    if (activity.start <= currentDate && activity.end >= currentDate) {
+                        totalCount += activity.count;
+                    }
+                });
+            }
+            console.log("Total Count:", totalCount);
+
+            return {
+                success: true,
+                message: Messages.TASK_STATUS_UPDATE_SUCCESS,
             }
         } catch (error) {
             console.log(error)

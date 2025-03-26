@@ -216,15 +216,34 @@ export class ProjectController implements IProjectController {
         }
     }
 
+    public getSingleTask = async(req: Request, res: Response): Promise<void> => {
+        try {
+            const result: ProjectControllerResponse = await projectService.getSingleTask(req.params._id)
+            const { success, message, data } = result
+            res.status(201).json({
+                success,
+                message,
+                data
+            });
+            return
+
+        } catch (error) {
+            console.error(Messages.TASK_STATUS_UPDATE_FAILURE, error);
+            res.status(500).json({
+                success: false,
+                message: Messages.TASK_STATUS_UPDATE_FAILURE,
+            });
+            return
+        }
+    }
+
     public checkEquipmentCount = async(req: Request, res: Response): Promise<void> => {
         try {
-            // const result: ProjectControllerResponse = 
-            // await projectService.changeTaskStatus(req.body)
-            // const { success, message } = result
-            console.log(req.body)
+            const result: ProjectControllerResponse = await projectService.checkEquipmentCount(req.body)
+            const { success, message } = result
             res.status(201).json({
-                success: true,
-                message: 's'
+                success,
+                message
             });
             return
 

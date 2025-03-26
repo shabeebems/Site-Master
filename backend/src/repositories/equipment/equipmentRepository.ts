@@ -55,4 +55,9 @@ export class EquipmentRepository implements IEquipmentRepository {
         })
         return
     }
+
+    public equipmentAvalability = async(equipmentId: any): Promise<any> => {
+        return await equipmentHistory.findOne({ equipmentId })
+    }
+
 }
