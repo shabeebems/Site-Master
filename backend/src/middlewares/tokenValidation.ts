@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { createAccessToken, deleteToken } from "../utils/jwt";
 import { UserRepository } from "../repositories/user/userRepository";

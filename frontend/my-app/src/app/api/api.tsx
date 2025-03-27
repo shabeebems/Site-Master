@@ -47,9 +47,7 @@ export const statusEdits = async (route: string, data: object) => {
 
 export const checkEquipmentCount = async (data: object, route: string) => {
     try {
-        console.log('as')
         const response = await apiClient.post(`http://localhost:5000/api/contractor/${route}`, data, { withCredentials: true })
-        console.log(response)
         return response?.data
     } catch (error) {
         console.error("Error during fetching workers", error);

@@ -50,7 +50,6 @@ const Content: React.FC<PageProps> = ({ _id }) => {
     }, [])
 
     const equipmentAdditionSuccess = (newEquipment: IEquipment[]) => {
-        console.log(newEquipment, 'newEquipment')
         setEquipment((prevEquipment) => [...newEquipment, ...prevEquipment as any])
     }
 
@@ -78,20 +77,6 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                     {task?.status}
                 </span>
             </div>
-        </div>
-
-        {/* Navigation Buttons */}
-        <div className="flex justify-center gap-6 mb-8">
-            <button
-            //   onClick={() => navigate('/workers')}
-            className="bg-green-600 text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:bg-green-700 transition-transform transform hover:scale-105">
-            🏗️ View Workers
-            </button>
-            <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-red-600 text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:bg-purple-700 transition-transform transform hover:scale-105">
-            🏢 add Equipment
-            </button>
         </div>
 
         {/* Equipment Details Section */}
@@ -131,8 +116,11 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 )}
             </div>
         </div>
+        {/* Modal */}
+        {isModalOpen && (
+            <AddEquipment equipmentAdditionSuccess={equipmentAdditionSuccess} cancel={cancel} dates={{ start: task?.startingDate, end: task?.endingDate } } taskId={ task?._id } />
+        )}
     </div>
-
   )
 }
 

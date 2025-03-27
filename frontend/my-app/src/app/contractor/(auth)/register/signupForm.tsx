@@ -74,7 +74,6 @@ export default function SignupForm() {
         // Re-render register while any unexpected error happens
         router.push('/contractor/register');
       }
-      console.log('ee')
       
     } catch (error: any) {
       // Passing error message (async functions handling 400 status errors in catch)

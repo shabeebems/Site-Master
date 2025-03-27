@@ -91,7 +91,6 @@ export class WorkerService implements IWorkerService {
 
             // Find workers using contractor id
             const workers = await userScheme.findWorkersByContractorId(decoded._id)
-            // console.log(workers)
             return {
                 success: true,
                 data: workers,

@@ -149,7 +149,6 @@ export class AuthService implements IAuthService {
                     success: false,
                     message: Messages.USER_NOT_FOUND,
                 };
-                // console.log('ss')
                 // throw new NotFoundError()
             }
 

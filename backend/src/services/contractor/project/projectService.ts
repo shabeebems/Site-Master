@@ -36,7 +36,7 @@ export class ProjectService implements IProjectService {
 
             // Upload image to cloudinary
             let result = await cloudinary.uploader.upload(image, {
-                folder: "user",
+                folder: "project",
             });
 
             const accessToken = req.cookies.accessToken
@@ -132,11 +132,6 @@ export class ProjectService implements IProjectService {
 
             await taskScheme.createOne({ ...req.params, ...req.body, status: 'Pending' })
             
-            // Pushing to equipment history
-            // for (const item of equipment) {
-            //     await equipmentScheme.pushHistory(item, newTask, req.body)
-            // }
-
             return {
                 success: true,
                 message: Messages.TASK_ADDED_SUCCESS,
