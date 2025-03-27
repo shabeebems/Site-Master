@@ -47,12 +47,17 @@ const AddEquipment = ({ cancel, dates }: ProjectModalProps) => {
 
         const data = {
             equipmentId: clickedItem?._id,
-            count: clickedItem?.count,
+            totalCount: clickedItem?.count,
             start: dates.start,
-            end: dates.end
+            end: dates.end,
+            inputCount: equipmentCount
         }
-        await checkEquipmentCount({ data }, `check_equipment_count`)
-
+        const response = await checkEquipmentCount({ data }, `check_equipment_count`)
+        if(response.success) {
+            toast.success("Success", { position: "top-right" });
+        } else {
+            toast.error("Cant do", { position: "top-right" });
+        }
     };
 
     return (

@@ -287,20 +287,26 @@ export class ProjectService implements IProjectService {
 
     public checkEquipmentCount = async(data: any): Promise<ServiceResponse> => {
         try {
-            const {  equipmentId, count, start, end } = data.data
+            const { equipmentId, totalCount, start, end, inputCount } = data
             const check = await equipmentScheme.equipmentAvalability(equipmentId)
-            let totalCount = 0;
-            // ഓരോ ദിവസവും iterate ചെയ്യുക
-            for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-                let currentDate = new Date(d); // Object mutation ഒഴിവാക്കാൻ copy ചെയ്യുന്നു
+            const history = check.activities
+            const startDate = new Date(start);
+            const endDate = new Date(end);
 
-                check.activities.forEach((activity: any) => {
-                    if (activity.start <= currentDate && activity.end >= currentDate) {
-                        totalCount += activity.count;
+            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                let historyCount = 0
+                history.forEach((history: any) => {
+                    if(history.start <= d && history.end >= d) {
+                        historyCount += history.count
                     }
-                });
+                })
+                if((totalCount - historyCount) < inputCount) {
+                    return {
+                        success: false,
+                        message: Messages.TASK_STATUS_UPDATE_SUCCESS,
+                    }
+                }
             }
-            console.log("Total Count:", totalCount);
 
             return {
                 success: true,

@@ -49,7 +49,8 @@ export const checkEquipmentCount = async (data: object, route: string) => {
     try {
         console.log('as')
         const response = await apiClient.post(`http://localhost:5000/api/contractor/${route}`, data, { withCredentials: true })
-        return response?.data.data
+        console.log(response)
+        return response?.data
     } catch (error) {
         console.error("Error during fetching workers", error);
         throw error;

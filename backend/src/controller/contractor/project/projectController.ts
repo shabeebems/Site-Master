@@ -239,7 +239,7 @@ export class ProjectController implements IProjectController {
 
     public checkEquipmentCount = async(req: Request, res: Response): Promise<void> => {
         try {
-            const result: ProjectControllerResponse = await projectService.checkEquipmentCount(req.body)
+            const result: ProjectControllerResponse = await projectService.checkEquipmentCount(req.body.data)
             const { success, message } = result
             res.status(201).json({
                 success,

@@ -37,7 +37,6 @@ export class EquipmentController implements IEquipmentController {
                 const result: EquipmentControllerResponse = await equipmentService.getEquipment(req)
              
                 const { success, message, data } = result
-                console.log('poooda', data)
                 res.status(201).json({
                     success,
                     message,
