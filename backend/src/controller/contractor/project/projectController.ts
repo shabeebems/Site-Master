@@ -228,10 +228,10 @@ export class ProjectController implements IProjectController {
             return
 
         } catch (error) {
-            console.error(Messages.TASK_STATUS_UPDATE_FAILURE, error);
+            console.error(Messages.SINGLE_TASK_FETCH_FAILED, error);
             res.status(500).json({
                 success: false,
-                message: Messages.TASK_STATUS_UPDATE_FAILURE,
+                message: Messages.SINGLE_TASK_FETCH_FAILED,
             });
             return
         }
@@ -248,13 +248,35 @@ export class ProjectController implements IProjectController {
             return
 
         } catch (error) {
-            console.error(Messages.TASK_STATUS_UPDATE_FAILURE, error);
+            console.error(Messages.CHECK_EQUIPMENT_AVAILABILITY_FAILED, error);
             res.status(500).json({
                 success: false,
-                message: Messages.TASK_STATUS_UPDATE_FAILURE,
+                message: Messages.CHECK_EQUIPMENT_AVAILABILITY_FAILED,
             });
             return
         }
     }
 
+    public taskEquipmentAdd = async(req: Request, res: Response): Promise<void> => {
+        try {
+            const { body, params } = req
+            console.log('body', body.inputs)
+            console.log('params', params.taskId)
+            const result: ProjectControllerResponse = await projectService.taskEquipmentAdd(body.inputs, params.taskId)
+            const { success, message } = result
+            res.status(201).json({
+                success,
+                message
+            });
+            return
+
+        } catch (error) {
+            console.error(Messages.ADD_EQUIPMENT_TO_TASK_FAILED, error);
+            res.status(500).json({
+                success: false,
+                message: Messages.ADD_EQUIPMENT_TO_TASK_FAILED,
+            });
+            return
+        }
+    }
 }

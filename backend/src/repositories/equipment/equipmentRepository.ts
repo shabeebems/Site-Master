@@ -31,14 +31,14 @@ export class EquipmentRepository implements IEquipmentRepository {
         // return
     }
 
-    public pushHistory = async(data: any, ids: any, body: any): Promise<any> => {
+    public pushHistory = async(data: any, task: any): Promise<any> => {
         return equipmentHistory.updateOne({ equipmentId: data.equipmentId }, {
             $push: {
                 activities: {
-                    taskId: ids._id,
-                    projectId: ids.projectId,
-                    start: body.startingDate,
-                    end: body.endingDate,
+                    taskId: task._id,
+                    projectId: task.projectId,
+                    start: task.startingDate,
+                    end: task.endingDate,
                     count: data.count,
                     status: 'Pending'
                 }

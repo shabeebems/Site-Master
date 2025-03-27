@@ -273,14 +273,14 @@ export class ProjectService implements IProjectService {
             const task = await taskScheme.findTaskById(_id)
             return {
                 success: true,
-                message: Messages.TASK_STATUS_UPDATE_SUCCESS,
+                message: Messages.SINGLE_TASK_FETCH_SUCCESS,
                 data: task
             }
         } catch (error) {
             console.log(error)
             return {
                 success: false,
-                message: Messages.TASK_STATUS_UPDATE_FAILURE
+                message: Messages.SINGLE_TASK_FETCH_FAILED
             }
         }
     }
@@ -296,27 +296,51 @@ export class ProjectService implements IProjectService {
             for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                 let historyCount = 0
                 history.forEach((history: any) => {
-                    if(history.start <= d && history.end >= d) {
+                    if(history.start <= d && history.end >= d && history.status !== "Returned") {
                         historyCount += history.count
                     }
                 })
-                if((totalCount - historyCount) < inputCount) {
+                const balance = totalCount - historyCount
+                if(balance < inputCount) {
                     return {
                         success: false,
-                        message: Messages.TASK_STATUS_UPDATE_SUCCESS,
+                        message: `Only ${balance} equipment left on ${d.toLocaleDateString()}`,
                     }
                 }
             }
 
             return {
                 success: true,
-                message: Messages.TASK_STATUS_UPDATE_SUCCESS,
+                message: Messages.CHECK_EQUIPMENT_AVAILABILITY_SUCCESS,
             }
+            
         } catch (error) {
             console.log(error)
             return {
                 success: false,
-                message: Messages.TASK_STATUS_UPDATE_FAILURE
+                message: Messages.CHECK_EQUIPMENT_AVAILABILITY_FAILED
+            }
+        }
+    }
+
+    public taskEquipmentAdd = async(equipment: any, taskId: any): Promise<ServiceResponse> => {
+        try {
+            const task = await taskScheme.findTaskById(taskId)
+            // To add all input equipment to task db
+            for (let tool of equipment) {
+                await taskScheme.addEquipment(taskId, tool)
+                await equipmentScheme.pushHistory(tool, task)
+            }        
+            return {
+                success: true,
+                message: Messages.ADD_EQUIPMENT_TO_TASK_SUCCESS,
+            }
+            
+        } catch (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: Messages.ADD_EQUIPMENT_TO_TASK_FAILED
             }
         }
     }

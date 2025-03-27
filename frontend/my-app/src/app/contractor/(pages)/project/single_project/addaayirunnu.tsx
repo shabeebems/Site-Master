@@ -46,7 +46,6 @@ const AddTask = ({closeModal, projectId, dates, taskAdditionSuccess}: ProjectMod
                 // Call api to get available equipment
                 const getAvailableEquipment = await fetchDetails('get_available_equipment');
                 // Store equipment details to state
-                console.log('123', getAvailableEquipment)
                 setAvailableEquipment(getAvailableEquipment);
             } catch (error) {
                 console.error("Error fetching projects:", error);

@@ -41,6 +41,10 @@ export const Messages = {
     PROJECT_EQUIPMENT_FETCH_FAILED: "Server error occurred while fetching project equipment",
     EQUIPMENT_ACTION_SUCCESS: "Equipment action success",
     EQUIPMENT_ACTION_FAILED: "Equipment action failed",
+    CHECK_EQUIPMENT_AVAILABILITY_SUCCESS: "Equipment availability check successful",
+    CHECK_EQUIPMENT_AVAILABILITY_FAILED: "Checking equipment availability failed",
+    ADD_EQUIPMENT_TO_TASK_SUCCESS: "Equipment added to task successfully",  
+    ADD_EQUIPMENT_TO_TASK_FAILED: "Adding equipment to task failed",  
 
     // Project
     STARTING_DATE_GREATER: "Starting date is greater than ending date",
@@ -83,5 +87,7 @@ export const Messages = {
     ADD_TASK_SERVER_ERROR: "Server error during task addition",
     TASK_STATUS_UPDATE_SUCCESS: "Task status updated successfully",
     TASK_STATUS_UPDATE_FAILURE: "Failed to update task status",
+    SINGLE_TASK_FETCH_SUCCESS: "Successfully fetched single task details",
+    SINGLE_TASK_FETCH_FAILED: "Feching single task details failed",
 
 }
