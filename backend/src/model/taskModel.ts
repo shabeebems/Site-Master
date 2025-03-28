@@ -30,7 +30,7 @@ const taskSchema = new mongoose.Schema({
         },
     }],
     workers: { 
-        type: Array
+        type: Array,
     },
     status: {
         type: String, 

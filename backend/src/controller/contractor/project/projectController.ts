@@ -277,4 +277,67 @@ export class ProjectController implements IProjectController {
             return
         }
     }
+
+    public getWorkerRoles = async(req: Request, res: Response): Promise<void> => {
+        try {
+            const result: ProjectControllerResponse = await projectService.getWorkerRoles(req)
+            const { success, message, data } = result
+            res.status(201).json({
+                success,
+                message,
+                data
+            });
+            return
+
+        } catch (error) {
+            console.error(Messages.ADD_EQUIPMENT_TO_TASK_FAILED, error);
+            res.status(500).json({
+                success: false,
+                message: Messages.ADD_EQUIPMENT_TO_TASK_FAILED,
+            });
+            return
+        }
+    }
+
+    public getWorkerToAddTask = async(req: Request, res: Response): Promise<void> => {
+        try {
+            const result: ProjectControllerResponse = await projectService.getWorkerToAddTask(req)
+            const { success, message, data } = result
+            res.status(201).json({
+                success,
+                message,
+                data
+            });
+            return
+
+        } catch (error) {
+            console.error(Messages.ADD_EQUIPMENT_TO_TASK_FAILED, error);
+            res.status(500).json({
+                success: false,
+                message: Messages.ADD_EQUIPMENT_TO_TASK_FAILED,
+            });
+            return
+        }
+    }
+
+    public taskWorkerAdd = async(req: Request, res: Response): Promise<void> => {
+        try {
+            // const result: ProjectControllerResponse = 
+            await projectService.taskWorkerAdd(req)
+            // const { success, message, data } = result
+            res.status(201).json({
+                success: '',
+                message: '',
+            });
+            return
+
+        } catch (error) {
+            console.error(Messages.ADD_EQUIPMENT_TO_TASK_FAILED, error);
+            res.status(500).json({
+                success: false,
+                message: Messages.ADD_EQUIPMENT_TO_TASK_FAILED,
+            });
+            return
+        }
+    }
 }

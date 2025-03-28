@@ -55,6 +55,16 @@ export const checkEquipmentCount = async (data: object, route: string) => {
     }
 }
 
+export const dataValidation = async (data: object, route: string) => {
+    try {
+        const response = await apiClient.post(`http://localhost:5000/api/contractor/${route}`, data, { withCredentials: true })
+        return response?.data
+    } catch (error) {
+        console.error("Error during fetching workers", error);
+        throw error;
+    }
+}
+
 // Logout
 export const logoutApi = async () => {
     try {

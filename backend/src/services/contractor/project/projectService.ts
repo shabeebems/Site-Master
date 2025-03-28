@@ -8,10 +8,12 @@ import { EquipmentRepository } from "../../../repositories/equipment/equipmentRe
 import { ProjectRepository } from "../../../repositories/project/projectRepository";
 import { TaskRepository } from "../../../repositories/tasks/taskRepository";
 import { extractEquipment } from "../../../utils/extractEquipment";
+import { UserRepository } from "../../../repositories/user/userRepository";
 
 const projectSchema = new ProjectRepository()
 const equipmentScheme = new EquipmentRepository()
 const taskScheme = new TaskRepository()
+const userScheme = new UserRepository()
 
 export class ProjectService implements IProjectService {
 
@@ -339,4 +341,71 @@ export class ProjectService implements IProjectService {
             }
         }
     }
+
+    public getWorkerRoles = async(req: any): Promise<ServiceResponse> => {
+        try {
+            const accessToken = req.cookies.accessToken
+            
+            // Decode access token for get logged contractor id for get workers roles from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
+            const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
+
+            const roles = await userScheme.findworkerRoles(decoded._id)
+
+            return {
+                success: true,
+                message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,
+                data: roles
+            }
+            
+        } catch (error) {
+            console.log(error, Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED)
+            return {
+                success: false,
+                message: Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED
+            }
+        }
+    }
+
+    public getWorkerToAddTask = async(req: any): Promise<ServiceResponse> => {
+        try {
+            const accessToken = req.cookies.accessToken
+            
+            // Decode access token for get logged contractor id for get workers roles from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
+            const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
+            const workers = await userScheme.findworkerBasedOnRoles(decoded._id, req.params.role)
+
+            return {
+                success: true,
+                message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,
+                data: workers
+            }
+            
+        } catch (error) {
+            console.log(error, Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED)
+            return {
+                success: false,
+                message: Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED
+            }
+        }
+    }
+
+    public taskWorkerAdd = async(req: any): Promise<ServiceResponse> => {
+        try {
+
+            const { workerId, taskId } = req.body
+            await taskScheme.addWorker(taskId, workerId)
+            return {
+                success: true,
+                message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,
+            }
+            
+        } catch (error) {
+            console.log(error, Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED)
+            return {
+                success: false,
+                message: Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED
+            }
+        }
+    }
+
 }

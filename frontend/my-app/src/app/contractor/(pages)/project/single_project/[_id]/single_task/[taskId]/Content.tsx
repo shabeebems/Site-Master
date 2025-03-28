@@ -1,6 +1,7 @@
 import { fetchSingleData } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
 import AddEquipment from './AddEquipment';
+import AddWorker from './AddWorker';
 
 type PageProps = {
     _id: any;
@@ -20,19 +21,27 @@ type IEquipment = {
     count: number;
 }
 
+type IWorker = {
+    name: string;
+    status: string;
+    role: string;
+}
+
 const Content: React.FC<PageProps> = ({ _id }) => {
 
     const [task, setTask] = useState<ITask>()
     const [equipment, setEquipment] = useState<IEquipment[]>()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const cancel = () => setIsModalOpen(false)
+
     const [workerAddForm, setWorkerAddForm] = useState(false)
+    const cancelWorkerForm = () => setWorkerAddForm(false)
 
     const formatDate = (dateString: any) => {
         return new Date(dateString).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
     };
 
-    const cancel = () => setIsModalOpen(false)
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,17 +63,11 @@ const Content: React.FC<PageProps> = ({ _id }) => {
         setEquipment((prevEquipment) => [...newEquipment, ...prevEquipment as any])
     }
 
-    const workers = [
-        { name: "John Doe", role: "Electrician", status: "Active" },
-        { name: "Jane Smith", role: "Carpenter", status: "Inactive" },
-        { name: "Mike Johnson", role: "Plumber", status: "Active" },
-        { name: "Sara Wilson", role: "Welder", status: "On Leave" },
-        { name: "Tom Hardy", role: "Painter", status: "Active" },
-    ];
-    
+    const [workers, setWorkers] = useState<IWorker[]>([])
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-6">
+
         {/* Task Details Section */}
         <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -88,6 +91,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 </span>
             </div>
         </div>
+
         {/* Equipment Details Section */}
         <div className="w-full flex justify-center mt-10 px-4 relative">
             <div className="w-full max-w-6xl bg-white/90 backdrop-blur-lg shadow-xl rounded-2xl p-8 border border-gray-300">
@@ -141,17 +145,21 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-3xl font-bold text-gray-900">Workers List</h2>
-                    {}
-                    <button 
-                        className="px-4 py-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 transition-all"
-                    >
-                        + Add Worker
-                    </button>
+                    {workerAddForm ? (
+                        <AddWorker cancel={cancelWorkerForm} taskId={_id} />
+                    ) : (
+                        <button 
+                            className="px-4 py-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 transition-all"
+                            onClick={() => setWorkerAddForm(true)}
+                        >
+                            + Add Worker
+                        </button>
+                    )}
                 </div>
 
                 {workers?.length > 0 ? (
                     <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                        {workers.map((worker, index) => (
+                        {workers?.map((worker, index) => (
                             <div 
                                 key={index} 
                                 className="bg-white p-6 rounded-xl shadow-md border border-gray-300 hover:shadow-lg transition-all transform hover:scale-105"

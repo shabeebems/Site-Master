@@ -25,5 +25,14 @@ export class UserRepository implements IUserRepository {
         return await this.findUserByEmail(verify.email)
     }
 
+    public findworkerRoles = async (contractorId: string): Promise<any> => {
+        const result = await User.aggregate([{ $match: { contractorId } }, { $group: { _id: "$profession" } }])
+        return result.map(item => item._id);
+    }
+
+    public findworkerBasedOnRoles = async (contractorId: string, profession: string): Promise<any> => {
+        return await User.find({ contractorId, profession })
+    }
+
 }
 
