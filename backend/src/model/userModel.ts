@@ -41,6 +41,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    profession: { 
+        type: String,
+    },
 })
 
 export default mongoose.model('User', userSchema)

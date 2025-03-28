@@ -26,6 +26,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
     const [equipment, setEquipment] = useState<IEquipment[]>()
 
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const [workerAddForm, setWorkerAddForm] = useState(false)
 
     const formatDate = (dateString: any) => {
         return new Date(dateString).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
@@ -53,6 +54,15 @@ const Content: React.FC<PageProps> = ({ _id }) => {
         setEquipment((prevEquipment) => [...newEquipment, ...prevEquipment as any])
     }
 
+    const workers = [
+        { name: "John Doe", role: "Electrician", status: "Active" },
+        { name: "Jane Smith", role: "Carpenter", status: "Inactive" },
+        { name: "Mike Johnson", role: "Plumber", status: "Active" },
+        { name: "Sara Wilson", role: "Welder", status: "On Leave" },
+        { name: "Tom Hardy", role: "Painter", status: "Active" },
+    ];
+    
+
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-6">
         {/* Task Details Section */}
@@ -78,13 +88,21 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 </span>
             </div>
         </div>
-
         {/* Equipment Details Section */}
-        <div className="w-full flex justify-center mt-10 px-4">
+        <div className="w-full flex justify-center mt-10 px-4 relative">
             <div className="w-full max-w-6xl bg-white/90 backdrop-blur-lg shadow-xl rounded-2xl p-8 border border-gray-300">
-                <h2 className="text-3xl font-bold text-gray-900 text-center mb-6">
-                    Equipment Details
-                </h2>
+                {/* Header Section with Add Button */}
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-3xl font-bold text-gray-900">
+                        Equipment Details
+                    </h2>
+                    <button 
+                        className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition-all"
+                        onClick={() => setIsModalOpen(true)} // Replace with your function
+                    >
+                        + Add Equipment
+                    </button>
+                </div>
 
                 {equipment?.length || 0 > 0 ? (
                     <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -116,6 +134,49 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 )}
             </div>
         </div>
+
+        {/* Workers Section */}
+        <div className="w-full flex justify-center mt-10 px-4">
+            <div className="w-full max-w-6xl bg-white/90 backdrop-blur-lg shadow-xl rounded-2xl p-8 border border-gray-300">
+                
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-3xl font-bold text-gray-900">Workers List</h2>
+                    {}
+                    <button 
+                        className="px-4 py-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 transition-all"
+                    >
+                        + Add Worker
+                    </button>
+                </div>
+
+                {workers?.length > 0 ? (
+                    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {workers.map((worker, index) => (
+                            <div 
+                                key={index} 
+                                className="bg-white p-6 rounded-xl shadow-md border border-gray-300 hover:shadow-lg transition-all transform hover:scale-105"
+                            >
+                                <h3 className="text-xl font-semibold text-gray-800">{worker.name}</h3>
+                                <p className="text-gray-600"><span className="font-medium text-gray-700">Role:</span> {worker.role}</p>
+                                <p className={`font-medium px-3 py-1 rounded-full inline-block text-sm mt-2 ${
+                                    worker.status === "Active" ? "bg-green-100 text-green-600" :
+                                    worker.status === "Inactive" ? "bg-red-100 text-red-600" :
+                                    "bg-yellow-100 text-yellow-600"
+                                }`}>
+                                    {worker.status}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <div className="text-center text-gray-500 mt-8">
+                        <p className="text-lg font-medium">No workers assigned to this task.</p>
+                    </div>
+                )}
+            </div>
+        </div>
+
+
         {/* Modal */}
         {isModalOpen && (
             <AddEquipment equipmentAdditionSuccess={equipmentAdditionSuccess} cancel={cancel} dates={{ start: task?.startingDate, end: task?.endingDate } } taskId={ task?._id } />

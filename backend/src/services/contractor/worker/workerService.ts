@@ -5,14 +5,15 @@ import { AddWorkerData, IWorkerService, ServiceResponse } from "./workerInterfac
 import hashedPassword from '../../../utils/hashPassword'
 import sendPassword from "../../../utils/sendPassword";
 import { decode } from "../../../utils/jwt";
+import { WorkerHistoryRepository } from "../../../repositories/workerHistory/workerHistoryRepository";
 
 const userScheme = new UserRepository()
+const workerHistoryScheme = new WorkerHistoryRepository()
 
 export class WorkerService implements IWorkerService {
 
     public addWorker = async(req: any, data: AddWorkerData): Promise<ServiceResponse> => {
         try {
-
             const { name, mobile, email, place } = data
             if(!name || !mobile || !email || !place) {
                 return {
@@ -64,7 +65,8 @@ export class WorkerService implements IWorkerService {
                 password: hashPassword,
                 role: 'Worker'
             }
-            await userScheme.createUser(worker)
+            const newWorker = await userScheme.createUser(worker)
+            await workerHistoryScheme.createWorkerHistory(newWorker._id)
     
             return {
                 success: true,

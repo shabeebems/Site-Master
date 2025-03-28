@@ -10,6 +10,7 @@ interface Worker {
   email: string;
   mobile: string;
   place: string;
+  profession: string;
 }
 
 const Content = () => {
@@ -27,7 +28,6 @@ const Content = () => {
 
         // Call api to get workers
         const users = await fetchDetails('get_workers');
-
         // Store workers details to state
         setWorkers(users);
 
@@ -88,7 +88,7 @@ const Content = () => {
 
               {/* Right Section (Contact Info) */}
               <div className="text-right">
-                <p className="text-xs font-medium text-gray-700">{user.mobile}</p>
+                <p className="text-xs font-medium text-gray-700">{user.profession}</p>
                 <p className="text-xs text-gray-500">{user.place}</p>
               </div>
             </li>
