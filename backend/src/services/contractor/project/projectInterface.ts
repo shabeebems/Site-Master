@@ -21,4 +21,12 @@ export interface IProjectService {
     getProjectEquipment(projectId: any): Promise<ServiceResponse>;
     equipmentAction(data: any): Promise<ServiceResponse>;
     changeProjectStatus(data: any): Promise<ServiceResponse>;
+    changeTaskStatus(data: any): Promise<ServiceResponse>;
+    getSingleTask(_id: string): Promise<ServiceResponse>;
+    checkEquipmentCount(data: any): Promise<ServiceResponse>;
+    taskEquipmentAdd(equipment: any, taskId: any): Promise<ServiceResponse>;
+    getWorkerRoles(req: any): Promise<ServiceResponse>;
+    getWorkerToAddTask(req: any): Promise<ServiceResponse>;
+    taskWorkerAdd(req: any): Promise<ServiceResponse>;
+
 }

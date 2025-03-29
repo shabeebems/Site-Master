@@ -15,4 +15,12 @@ export interface IProjectController {
     getProjectEquipment(req: Request, res: Response): Promise<void>;
     equipmentAction(req: Request, res: Response): Promise<void>;
     changeProjectStatus(req: Request, res: Response): Promise<void>;
+    changeTaskStatus(req: Request, res: Response): Promise<void>;
+    getSingleTask(req: Request, res: Response): Promise<void>;
+    checkEquipmentCount(req: Request, res: Response): Promise<void>;
+    taskEquipmentAdd(req: Request, res: Response): Promise<void>;
+    getWorkerRoles(req: Request, res: Response): Promise<void>;
+    getWorkerToAddTask(req: Request, res: Response): Promise<void>;
+    taskWorkerAdd(req: Request, res: Response): Promise<void>;
+
 }
