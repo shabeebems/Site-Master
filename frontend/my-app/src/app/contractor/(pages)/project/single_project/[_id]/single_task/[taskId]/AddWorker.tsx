@@ -1,5 +1,6 @@
-import { dataValidation, fetchDetails } from '@/app/api/api';
+import { fetchDetails } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
+import Loading from "@/app/components/Loading";
 
 type PageProps = {
     cancel: Function;
@@ -16,6 +17,7 @@ const AddWorker: React.FC<PageProps> = ({ cancel, workerAddition }) => {
     const [roles, setRoles] = useState([])
     const [workers, setWorkers] = useState<IWorker[]>([])
     const [selectedWorkerId, setSelectedWorkerId] = useState<string>("");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -40,6 +42,7 @@ const AddWorker: React.FC<PageProps> = ({ cancel, workerAddition }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setIsLoading(true);
 
         if (!selectedWorkerId) {
             alert("Please select a worker.");
@@ -52,6 +55,8 @@ const AddWorker: React.FC<PageProps> = ({ cancel, workerAddition }) => {
 
         } catch (error) {
             console.error("Error assigning worker:", error);
+        } finally {
+          setIsLoading(false);
         }
     };
 
@@ -86,24 +91,29 @@ const AddWorker: React.FC<PageProps> = ({ cancel, workerAddition }) => {
 
 
           {/* Buttons */}
-          <div className="flex items-center gap-2 mt-2 md:mt-0">
-            <button 
-              onClick={() => cancel()}
-              type="button" 
-              className="px-3 py-1.5 bg-gray-300 text-gray-700 rounded-md text-xs w-full md:w-auto"
-            >
-              Cancel
-            </button>
+            {isLoading ? (
+              <Loading />
+            ) : (
+              <div className="flex items-center gap-2 mt-2 md:mt-0">
+                  <button 
+                    onClick={() => cancel()}
+                    type="button" 
+                    className="px-3 py-1.5 bg-gray-300 text-gray-700 rounded-md text-xs w-full md:w-auto"
+                    >
+                    Cancel
+                  </button>
+                
+                  <button
+                    type="submit"
+                    onClick={handleSubmit}
+                    className="px-3 py-1.5 bg-blue-500 text-white rounded-md text-xs w-full md:w-auto hover:bg-blue-600 transition"
+                    >
+                      Save
+                  </button>
+              </div>
+
+            )}
             
-            <button
-                type="submit"
-                onClick={handleSubmit}
-                className="px-3 py-1.5 bg-blue-500 text-white rounded-md text-xs w-full md:w-auto hover:bg-blue-600 transition"
-            >
-                Save
-            </button>
-            
-          </div>
         </form>
     </>
   )

@@ -27,8 +27,12 @@ export const Messages = {
     // Worker
     WORKER_CREATED_SUCCESS: "Worker created successfully",
     WORKER_CREATION_FAILED: "Failed to add worker",
-    FETCH_WORKER_SUCCESS: "Fetch worker successful!",
-    FETCH_WORKER_FAILED: "Failed to fetch worker data",
+    FETCH_WORKER_SUCCESS: "Fetch workers successful!",
+    FETCH_WORKER_FAILED: "Failed to fetch workers data",
+    FETCH_WORKER_ROLES_SUCCESS: "Worker roles fetched successfully",
+    FETCH_WORKER_ROLES_FAILURE: "Failed to fetch worker roles",
+    ADD_WORKER_SUCCESS: "Worker added successfully",
+    ADD_WORKER_FAILURE: "Failed to add worker",
 
     // Equipment
     INVALID_COUNT: "Count must be a positive number",

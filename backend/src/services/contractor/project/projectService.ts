@@ -360,15 +360,15 @@ export class ProjectService implements IProjectService {
 
             return {
                 success: true,
-                message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,
+                message: Messages.FETCH_WORKER_ROLES_SUCCESS,
                 data: roles
             }
             
         } catch (error) {
-            console.log(error, Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED)
+            console.log(error, Messages.FETCH_WORKER_ROLES_FAILURE)
             return {
                 success: false,
-                message: Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED
+                message: Messages.FETCH_WORKER_ROLES_FAILURE
             }
         }
     }
@@ -382,15 +382,15 @@ export class ProjectService implements IProjectService {
             const workers = await userScheme.findworkerBasedOnRoles(decoded._id, req.params.role)
             return {
                 success: true,
-                message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,
+                message: Messages.FETCH_WORKER_SUCCESS,
                 data: workers
             }
             
         } catch (error) {
-            console.log(error, Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED)
+            console.log(error, Messages.FETCH_WORKER_FAILED)
             return {
                 success: false,
-                message: Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED
+                message: Messages.FETCH_WORKER_FAILED
             }
         }
     }
@@ -402,15 +402,15 @@ export class ProjectService implements IProjectService {
             const newWorker = await userScheme.findUserBy_id(workerId);
             return {
                 success: true,
-                message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,
+                message: Messages.ADD_WORKER_SUCCESS,
                 data: newWorker || {}
             }
             
         } catch (error) {
-            console.log(error, Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED)
+            console.log(error, Messages.ADD_WORKER_FAILURE)
             return {
                 success: false,
-                message: Messages.AVAILABLE_EQUIPMENT_FETCH_FAILED
+                message: Messages.ADD_WORKER_FAILURE
             }
         }
     }

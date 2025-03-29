@@ -290,10 +290,10 @@ export class ProjectController implements IProjectController {
             return
 
         } catch (error) {
-            console.error(Messages.ADD_EQUIPMENT_TO_TASK_FAILED, error);
+            console.error(Messages.FETCH_WORKER_ROLES_FAILURE, error);
             res.status(500).json({
                 success: false,
-                message: Messages.ADD_EQUIPMENT_TO_TASK_FAILED,
+                message: Messages.FETCH_WORKER_ROLES_FAILURE,
             });
             return
         }
@@ -311,10 +311,10 @@ export class ProjectController implements IProjectController {
             return
 
         } catch (error) {
-            console.error(Messages.ADD_EQUIPMENT_TO_TASK_FAILED, error);
+            console.error(Messages.FETCH_WORKER_FAILED, error);
             res.status(500).json({
                 success: false,
-                message: Messages.ADD_EQUIPMENT_TO_TASK_FAILED,
+                message: Messages.FETCH_WORKER_FAILED,
             });
             return
         }
@@ -332,10 +332,10 @@ export class ProjectController implements IProjectController {
             return
 
         } catch (error) {
-            console.error(Messages.ADD_EQUIPMENT_TO_TASK_FAILED, error);
+            console.error(Messages.ADD_WORKER_FAILURE, error);
             res.status(500).json({
                 success: false,
-                message: Messages.ADD_EQUIPMENT_TO_TASK_FAILED,
+                message: Messages.ADD_WORKER_FAILURE,
             });
             return
         }

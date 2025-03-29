@@ -46,6 +46,8 @@ const AddEquipment: React.FC<ProjectModalProps> = ({ equipmentAdditionSuccess, c
   }, []);
 
   const addEquipment = async () => {
+    setIsLoading(true);
+
     if (!equipmentName || !equipmentCount || Number(equipmentCount) <= 0) {
       toast.error("Please select valid equipment and enter a positive count.", {
         position: "top-right",
@@ -64,8 +66,6 @@ const AddEquipment: React.FC<ProjectModalProps> = ({ equipmentAdditionSuccess, c
       toast.error("Equipment already added.", { position: "top-right" });
       return;
     }
-
-    setIsLoading(true);
 
     try {
       const data = {
