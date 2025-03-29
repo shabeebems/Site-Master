@@ -12,6 +12,10 @@ export class UserRepository implements IUserRepository {
         return await User.findOne({ email })
     }
 
+    public findUserBy_id = async (_id: string): Promise<IUser | null> => {
+        return await User.findOne({ _id }, { name: 1, email: 1, mobile: 1, place: 1, role: '$profession' })
+    }
+
     public changePasswordByEmail = async (email: string, password: string): Promise<void> => {
         await User.updateOne({ email }, { password })
     }
@@ -31,7 +35,7 @@ export class UserRepository implements IUserRepository {
     }
 
     public findworkerBasedOnRoles = async (contractorId: string, profession: string): Promise<any> => {
-        return await User.find({ contractorId, profession })
+        return await User.find({ contractorId, profession }, { name: 1 })
     }
 
 }

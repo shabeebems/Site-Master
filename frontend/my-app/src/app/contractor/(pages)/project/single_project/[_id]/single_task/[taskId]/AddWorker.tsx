@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 
 type PageProps = {
     cancel: Function;
-    taskId: string
+    workerAddition: Function;
 };
 
 type IWorker = {
@@ -11,7 +11,7 @@ type IWorker = {
     _id: string
 }
 
-const AddWorker: React.FC<PageProps> = ({ cancel, taskId }) => {
+const AddWorker: React.FC<PageProps> = ({ cancel, workerAddition }) => {
 
     const [roles, setRoles] = useState([])
     const [workers, setWorkers] = useState<IWorker[]>([])
@@ -47,7 +47,9 @@ const AddWorker: React.FC<PageProps> = ({ cancel, taskId }) => {
         }
 
         try {
-            await dataValidation({ workerId: selectedWorkerId, taskId }, `task/add_worker`);
+            workerAddition(selectedWorkerId)
+            // await dataValidation({ workerId: selectedWorkerId, taskId }, `task/add_worker`);
+
         } catch (error) {
             console.error("Error assigning worker:", error);
         }

@@ -268,10 +268,17 @@ export class ProjectService implements IProjectService {
     public getSingleTask = async(_id: string): Promise<ServiceResponse> => {
         try {
             const task = await taskScheme.findTaskById(_id)
+            let allWorkers: any[] = [];
+            allWorkers = await Promise.all(
+                task.workers.map(async (workerId: string) => {
+                    return await userScheme.findUserBy_id(workerId);
+                })
+            );
+
             return {
                 success: true,
                 message: Messages.SINGLE_TASK_FETCH_SUCCESS,
-                data: task
+                data: [task, allWorkers]
             }
         } catch (error) {
             console.log(error)
@@ -373,7 +380,7 @@ export class ProjectService implements IProjectService {
             // Decode access token for get logged contractor id for get workers roles from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
             const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
             const workers = await userScheme.findworkerBasedOnRoles(decoded._id, req.params.role)
-
+            console.log(workers)
             return {
                 success: true,
                 message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,

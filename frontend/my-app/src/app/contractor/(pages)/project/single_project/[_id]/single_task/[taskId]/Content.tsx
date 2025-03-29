@@ -1,4 +1,4 @@
-import { fetchSingleData } from '@/app/api/api';
+import { dataValidation, fetchSingleData } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
 import AddEquipment from './AddEquipment';
 import AddWorker from './AddWorker';
@@ -31,6 +31,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
 
     const [task, setTask] = useState<ITask>()
     const [equipment, setEquipment] = useState<IEquipment[]>()
+    const [workers, setWorkers] = useState<IWorker[]>([])
 
     const [isModalOpen, setIsModalOpen] = useState(false)
     const cancel = () => setIsModalOpen(false)
@@ -48,8 +49,9 @@ const Content: React.FC<PageProps> = ({ _id }) => {
             try {
                 // Call api to get TASK
                 const getTask = await fetchSingleData('get_single_task', _id);
-                setTask(getTask)
-                setEquipment(getTask.equipment)
+                setTask(getTask[0])
+                setEquipment(getTask[0].equipment)
+                setWorkers(getTask[1])
             } catch (error) {
                 console.error("Error fetching projects:", error);
             }
@@ -63,7 +65,10 @@ const Content: React.FC<PageProps> = ({ _id }) => {
         setEquipment((prevEquipment) => [...newEquipment, ...prevEquipment as any])
     }
 
-    const [workers, setWorkers] = useState<IWorker[]>([])
+    const workerAddition = async(workerId: string) => {
+        console.log(workerId, _id)
+        await dataValidation({ workerId, _id }, `task/add_worker`);
+    }
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-6">
@@ -146,7 +151,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-3xl font-bold text-gray-900">Workers List</h2>
                     {workerAddForm ? (
-                        <AddWorker cancel={cancelWorkerForm} taskId={_id} />
+                        <AddWorker cancel={cancelWorkerForm} workerAddition={workerAddition} />
                     ) : (
                         <button 
                             className="px-4 py-2 bg-green-600 text-white font-medium rounded-lg shadow-md hover:bg-green-700 transition-all"
