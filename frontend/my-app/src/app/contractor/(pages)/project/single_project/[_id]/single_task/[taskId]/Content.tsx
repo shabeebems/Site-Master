@@ -1,3 +1,4 @@
+'use client'
 import { dataValidation, fetchSingleData } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
 import AddEquipment from './AddEquipment';
