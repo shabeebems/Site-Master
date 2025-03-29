@@ -380,7 +380,6 @@ export class ProjectService implements IProjectService {
             // Decode access token for get logged contractor id for get workers roles from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
             const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
             const workers = await userScheme.findworkerBasedOnRoles(decoded._id, req.params.role)
-            console.log(workers)
             return {
                 success: true,
                 message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,
@@ -398,12 +397,13 @@ export class ProjectService implements IProjectService {
 
     public taskWorkerAdd = async(req: any): Promise<ServiceResponse> => {
         try {
-
-            const { workerId, taskId } = req.body
-            await taskScheme.addWorker(taskId, workerId)
+            const { workerId, _id } = req.body
+            await taskScheme.addWorker(_id, workerId)
+            const newWorker = await userScheme.findUserBy_id(workerId);
             return {
                 success: true,
                 message: Messages.AVAILABLE_EQUIPMENT_FETCH_SUCCESS,
+                data: newWorker || {}
             }
             
         } catch (error) {

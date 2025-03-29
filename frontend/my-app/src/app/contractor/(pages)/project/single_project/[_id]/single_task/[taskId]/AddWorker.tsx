@@ -73,15 +73,17 @@ const AddWorker: React.FC<PageProps> = ({ cancel, workerAddition }) => {
             </select>
             <select
               name="name"
+              value={selectedWorkerId}  // Ensures controlled component
               onChange={handleWorkerChange}
               className="p-2 border rounded w-full md:w-32 text-sm outline-none focus:border-blue-500"
               required
             >
               <option value="">Select worker</option>
-              {workers.map((user, index) => (
-                <option key={index} value={user._id}>{user.name}</option>
+              {workers.map((user) => (
+                <option key={user._id} value={user._id}>{user.name}</option>
               ))}
             </select>
+
 
           {/* Buttons */}
           <div className="flex items-center gap-2 mt-2 md:mt-0">

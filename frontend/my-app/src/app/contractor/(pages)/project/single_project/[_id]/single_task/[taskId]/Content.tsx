@@ -2,6 +2,8 @@ import { dataValidation, fetchSingleData } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
 import AddEquipment from './AddEquipment';
 import AddWorker from './AddWorker';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 type PageProps = {
     _id: any;
@@ -23,8 +25,8 @@ type IEquipment = {
 
 type IWorker = {
     name: string;
-    status: string;
     role: string;
+    _id: string;
 }
 
 const Content: React.FC<PageProps> = ({ _id }) => {
@@ -66,13 +68,19 @@ const Content: React.FC<PageProps> = ({ _id }) => {
     }
 
     const workerAddition = async(workerId: string) => {
-        console.log(workerId, _id)
-        await dataValidation({ workerId, _id }, `task/add_worker`);
+        const existWorker = workers.some(worker => worker._id == workerId);
+        if(existWorker) {
+            toast.error('Already added this worker', { position: "top-right", });
+        } else {
+            const response = await dataValidation({ workerId, _id }, `task/add_worker`);
+            toast.success(response.message, { position: "top-right", });
+            setWorkers(prev => [...prev, response.data])
+        }
     }
 
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-6">
-
+      <ToastContainer />
         {/* Task Details Section */}
         <div className="mb-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -171,13 +179,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                             >
                                 <h3 className="text-xl font-semibold text-gray-800">{worker.name}</h3>
                                 <p className="text-gray-600"><span className="font-medium text-gray-700">Role:</span> {worker.role}</p>
-                                <p className={`font-medium px-3 py-1 rounded-full inline-block text-sm mt-2 ${
-                                    worker.status === "Active" ? "bg-green-100 text-green-600" :
-                                    worker.status === "Inactive" ? "bg-red-100 text-red-600" :
-                                    "bg-yellow-100 text-yellow-600"
-                                }`}>
-                                    {worker.status}
-                                </p>
+                                
                             </div>
                         ))}
                     </div>

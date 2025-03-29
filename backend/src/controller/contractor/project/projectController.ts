@@ -322,12 +322,12 @@ export class ProjectController implements IProjectController {
 
     public taskWorkerAdd = async(req: Request, res: Response): Promise<void> => {
         try {
-            // const result: ProjectControllerResponse = 
-            await projectService.taskWorkerAdd(req)
-            // const { success, message, data } = result
+            const result: ProjectControllerResponse = await projectService.taskWorkerAdd(req)
+            const { success, message, data } = result
             res.status(201).json({
-                success: '',
-                message: '',
+                success,
+                message,
+                data
             });
             return
 
