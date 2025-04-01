@@ -36,8 +36,8 @@ const Content: React.FC<PageProps> = ({ _id }) => {
     const [equipment, setEquipment] = useState<IEquipment[]>()
     const [workers, setWorkers] = useState<IWorker[]>([])
 
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const cancel = () => setIsModalOpen(false)
+    const [equipmentAddForm, setEquipmentAddForm] = useState(false)
+    const cancelEquipmentForm = () => setEquipmentAddForm(false)
 
     const [workerAddForm, setWorkerAddForm] = useState(false)
     const cancelWorkerForm = () => setWorkerAddForm(false)
@@ -64,8 +64,15 @@ const Content: React.FC<PageProps> = ({ _id }) => {
         fetchData();
     }, [])
 
-    const equipmentAdditionSuccess = (newEquipment: IEquipment[]) => {
-        setEquipment((prevEquipment) => [...newEquipment, ...prevEquipment as any])
+    const equipmentAddition = (newEquipment: any) => {
+        const { equipmentId, equipmentCount } = newEquipment
+        if (!equipmentId || !equipmentCount || Number(equipmentCount) <= 0) {
+            toast.error("Please select valid equipment and enter a positive count.", {
+                position: "top-right",
+            });
+            return;
+        }
+        // setEquipment((prevEquipment) => [...newEquipment, ...prevEquipment as any])
     }
 
     const workerAddition = async(workerId: string) => {
@@ -114,12 +121,16 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                     <h2 className="text-3xl font-bold text-gray-900">
                         Equipment Details
                     </h2>
-                    <button 
-                        className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition-all"
-                        onClick={() => setIsModalOpen(true)} // Replace with your function
-                    >
-                        + Add Equipment
-                    </button>
+                    {equipmentAddForm ? (
+                        <AddEquipment cancel={cancelEquipmentForm} submit={equipmentAddition} />
+                    ) : (
+                        <button 
+                            className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition-all"
+                            onClick={() => setEquipmentAddForm(true)} // Replace with your function
+                            >
+                            + Add Equipment
+                        </button>
+                    )}
                 </div>
 
                 {equipment?.length || 0 > 0 ? (
@@ -194,9 +205,9 @@ const Content: React.FC<PageProps> = ({ _id }) => {
 
 
         {/* Modal */}
-        {isModalOpen && (
+        {/* {isModalOpen && (
             <AddEquipment equipmentAdditionSuccess={equipmentAdditionSuccess} cancel={cancel} dates={{ start: task?.startingDate, end: task?.endingDate } } taskId={ task?._id } />
-        )}
+        )} */}
     </div>
   )
 }
