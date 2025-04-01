@@ -110,7 +110,6 @@ const AddEquipment: React.FC<ProjectModalProps> = ({ equipmentAdditionSuccess, c
             if(response.success) {
                 toast.success(response.message, { position: "top-right", });
                 setInputs([])
-                
                 equipmentAdditionSuccess(inputs)
             } else {
                 toast.error(response.message, { position: "top-right", });
