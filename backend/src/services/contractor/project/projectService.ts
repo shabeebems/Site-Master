@@ -274,11 +274,11 @@ export class ProjectService implements IProjectService {
                     return await userScheme.findUserBy_id(workerId);
                 })
             );
-
+            task.workers = allWorkers
             return {
                 success: true,
                 message: Messages.SINGLE_TASK_FETCH_SUCCESS,
-                data: [task, allWorkers]
+                data: task
             }
         } catch (error) {
             console.log(error)
@@ -292,12 +292,15 @@ export class ProjectService implements IProjectService {
     public checkEquipmentCount = async(data: any): Promise<ServiceResponse> => {
         try {
             const { equipmentId, start, end, inputCount } = data
+            
             const selectedEquipment = await equipmentScheme.findEquipmentById(equipmentId)
-            const check = await equipmentScheme.equipmentAvalability(equipmentId)
-            const history = check.activities
+            const equpmentHistory = await equipmentScheme.findEquipmentHistoryByEquipmentId(equipmentId)
+            
+            const history = equpmentHistory.activities
             const startDate = new Date(start);
             const endDate = new Date(end);
             const totalCount = selectedEquipment.count
+
             for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                 let historyCount = 0
                 history.forEach((history: any) => {
@@ -330,7 +333,6 @@ export class ProjectService implements IProjectService {
 
     public taskEquipmentAdd = async(equipment: any, taskId: any): Promise<ServiceResponse> => {
         try {
-            
             const task = await taskScheme.findTaskById(taskId)
             const equip = await equipmentScheme.findEquipmentById(equipment.equipmentId)
             equipment.name = equip.tool
@@ -339,7 +341,7 @@ export class ProjectService implements IProjectService {
             return {
                 success: true,
                 message: Messages.ADD_EQUIPMENT_TO_TASK_SUCCESS,
-                data: { name: equipment.name, _id: equipment._id, status: 'Pending', count: equipment.count }
+                data: { name: equipment.name }
             }
             
         } catch (error) {

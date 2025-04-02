@@ -16,7 +16,7 @@ export class TaskRepository implements ITaskRepository {
     }
 
     public addEquipment = async(_id: string, data: any): Promise<ITask | any> => {
-        return await taskModel.updateOne({ _id }, { $push: { equipment: { ...data, status: 'Pending' } } })
+        return await taskModel.updateOne({ _id }, { $push: { equipment: data } })
     }
 
     public updateEquipmentByTask = async(taskId: string, _id: string, status: string): Promise<ITask | null> => {

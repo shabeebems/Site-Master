@@ -52,10 +52,9 @@ const Content: React.FC<PageProps> = ({ _id }) => {
             try {
                 // Call api to get TASK
                 const getTask = await fetchSingleData('get_single_task', _id);
-                setTask(getTask[0])
-                setEquipment(getTask[0].equipment)
-                console.log(getTask[0].equipment)
-                setWorkers(getTask[1])
+                setTask(getTask)
+                setEquipment(getTask.equipment)
+                setWorkers(getTask.workers)
             } catch (error) {
                 console.error("Error fetching projects:", error);
             }
@@ -72,8 +71,13 @@ const Content: React.FC<PageProps> = ({ _id }) => {
         } else {
             const response = await dataValidation({ workerId, _id }, `task/add_worker`);
             toast.success(response.message, { position: "top-right", });
+            console.log(response.data)
             setWorkers(prev => [...prev, response.data])
         }
+    }
+
+    const equipmentAddition = async(data: any) => {
+        setEquipment(prev => [...(prev || []), data])
     }
 
   return (
@@ -112,7 +116,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                         Equipment Details
                     </h2>
                     {equipmentAddForm ? (
-                        <AddEquipment cancel={cancelEquipmentForm} />
+                        <AddEquipment success={equipmentAddition} usedEquipment={equipment} taskId={_id} cancel={cancelEquipmentForm} dates={{ start: task?.startingDate, end: task?.endingDate } } />
                     ) : (
                         <button 
                             className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition-all"

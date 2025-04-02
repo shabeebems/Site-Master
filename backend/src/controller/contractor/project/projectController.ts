@@ -239,7 +239,7 @@ export class ProjectController implements IProjectController {
 
     public checkEquipmentCount = async(req: Request, res: Response): Promise<void> => {
         try {
-            const result: ProjectControllerResponse = await projectService.checkEquipmentCount(req.body.data)
+            const result: ProjectControllerResponse = await projectService.checkEquipmentCount(req.body)
             const { success, message } = result
             res.status(201).json({
                 success,
@@ -259,8 +259,9 @@ export class ProjectController implements IProjectController {
 
     public taskEquipmentAdd = async(req: Request, res: Response): Promise<void> => {
         try {
+            console.log(req.body)
             const { body, params } = req
-            const result: ProjectControllerResponse = await projectService.taskEquipmentAdd(body.equip, params.taskId)
+            const result: ProjectControllerResponse = await projectService.taskEquipmentAdd(body, params.taskId)
             const { success, message, data } = result
             res.status(201).json({
                 success,

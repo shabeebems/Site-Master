@@ -1,10 +1,14 @@
-import { fetchDetails } from '@/app/api/api';
+import { apiCheck, checkEquipmentCount, dataValidation, fetchDetails } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 type PageProps = {
   cancel: Function;
+  dates: any;
+  taskId: any;
+  usedEquipment: any;
+  success: Function;
 };
 
 interface IEquipment {
@@ -13,16 +17,20 @@ interface IEquipment {
   _id: string;
 }
 
-const AddEquipment: React.FC<PageProps> = ({ cancel }) => {
+const AddEquipment: React.FC<PageProps> = ({ success, usedEquipment, taskId, cancel, dates }) => {
   const [equipment, setEquipment] = useState<IEquipment[]>([]);
   const [equipmentId, setEquipmentId] = useState<string>("");
-  const [equipmentCount, setEquipmentCount] = useState<string>("");
+  const [inputCount, setInputCount] = useState<string>("");
 
   useEffect(() => {
       const fetchData = async () => {
         try {
           const getEquipment = await fetchDetails("get_equipment");
-          setEquipment(getEquipment);
+
+          const getNonUsing = getEquipment.filter((eqGet: any) =>
+            !usedEquipment.some((eqUsed: any) => eqGet._id === eqUsed.equipmentId)
+          );
+          setEquipment(getNonUsing);
         } catch (error) {
           console.error("Error fetching equipment:", error);
           toast.error("Failed to fetch equipment.", { position: "top-right" });
@@ -33,6 +41,29 @@ const AddEquipment: React.FC<PageProps> = ({ cancel }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault()
+      if(!equipmentId || !inputCount || Number(inputCount) < 1) {
+        toast.error("Fill the blanks.", { position: "top-right" });
+        return;
+      }
+      const checkCount = await checkEquipmentCount({ equipmentId, inputCount, ...dates }, "check_equipment_count")
+      if(!checkCount.success) {
+        toast.error(checkCount.message, { position: "top-right" });
+        return;
+      }
+      const data = {
+        equipmentId,
+        count: inputCount,
+        status: "Pending",
+      }
+      const response = await dataValidation(data, `task/add_equipment/${taskId}`)
+      if(!response.success) {
+        toast.error(response.message, { position: "top-right" });
+        return
+      }
+      toast.success(response.message, { position: "top-right" });
+      success({ ...data, name: response.data.name })
+      // Removing from selector show
+      setEquipment(prev => prev.filter(item => item._id !== data.equipmentId));
     }
 
   return (
@@ -44,7 +75,7 @@ const AddEquipment: React.FC<PageProps> = ({ cancel }) => {
             <select
               value={equipmentId}
               onChange={(e) => setEquipmentId(e.target.value)}
-              className="w-2/3 border border-gray-300 rounded-lg p-2"
+              className="p-2 border rounded w-full md:w-32 text-sm outline-none focus:border-blue-500"
             >
               <option value="">Select Equipment</option>
               {equipment.map((tool) => (
@@ -55,11 +86,11 @@ const AddEquipment: React.FC<PageProps> = ({ cancel }) => {
             </select>
             <input
               type="number"
-              value={equipmentCount}
-              onChange={(e) => setEquipmentCount(e.target.value)}
+              value={inputCount}
+              onChange={(e) => setInputCount(e.target.value)}
               placeholder="Count"
               min="1"
-              className="w-1/3 border border-gray-300 rounded-lg p-2"
+              className="p-2 border rounded w-full md:w-32 text-sm outline-none focus:border-blue-500"
             />
 
 

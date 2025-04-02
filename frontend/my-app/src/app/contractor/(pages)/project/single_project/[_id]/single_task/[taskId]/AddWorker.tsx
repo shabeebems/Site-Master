@@ -51,8 +51,6 @@ const AddWorker: React.FC<PageProps> = ({ cancel, workerAddition }) => {
 
         try {
             workerAddition(selectedWorkerId)
-            // await dataValidation({ workerId: selectedWorkerId, taskId }, `task/add_worker`);
-
         } catch (error) {
             console.error("Error assigning worker:", error);
         } finally {
