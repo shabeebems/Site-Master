@@ -1,5 +1,5 @@
 'use client'
-import { dataValidation, fetchSingleData } from '@/app/api/api';
+import { apiCheck, checkEquipmentCount, dataValidation, fetchSingleData } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
 import AddEquipment from './AddEquipment';
 import AddWorker from './AddWorker';
@@ -54,6 +54,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 const getTask = await fetchSingleData('get_single_task', _id);
                 setTask(getTask[0])
                 setEquipment(getTask[0].equipment)
+                console.log(getTask[0].equipment)
                 setWorkers(getTask[1])
             } catch (error) {
                 console.error("Error fetching projects:", error);
@@ -63,17 +64,6 @@ const Content: React.FC<PageProps> = ({ _id }) => {
         // Call function
         fetchData();
     }, [])
-
-    const equipmentAddition = (newEquipment: any) => {
-        const { equipmentId, equipmentCount } = newEquipment
-        if (!equipmentId || !equipmentCount || Number(equipmentCount) <= 0) {
-            toast.error("Please select valid equipment and enter a positive count.", {
-                position: "top-right",
-            });
-            return;
-        }
-        // setEquipment((prevEquipment) => [...newEquipment, ...prevEquipment as any])
-    }
 
     const workerAddition = async(workerId: string) => {
         const existWorker = workers.some(worker => worker._id == workerId);
@@ -122,7 +112,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                         Equipment Details
                     </h2>
                     {equipmentAddForm ? (
-                        <AddEquipment cancel={cancelEquipmentForm} submit={equipmentAddition} />
+                        <AddEquipment cancel={cancelEquipmentForm} />
                     ) : (
                         <button 
                             className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 transition-all"

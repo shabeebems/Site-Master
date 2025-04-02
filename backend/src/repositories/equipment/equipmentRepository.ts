@@ -12,6 +12,10 @@ export class EquipmentRepository implements IEquipmentRepository {
         return await toolModel.find({ contractorId: _id })
     }
 
+    public findEquipmentById = async(_id: any): Promise<IEquipment | any> => {
+        return await toolModel.findOne({  _id })
+    }
+
     public findAvailableEquipment = async(_id: any): Promise<IEquipment[]> => {
         return await toolModel.aggregate([{ $match: { contractorId: _id, count: { $gt: 0 } } }])
     }

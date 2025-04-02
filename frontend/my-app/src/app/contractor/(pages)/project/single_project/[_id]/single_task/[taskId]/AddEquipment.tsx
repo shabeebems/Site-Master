@@ -5,7 +5,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 type PageProps = {
   cancel: Function;
-  submit: Function;
 };
 
 interface IEquipment {
@@ -14,7 +13,7 @@ interface IEquipment {
   _id: string;
 }
 
-const AddEquipment: React.FC<PageProps> = ({ cancel, submit }) => {
+const AddEquipment: React.FC<PageProps> = ({ cancel }) => {
   const [equipment, setEquipment] = useState<IEquipment[]>([]);
   const [equipmentId, setEquipmentId] = useState<string>("");
   const [equipmentCount, setEquipmentCount] = useState<string>("");
@@ -34,7 +33,6 @@ const AddEquipment: React.FC<PageProps> = ({ cancel, submit }) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault()
-      submit({ equipmentId, equipmentCount })
     }
 
   return (

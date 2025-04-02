@@ -291,12 +291,13 @@ export class ProjectService implements IProjectService {
 
     public checkEquipmentCount = async(data: any): Promise<ServiceResponse> => {
         try {
-            const { equipmentId, totalCount, start, end, inputCount } = data
+            const { equipmentId, start, end, inputCount } = data
+            const selectedEquipment = await equipmentScheme.findEquipmentById(equipmentId)
             const check = await equipmentScheme.equipmentAvalability(equipmentId)
             const history = check.activities
             const startDate = new Date(start);
             const endDate = new Date(end);
-
+            const totalCount = selectedEquipment.count
             for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
                 let historyCount = 0
                 history.forEach((history: any) => {
@@ -329,15 +330,16 @@ export class ProjectService implements IProjectService {
 
     public taskEquipmentAdd = async(equipment: any, taskId: any): Promise<ServiceResponse> => {
         try {
+            
             const task = await taskScheme.findTaskById(taskId)
-            // To add all input equipment to task db
-            for (let tool of equipment) {
-                await taskScheme.addEquipment(taskId, tool)
-                await equipmentScheme.pushHistory(tool, task)
-            }        
+            const equip = await equipmentScheme.findEquipmentById(equipment.equipmentId)
+            equipment.name = equip.tool
+            await taskScheme.addEquipment(taskId, equipment)
+            await equipmentScheme.pushHistory(equipment, task)
             return {
                 success: true,
                 message: Messages.ADD_EQUIPMENT_TO_TASK_SUCCESS,
+                data: { name: equipment.name, _id: equipment._id, status: 'Pending', count: equipment.count }
             }
             
         } catch (error) {
