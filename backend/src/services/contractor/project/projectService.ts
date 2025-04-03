@@ -9,11 +9,13 @@ import { ProjectRepository } from "../../../repositories/project/projectReposito
 import { TaskRepository } from "../../../repositories/tasks/taskRepository";
 import { extractEquipment } from "../../../utils/extractEquipment";
 import { UserRepository } from "../../../repositories/user/userRepository";
+import { WorkerHistoryRepository } from "../../../repositories/workerHistory/workerHistoryRepository";
 
 const projectSchema = new ProjectRepository()
 const equipmentScheme = new EquipmentRepository()
 const taskScheme = new TaskRepository()
 const userScheme = new UserRepository()
+const workerHistorySchema = new WorkerHistoryRepository()
 
 export class ProjectService implements IProjectService {
 
@@ -402,8 +404,9 @@ export class ProjectService implements IProjectService {
     public taskWorkerAdd = async(req: any): Promise<ServiceResponse> => {
         try {
             const { workerId, _id } = req.body
-            await taskScheme.addWorker(_id, workerId)
+            const task = await taskScheme.addWorker(_id, workerId)
             const newWorker = await userScheme.findUserBy_id(workerId);
+            await workerHistorySchema.pushHistory(workerId, task)
             return {
                 success: true,
                 message: Messages.ADD_WORKER_SUCCESS,

@@ -31,9 +31,11 @@ export class TaskRepository implements ITaskRepository {
         await taskModel.updateOne({ _id }, { $set: { status } })
     }
 
-    public addWorker = async(_id: string, workerId: string): Promise<void> => {
-        const a = await taskModel.updateOne({ _id }, { $push: { workers: workerId } })
-        console.log(a)
+    public addWorker = async(_id: string, workerId: string): Promise<ITask | any> => {
+        const task = await taskModel.findOneAndUpdate({ _id }, { $push: { workers: workerId } }, { new: true })
+        if(task) {
+            return task
+        }
     }
 
 }

@@ -62,6 +62,7 @@ const AddEquipment: React.FC<PageProps> = ({ success, usedEquipment, taskId, can
       }
       toast.success(response.message, { position: "top-right" });
       success({ ...data, name: response.data.name })
+      setEquipmentId('')
       // Removing from selector show
       setEquipment(prev => prev.filter(item => item._id !== data.equipmentId));
     }
