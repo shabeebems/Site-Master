@@ -70,8 +70,11 @@ const Content: React.FC<PageProps> = ({ _id }) => {
             toast.error('Already added this worker', { position: "top-right", });
         } else {
             const response = await dataValidation({ workerId, _id }, `task/add_worker`);
+            if(!response.success) {
+                toast.error(response.message, { position: "top-right", });
+                return
+            }
             toast.success(response.message, { position: "top-right", });
-            console.log(response.data)
             setWorkers(prev => [...prev, response.data])
         }
     }

@@ -404,9 +404,27 @@ export class ProjectService implements IProjectService {
     public taskWorkerAdd = async(req: any): Promise<ServiceResponse> => {
         try {
             const { workerId, _id } = req.body
-            const task = await taskScheme.addWorker(_id, workerId)
+            const task = await taskScheme.findTaskById(_id)
+            const workerHistory = await workerHistorySchema.findByWorkerId(workerId)
+            const startDate = task.startingDate
+            const endDate = task.endingDate
+            const history = workerHistory.activities
+
+            for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+                for (const historyItem of history) {
+                    if (historyItem.start <= d && historyItem.end >= d) {
+                        return {
+                            success: false,
+                            message: "Worker is on another work",
+                        };
+                    }
+                }
+            }
+            
             const newWorker = await userScheme.findUserBy_id(workerId);
             await workerHistorySchema.pushHistory(workerId, task)
+            await taskScheme.addWorker(_id, workerId)
+
             return {
                 success: true,
                 message: Messages.ADD_WORKER_SUCCESS,

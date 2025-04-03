@@ -67,7 +67,6 @@ export class WorkerService implements IWorkerService {
             }
             const newWorker = await userScheme.createUser(worker)
             await workerHistoryScheme.createWorkerHistory(newWorker._id)
-    
             return {
                 success: true,
                 message: Messages.WORKER_CREATED_SUCCESS,

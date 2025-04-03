@@ -7,7 +7,7 @@ export class WorkerHistoryRepository {
     }
 
     public pushHistory = async(workerId: any, task: any): Promise<any> => {
-        return workerHistory.updateOne({ workerId: workerId }, {
+        return workerHistory.findOneAndUpdate({ workerId: workerId }, {
             $push: {
                 activities: {
                     taskId: task._id,
@@ -18,6 +18,10 @@ export class WorkerHistoryRepository {
                 }
             }
         })
+    }
+
+    public findByWorkerId = async (workerId: any): Promise<any> => {
+        return await workerHistory.findOne({ workerId })
     }
 
 }
