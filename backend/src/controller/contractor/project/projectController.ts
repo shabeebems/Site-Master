@@ -84,11 +84,12 @@ export class ProjectController implements IProjectController {
         try {
             const result: ProjectControllerResponse = await projectService.addTask(req)
          
-            const { success, message } = result
+            const { success, message, data } = result
             
             res.status(201).json({
                 success,
                 message,
+                data
             });
             return
 

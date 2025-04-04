@@ -55,7 +55,7 @@ const Content = () => {
     <div className='p-7 text-2xl font-semibold flex-1 max-h-screen'>
 
         {/* Top Section - Button */}
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center mb-6">
           <h1 className="text-xl font-semibold">Equipment</h1>
           {add ? (
             <AddForm cancel={cancel} addEquipment={handleEquipmentAdded} /> 
@@ -66,45 +66,53 @@ const Content = () => {
             ) 
           }
         </div>
+          {tools && tools.length ? (
 
-        <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {tools.map((tool, index) => (
-            <div
+            <div className="overflow-x-auto shadow-lg rounded-xl">
+        <table className="min-w-full bg-white border border-gray-200 rounded-xl text-sm">
+          <thead className="bg-blue-400 text-gray-700 uppercase text-xs font-semibold tracking-wider">
+            <tr>
+              <th className="text-left px-6 py-4">#</th>
+              <th className="text-left px-6 py-4">Tool Name</th>
+              <th className="text-left px-6 py-4">Available</th>
+              <th className="text-left px-6 py-4">On-Site</th>
+              <th className="text-left px-6 py-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tools.map((tool, index) => (
+              <tr
               key={index}
-              className="p-5 bg-white border border-gray-200 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.03] transition-all duration-300 relative overflow-hidden"
-            >
-              {/* Floating Blur Effect */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 to-transparent rounded-xl pointer-events-none"></div>
-
-              {/* Title */}
-              <h2 className="text-lg font-semibold text-gray-900 tracking-wide">
-                {tool.tool}
-              </h2>
-
-              {/* Tool Information */}
-              <div className="mt-2 space-y-1">
-                <p className="text-sm text-gray-700">
-                  <span className="font-medium text-green-600">Available:</span> {tool.available}
-                </p>
-                <p className="text-sm text-gray-700">
-                  <span className="font-medium text-blue-600">On-Site:</span> {tool.onSite}
-                </p>
-              </div>
-
-              {/* Button */}
-              <div className="mt-4">
-                <button
-                  className="w-full py-2 rounded-lg bg-blue-500 text-white text-sm font-medium shadow-md hover:bg-blue-600 hover:shadow-lg transition-all duration-300"
-                  role="button"
-                >
-                  View Details
-                </button>
-              </div>
+              className="border-t border-gray-100 hover:bg-blue-50 transition"
+              >
+                <td className="px-6 py-4 text-gray-500">{index + 1}</td>
+                <td className="px-6 py-4 font-medium text-gray-900">{tool.tool}</td>
+                <td className="px-6 py-4">
+                  <span
+                    className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
+                      "bg-red-100 text-red-800"
+                      }`}
+                      >
+                    {tool.available}
+                  </span>
+                </td>
+                <td className="px-6 py-4 text-gray-700">{tool.onSite}</td>
+                <td className="px-6 py-4">
+                  <button className="text-blue-600 hover:text-blue-800 font-medium text-xs">
+                    View Details
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+          ) : (
+            <div className="col-span-full text-center text-gray-500 py-10">
+              <h1 className="text-lg font-medium">No equipment found</h1>
             </div>
+          )}
 
-
-          ))}
-        </div>
       </div>
   )
 }

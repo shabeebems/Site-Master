@@ -134,11 +134,11 @@ export class ProjectService implements IProjectService {
                 }
             }
 
-            await taskScheme.createOne({ ...req.params, ...req.body, status: 'Pending' })
-            
+            const newTask = await taskScheme.createOne({ ...req.params, ...req.body, status: 'Pending' })
             return {
                 success: true,
                 message: Messages.TASK_ADDED_SUCCESS,
+                data: newTask
             }
             
         } catch (error) {

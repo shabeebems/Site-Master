@@ -50,7 +50,7 @@ const AddTask = ({closeModal, projectId, dates, taskAdditionSuccess}: ProjectMod
                     startingDate: "",
                     endingDate: ""
                 })
-                taskAdditionSuccess({ ...taskData, status: "Pending" })
+                taskAdditionSuccess(response.data)
             } else {
                 toast.error(response.message, { position: "top-right", });
             }

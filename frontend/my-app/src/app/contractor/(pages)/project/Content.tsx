@@ -56,7 +56,6 @@ const Content = () => {
   }
 
   return (
-    <>
         <div className="p-7 text-2xl font-medium flex-1 max-h-screen">
 
           {/* Top Section - Button */}
@@ -70,8 +69,9 @@ const Content = () => {
             </button>
           </div>
 
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects && projects.length ? (
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {projects.map((project, index) => (
               <div 
               key={index}
@@ -112,6 +112,7 @@ const Content = () => {
                   })()}
 
               </div>
+               
             
               {/* Card Content */}
               <div className="p-4 flex flex-col justify-between h-32">
@@ -162,15 +163,19 @@ const Content = () => {
             
             ))}
           </div>
-        </div>
-
-        {/* Modal */}
+           ) : (
+          <div className="col-span-full text-center text-gray-500 py-10">
+            <h1 className="text-lg font-medium">No projects found</h1>
+          </div>
+          )}
+          {/* Modal */}
         {isModalOpen && (
           <AddModal cancel={cancelModal} afterModal={afterModalSuccess} />
         )}
+        </div>
 
+        
 
-    </>
   )
 }
 
