@@ -20,8 +20,12 @@ export class UserRepository implements IUserRepository {
         await User.updateOne({ email }, { password })
     }
 
-    public findWorkersByContractorId = async (_id: string): Promise<IUser[]> => {
-        return await User.aggregate([{ $match: { contractorId: _id } }, { $project: { _id: 0, name: 1, email: 1, mobile: 1, place: 1, profession: 1 } }])
+    public findWorkersByContractorId = async (_id: string, limit: number, itemsPerPage: number): Promise<IUser[]> => {
+        return await User.aggregate([{ $match: { contractorId: _id } }, { $skip: (limit * itemsPerPage) }, { $limit: 6 }, { $project: { _id: 0, name: 1, email: 1, mobile: 1, place: 1, profession: 1 } }])
+    }
+
+    public findWorkersCount = async (_id: string): Promise<number> => {
+        return await User.countDocuments({ contractorId: _id });
     }
 
     public findUserByToken = async (token: string, jwtSecret: string): Promise<IUser | null> => {

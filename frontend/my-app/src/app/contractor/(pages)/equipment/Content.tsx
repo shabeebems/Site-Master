@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react"
 import AddForm from "./AddForm"
-import { fetchDetails } from "@/app/api/api"
+import { fetchDetails, fetchPaginationDetails } from "@/app/api/api"
+import PaginationPage from "@/app/components/Pagination";
 
 // For display equipment details
 interface IEquipment {
@@ -19,6 +20,11 @@ const Content = () => {
     // Save all equipments
     const [tools, setTools] = useState<IEquipment[]>([]);
 
+    // Pagination stats
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [totalEquipmentCount, setTotalEquipmentCount] = useState<number>(0)
+    const itemsPerPage = 6
+
     // Trigger while cancel form (Passing to child component(AddForm))
     const cancel = useCallback(() => {
       // Set false while cancel button click
@@ -31,7 +37,7 @@ const Content = () => {
         try {
 
           // Call api to get equipment
-          const getTools = await fetchDetails('get_equipment');
+          const getTools = await fetchPaginationDetails('get_equipment', currentPage, itemsPerPage);
 
           // Store equipment details to state
           setTools(getTools);
@@ -112,8 +118,12 @@ const Content = () => {
               <h1 className="text-lg font-medium">No equipment found</h1>
             </div>
           )}
+      <PaginationPage 
+        count={Math.ceil(3)}
+        // onChange={(event, value) => setCurrentPage(value)}
+      />
 
-      </div>
+    </div>
   )
 }
 

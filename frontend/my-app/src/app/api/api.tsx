@@ -23,6 +23,17 @@ export const fetchDetails = async (route: string) => {
     }
 }
 
+// Fetch details based on pagination
+export const fetchPaginationDetails = async (route: string, currentPage: number, itemsPerPage: number) => {
+    try {
+        const response = await apiClient.get(`http://localhost:5000/api/contractor/${route}/${currentPage}/${itemsPerPage}`, { withCredentials: true })
+        return response?.data.data
+    } catch (error) {
+        console.error("Error during fetching workers", error);
+        throw error;
+    }
+}
+
 // Get datas of single (equipment / project / worker) with _id
 export const fetchSingleData = async (route: string, _id: string) => {
     try {

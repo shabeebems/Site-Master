@@ -159,9 +159,9 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                             <div className="flex justify-between items-start mb-3">
                                 <h3 className="text-xl font-semibold text-gray-900">{task.name}</h3>
                                 {(() => {
-                                    const today = new Date().toLocaleDateString();
-                                    const startDate = new Date(task.startingDate).toLocaleDateString();
-                                    const endDate: any = new Date(task.endingDate).toLocaleDateString();
+                                    const today = new Date();
+                                    const startDate = new Date(task.startingDate);
+                                    const endDate: any = new Date(task.endingDate);
                                     let taskStatus = task.status; // Default from DB
                                     if (today >= startDate && today <= endDate && taskStatus === "Pending") {
                                         taskStatus = "In Progress"
