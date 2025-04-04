@@ -9,7 +9,7 @@ export interface IEquipment {
 
 export interface IEquipmentRepository {
     addEquipment(data: any, _id: any): Promise<IEquipment>;
-    findEquipmentByContractorId(_id: any): Promise<IEquipment[]>;
+    findEquipmentByContractorId(_id: any,limit: number, itemsPerPage: number): Promise<IEquipment[]>;
     findAvailableEquipment(_id: any): Promise<IEquipment[]>;
     returnEquipment(_id: any, count: number): Promise<void>;
 }

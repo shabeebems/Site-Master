@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react"
 import AddForm from "./AddForm"
-import { fetchDetails, fetchPaginationDetails } from "@/app/api/api"
+import { fetchPaginationDetails } from "@/app/api/api"
 import PaginationPage from "@/app/components/Pagination";
 
 // For display equipment details
@@ -37,10 +37,11 @@ const Content = () => {
         try {
 
           // Call api to get equipment
-          const getTools = await fetchPaginationDetails('get_equipment', currentPage, itemsPerPage);
+          const fetchDetails = await fetchPaginationDetails('get_equipment', currentPage, itemsPerPage);
 
           // Store equipment details to state
-          setTools(getTools);
+          setTools(fetchDetails.equipment);
+          setTotalEquipmentCount(fetchDetails.totalEquipmentCount)
 
         } catch (error) {
           console.error("Error fetching workers:", error);
@@ -50,7 +51,7 @@ const Content = () => {
       // Call function
       fetchData();
 
-    }, [])
+    }, [currentPage])
 
   // Add latest added equipment to state to display (Passing to child component(AddForm))
   const handleEquipmentAdded = (newTool: IEquipment) => {
@@ -119,8 +120,8 @@ const Content = () => {
             </div>
           )}
       <PaginationPage 
-        count={Math.ceil(3)}
-        // onChange={(event, value) => setCurrentPage(value)}
+        count={Math.ceil(totalEquipmentCount / itemsPerPage)}
+        onChange={(event, value) => setCurrentPage(value)}
       />
 
     </div>

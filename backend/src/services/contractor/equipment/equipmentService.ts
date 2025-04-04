@@ -51,19 +51,19 @@ export class EquipmentService implements IEquipmentService {
 
     public getEquipment = async(req: any): Promise<ServiceResponse> => {
             try {
-    
+                const { currentPage, itemsPerPage } = req.params
                 const accessToken = req.cookies.accessToken
                 
                 // Decode access token for get logged contractor id to get equipment, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
                 const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
     
                 // Find equipment with contractor id
-                const equipment = await equipmentScheme.findEquipmentByContractorId(decoded._id)
-    
+                const equipment = await equipmentScheme.findEquipmentByContractorId(decoded._id, currentPage - 1, itemsPerPage)
+                const totalEquipmentCount = await equipmentScheme.findEquipmentCount(decoded._id)
                 return {
                     success: true,
                     message: Messages.EQUIPMENT_FETCH_SUCCESS,
-                    data: equipment
+                    data: { equipment, totalEquipmentCount }
                 }
                 
             } catch (error) {
