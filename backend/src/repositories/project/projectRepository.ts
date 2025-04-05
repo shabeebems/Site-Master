@@ -7,8 +7,12 @@ export class ProjectRepository implements IProjectRepository {
         return await projectModel.create(data)
     }
 
-    public getProjects = async(contractor_id: any): Promise<IPtoject[]> => {
-        return await projectModel.find({ contractorId: contractor_id }).sort({ _id: -1 });
+    public getProjects = async(contractorId: any, limit: number, itemsPerPage: number): Promise<IPtoject[]> => {
+        return await projectModel.aggregate([{ $match: { contractorId } }, { $skip: (limit * itemsPerPage) }, { $limit: (itemsPerPage * 1) }])
+    }
+
+    public findProjectsCount = async (contractorId: string): Promise<number> => {
+        return await projectModel.countDocuments({ contractorId });
     }
 
     public findProjectById = async(_id: any): Promise<IPtoject | null> => {

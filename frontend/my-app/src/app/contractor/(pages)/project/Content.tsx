@@ -2,8 +2,9 @@
 import { useEffect, useState } from "react";
 import { FaTasks } from "react-icons/fa";
 import AddModal from "./AddModal";
-import { fetchDetails, statusEdits } from "@/app/api/api";
+import { fetchDetails, fetchPaginationDetails, statusEdits } from "@/app/api/api";
 import { useRouter } from "next/navigation";
+import PaginationPage from "@/app/components/Pagination";
 
 interface Project {
   name: string;
@@ -21,16 +22,21 @@ const Content = () => {
 
     const [projects, setProjects] = useState<Project[]>([])
 
+    // Pagination stats
+    const [currentPage, setCurrentPage] = useState<number>(1)
+    const [totalProjectsCount, setTotalProjectsCount] = useState<number>(0)
+    const itemsPerPage = 3
+
     // Fetch projects under contractor to display
     useEffect(() => {
       const fetchData = async () => {
         try {
   
           // Call api to get projects
-          const getProjects = await fetchDetails('get_projects');
+          const getProjects = await fetchPaginationDetails('get_projects', currentPage, itemsPerPage);
           // Store projects details to state
-          setProjects(getProjects);
-  
+          setProjects(getProjects.projects);
+          setTotalProjectsCount(getProjects.projectsCount)
         } catch (error) {
           console.error("Error fetching projects:", error);
         }
@@ -39,7 +45,7 @@ const Content = () => {
       // Call function
       fetchData();
   
-    }, [])
+    }, [currentPage])
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -161,16 +167,21 @@ const Content = () => {
               </div>
             </div>
           </div>
-          
           ))}
         </div>
           ) : (
-        <div className="col-span-full text-center text-gray-500 py-10">
+            <div className="col-span-full text-center text-gray-500 py-10">
           <h1 className="text-lg font-medium">No projects found</h1>
         </div>
         )}
       </div>
-        {/* Modal */}
+
+      <PaginationPage
+        count={Math.ceil(totalProjectsCount / itemsPerPage)}
+        onChange={(event, value) => setCurrentPage(value)}
+      />
+      
+      {/* Modal */}
       {isModalOpen && (
         <AddModal cancel={cancelModal} afterModal={afterModalSuccess} />
       )}

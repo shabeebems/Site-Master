@@ -20,7 +20,7 @@ router.post('/newWorker', authenticateToken, workerController.addWorker)
       .get('/get_equipment/:currentPage/:itemsPerPage', authenticateToken, equipmentController.getEquipment)
 
       .post('/new_project', authenticateToken, projectController.newProject)
-      .get('/get_projects', authenticateToken, projectController.getProjects)
+      .get('/get_projects/:currentPage/:itemsPerPage', authenticateToken, projectController.getProjects)
       .get('/get_single_project/:_id', authenticateToken, projectController.getSingleProject)
       .post('/add_task/:projectId', authenticateToken, projectController.addTask)
       .get('/get_available_equipment', authenticateToken, projectController.getAvailableEquipment)
