@@ -36,7 +36,7 @@ const Content = () => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, workers]);
 
   const cancel = useCallback(() => {
     setAdd(false)

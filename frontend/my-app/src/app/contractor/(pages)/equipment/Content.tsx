@@ -73,52 +73,53 @@ const Content = () => {
             ) 
           }
         </div>
-          {tools && tools.length ? (
-
-            <div className="overflow-x-auto shadow-lg rounded-xl">
-        <table className="min-w-full bg-white border border-gray-200 rounded-xl text-sm">
-          <thead className="bg-blue-400 text-gray-700 uppercase text-xs font-semibold tracking-wider">
-            <tr>
-              <th className="text-left px-6 py-4">#</th>
-              <th className="text-left px-6 py-4">Tool Name</th>
-              <th className="text-left px-6 py-4">Available</th>
-              <th className="text-left px-6 py-4">On-Site</th>
-              <th className="text-left px-6 py-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tools.map((tool, index) => (
-              <tr
-              key={index}
-              className="border-t border-gray-100 hover:bg-blue-50 transition"
-              >
-                <td className="px-6 py-4 text-gray-500">{index + 1}</td>
-                <td className="px-6 py-4 font-medium text-gray-900">{tool.tool}</td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
-                      "bg-red-100 text-red-800"
-                      }`}
-                      >
-                    {tool.available}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-gray-700">{tool.onSite}</td>
-                <td className="px-6 py-4">
-                  <button className="text-blue-600 hover:text-blue-800 font-medium text-xs">
-                    View Details
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-          ) : (
-            <div className="col-span-full text-center text-gray-500 py-10">
-              <h1 className="text-lg font-medium">No equipment found</h1>
+        {tools && tools.length ? (
+            <div className="overflow-x-auto shadow-xl rounded-xl border border-gray-200">
+              <table className="min-w-full bg-white text-sm">
+                <thead className="bg-blue-500 text-white uppercase text-xs font-semibold">
+                  <tr>
+                    <th className="text-left px-6 py-4">#</th>
+                    <th className="text-left px-6 py-4">Tool Name</th>
+                    <th className="text-left px-6 py-4">Available</th>
+                    <th className="text-left px-6 py-4">On-Site</th>
+                    <th className="text-left px-6 py-4">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tools.map((tool, index) => (
+                    <tr
+                      key={index}
+                      className="border-t border-gray-100 hover:bg-blue-50 transition duration-150"
+                    >
+                      <td className="px-6 py-4 text-gray-500">{index + 1}</td>
+                      <td className="px-6 py-4 font-semibold text-gray-800">{tool.tool}</td>
+                      <td className="px-6 py-4">
+                        <span
+                          className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700"
+                        >
+                          {tool.available}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-gray-700">{tool.onSite}</td>
+                      <td className="px-6 py-4 flex gap-2">
+                        <button className="bg-blue-100 text-blue-700 hover:bg-blue-200 px-3 py-1 rounded-full text-xs font-medium transition">
+                          Edit
+                        </button>
+                        <button className="bg-red-100 text-red-700 hover:bg-red-200 px-3 py-1 rounded-full text-xs font-medium transition">
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          )}
+          ) : (
+        <div className="col-span-full text-center text-gray-500 py-10">
+          <h1 className="text-lg font-medium">No equipment found</h1>
+        </div>
+      )}
+
       <PaginationPage 
         count={Math.ceil(totalEquipmentCount / itemsPerPage)}
         onChange={(event, value) => setCurrentPage(value)}
