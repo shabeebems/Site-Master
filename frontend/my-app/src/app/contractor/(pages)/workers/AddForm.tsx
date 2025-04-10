@@ -10,7 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 // Props to recieve datas from parent
 type AddFormProps = {
   cancel: Function;
-  onWorkerAdded: (newWorker: { name: string; mobile: string; email: string; place: string, profession: string }) => void;
+  onWorkerAdded: (newWorker: { _id: string, name: string; mobile: string; email: string; place: string, profession: string }) => void;
 };
 
 // Type of adding new workers
@@ -52,7 +52,7 @@ const AddForm: React.FC<AddFormProps> = ({cancel, onWorkerAdded}) => {
             style: { fontSize: "12px", padding: "8px", maxWidth: "250px" }
           });
           // Parent function to display latest added user details
-          onWorkerAdded(newUser);
+          onWorkerAdded(response.data);
 
           // Upadate formData(empty)
           setNewUser({ name: '', mobile: '', email: '', place: '', profession: '' })

@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepository {
     }
 
     public findWorkersByContractorId = async (_id: string, limit: number, itemsPerPage: number): Promise<IUser[]> => {
-        return await User.aggregate([{ $match: { contractorId: _id } }, { $skip: (limit * itemsPerPage) }, { $limit: (itemsPerPage * 1) }, { $project: { _id: 0, name: 1, email: 1, mobile: 1, place: 1, profession: 1 } }])
+        return await User.aggregate([{ $match: { contractorId: _id } }, { $skip: (limit * itemsPerPage) }, { $limit: (itemsPerPage * 1) }, { $project: { name: 1, email: 1, mobile: 1, place: 1, profession: 1 } }])
     }
 
     public findWorkersCount = async (_id: string): Promise<number> => {

@@ -66,11 +66,12 @@ export class WorkerService implements IWorkerService {
                 role: 'Worker'
             }
             const newWorker = await userScheme.createUser(worker)
+
             await workerHistoryScheme.createWorkerHistory(newWorker._id)
             return {
                 success: true,
                 message: Messages.WORKER_CREATED_SUCCESS,
-                data: data
+                data: { ...data, _id: newWorker._id }
             }
 
         } catch (error) {

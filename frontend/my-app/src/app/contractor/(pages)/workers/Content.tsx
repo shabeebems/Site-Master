@@ -4,9 +4,11 @@ import React, { useCallback, useEffect, useState } from 'react'
 import AddForm from './AddForm'
 import { fetchPaginationDetails } from '@/app/api/api'
 import PaginationPage from '@/app/components/Pagination';
+import { useRouter } from 'next/navigation';
 
 // For display workers details
 interface Worker {
+  _id: any;
   name: string;
   email: string;
   mobile: string;
@@ -18,6 +20,8 @@ const Content = () => {
   const [add, setAdd] = useState(false)
   const [workers, setWorkers] = useState<Worker[]>([])
   
+  const router = useRouter()
+
   // Pagination stats
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [totalWorkers, setTotalWorkers] = useState<number>(0)
@@ -66,8 +70,9 @@ const Content = () => {
         {workers && workers.length ? (
           workers.map((user, index) => (
             <li
+              onClick={() => router.push(`/contractor/workers/single_worker/${user._id}`)}
               key={index}
-              className="flex flex-col justify-between p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:bg-blue-50"
+              className="cursor-pointer flex flex-col justify-between p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:bg-blue-50"
             >
               <div className="flex items-center gap-4 mb-3">
                 <div className="w-12 h-12 flex items-center justify-center bg-blue-100 text-blue-600 font-bold rounded-full text-sm">
