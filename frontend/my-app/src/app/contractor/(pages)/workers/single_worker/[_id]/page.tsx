@@ -1,4 +1,5 @@
 import React from 'react'
+import Content from './Content';
 
 interface PageProps {
     params: { [key: string]: string };
@@ -9,7 +10,7 @@ const Page: React.FC<PageProps> = async({ params }) => {
 
   return (
     <div>
-      { _id }
+      <Content workerId={_id} />
     </div>
   )
 }

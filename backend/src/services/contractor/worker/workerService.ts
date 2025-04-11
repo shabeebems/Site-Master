@@ -68,6 +68,7 @@ export class WorkerService implements IWorkerService {
             const newWorker = await userScheme.createUser(worker)
 
             await workerHistoryScheme.createWorkerHistory(newWorker._id)
+
             return {
                 success: true,
                 message: Messages.WORKER_CREATED_SUCCESS,
@@ -98,6 +99,25 @@ export class WorkerService implements IWorkerService {
                 success: true,
                 data: { workers, totalWorkersCount },
                 message: Messages.FETCH_WORKER_SUCCESS
+            }
+
+        } catch (error) {
+            return {
+                success: false,
+                message: Messages.FETCH_WORKER_FAILED
+            }
+        }
+    }
+
+    public getWorkerDetails = async(_id: string): Promise<ServiceResponse> => {
+        try {
+
+            const worker = await userScheme.findUserBy_id(_id)
+            const workerHistory = await workerHistoryScheme.findByWorkerId(_id)
+            return {
+                success: true,
+                message: Messages.FETCH_WORKER_SUCCESS,
+                data: { worker, workerHistory }
             }
 
         } catch (error) {

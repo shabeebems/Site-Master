@@ -21,7 +21,7 @@ export class WorkerHistoryRepository {
     }
 
     public findByWorkerId = async (workerId: any): Promise<any> => {
-        return await workerHistory.findOne({ workerId })
+        return await workerHistory.findOne({ workerId }, { activities: 1, _id: 0 })
     }
 
 }
