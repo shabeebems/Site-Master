@@ -11,10 +11,12 @@ export class WorkerHistoryRepository {
             $push: {
                 activities: {
                     taskId: task._id,
+                    project: task.project,
                     projectId: task.projectId,
                     start: task.startingDate,
                     end: task.endingDate,
-                    status: 'Pending'
+                    status: 'Pending',
+                    task: task.name
                 }
             }
         })

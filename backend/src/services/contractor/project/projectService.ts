@@ -122,6 +122,7 @@ export class ProjectService implements IProjectService {
 
     public addTask = async(req: any): Promise<ServiceResponse> => {
         try {
+            console.log(req.body)
             const { name, startingDate, endingDate } = req.body
             if(!name || !startingDate || !endingDate) {
                 return {
@@ -408,6 +409,7 @@ export class ProjectService implements IProjectService {
         try {
             const { workerId, _id } = req.body
             const task = await taskScheme.findTaskById(_id)
+            // const project = await taskScheme.findTaskById(_id)
             const workerHistory = await workerHistorySchema.findByWorkerId(workerId)
             const startDate = task.startingDate
             const endDate = task.endingDate

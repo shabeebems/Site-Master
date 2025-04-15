@@ -29,6 +29,14 @@ const historySchema = new mongoose.Schema({
             type: String, 
             required: true,
             enum: ["Active", "Returned", "Pending"]
+        },
+        task: {
+            type: String,
+            required: true,
+        },
+        project: {
+            type: String,
+            required: true,
         }
     }]
 });

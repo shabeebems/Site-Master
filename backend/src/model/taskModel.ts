@@ -6,6 +6,7 @@ const taskSchema = new mongoose.Schema({
         required: true,
         ref: 'projects'
     },
+    project: { type: String, required: true },
     name: { type: String, required: true },
     startingDate: { type: Date, required: true },
     endingDate: { type: Date, required: true },

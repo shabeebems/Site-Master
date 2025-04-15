@@ -13,11 +13,12 @@ interface TaskData {
 interface ProjectModalProps {
     closeModal: () => void;
     projectId: any;
+    projectName: any;
     dates: any;
     taskAdditionSuccess: Function;
 }
 
-const AddTask = ({closeModal, projectId, dates, taskAdditionSuccess}: ProjectModalProps) => {
+const AddTask = ({closeModal, projectId, projectName, dates, taskAdditionSuccess}: ProjectModalProps) => {
 
     const [taskData, setTaskData] = useState<TaskData>({
         name: '',
@@ -42,7 +43,7 @@ const AddTask = ({closeModal, projectId, dates, taskAdditionSuccess}: ProjectMod
         e.preventDefault()
         setIsLoading(true)
         try {
-            const response = await apiCheck({ ...taskData }, `contractor/add_task/${projectId}`)
+            const response = await apiCheck({ ...taskData, project: projectName }, `contractor/add_task/${projectId}`)
             if(response.success) {
                 toast.success(response.message, { position: "top-right", });
                 setTaskData({

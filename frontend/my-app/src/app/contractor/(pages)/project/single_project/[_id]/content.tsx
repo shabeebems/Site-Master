@@ -210,7 +210,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
 
             {/* Modal */}
             {isModalOpen && (
-                <AddTask taskAdditionSuccess={taskAdditionSuccess} closeModal={closeModal} projectId={_id} dates={{start: project?.startingDate, end: project?.endingDate}}/>
+                <AddTask taskAdditionSuccess={taskAdditionSuccess} closeModal={closeModal} projectId={_id} projectName={project?.name} dates={{start: project?.startingDate, end: project?.endingDate}}/>
             )}
         </div>
     )
