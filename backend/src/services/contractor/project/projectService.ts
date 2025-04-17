@@ -40,7 +40,7 @@ export class ProjectService implements IProjectService {
 
             // Upload image to cloudinary
             let result = await cloudinary.uploader.upload(image, {
-                folder: "project",
+                folder: "Site-Master/project",
             });
 
             const accessToken = req.cookies.accessToken
@@ -434,6 +434,31 @@ export class ProjectService implements IProjectService {
                 success: true,
                 message: Messages.ADD_WORKER_SUCCESS,
                 data: newWorker || {}
+            }
+            
+        } catch (error) {
+            console.log(error, Messages.ADD_WORKER_FAILURE)
+            return {
+                success: false,
+                message: Messages.ADD_WORKER_FAILURE
+            }
+        }
+    }
+
+    public addWorkerImage = async(data: any): Promise<ServiceResponse> => {
+        try {
+            const { image, _id } = data
+            // Upload image to cloudinary
+            let result = await cloudinary.uploader.upload(image, {
+                folder: "Site-Master/user",
+            });
+            
+            await userScheme.addImage(_id, result.url)
+
+            return {
+                success: true,
+                message: Messages.ADD_WORKER_SUCCESS,
+                data: { image: result.url }
             }
             
         } catch (error) {

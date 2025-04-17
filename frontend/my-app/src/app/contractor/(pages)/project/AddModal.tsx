@@ -45,7 +45,6 @@ const AddModal: React.FC<AddFormProps> = ({cancel, afterModal}) => {
         reader.readAsDataURL(file);
         reader.onloadend = () => {
           setImage(reader.result);
-        //   console.log(reader.result)
         };
     };
 

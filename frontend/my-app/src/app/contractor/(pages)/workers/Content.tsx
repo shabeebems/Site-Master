@@ -14,6 +14,7 @@ interface Worker {
   mobile: string;
   place: string;
   profession: string;
+  image?: string;
 }
 
 const Content = () => {
@@ -40,14 +41,15 @@ const Content = () => {
 
   useEffect(() => {
     fetchData();
-  }, [currentPage, workers]);
+  }, [currentPage]);
 
   const cancel = useCallback(() => {
     setAdd(false)
   }, [])
 
   const handleWorkerAdded = (newWorker: Worker) => {
-    setWorkers((prevWorkers) => [...prevWorkers, newWorker]);
+    // setWorkers((prevWorkers) => [...prevWorkers, newWorker]);
+    fetchData();
   };
 
   return (
@@ -75,8 +77,8 @@ const Content = () => {
               className="cursor-pointer flex flex-col justify-between p-5 rounded-xl bg-white border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300 hover:bg-blue-50"
             >
               <div className="flex items-center gap-4 mb-3">
-                <div className="w-12 h-12 flex items-center justify-center bg-blue-100 text-blue-600 font-bold rounded-full text-sm">
-                  {user.name[0]}
+                <div className="w-14 h-14 flex items-center justify-center bg-blue-100 text-blue-600 font-bold rounded-full text-sm">
+                  { user.image ? <img src={user.image} className='w-full h-full object-cover rounded-full' /> : user.name[0] }
                 </div>
                 <div className="flex flex-col">
                   <span className="text-sm font-semibold text-gray-900">{user.name}</span>

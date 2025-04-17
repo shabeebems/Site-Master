@@ -13,7 +13,7 @@ export class UserRepository implements IUserRepository {
     }
 
     public findUserBy_id = async (_id: string): Promise<IUser | null> => {
-        return await User.findOne({ _id }, { name: 1, email: 1, mobile: 1, place: 1, role: '$profession' })
+        return await User.findOne({ _id }, { name: 1, email: 1, mobile: 1, place: 1, role: '$profession', image: 1 })
     }
 
     public changePasswordByEmail = async (email: string, password: string): Promise<void> => {
@@ -21,7 +21,7 @@ export class UserRepository implements IUserRepository {
     }
 
     public findWorkersByContractorId = async (_id: string, limit: number, itemsPerPage: number): Promise<IUser[]> => {
-        return await User.aggregate([{ $match: { contractorId: _id } }, { $skip: (limit * itemsPerPage) }, { $limit: (itemsPerPage * 1) }, { $project: { name: 1, email: 1, mobile: 1, place: 1, profession: 1 } }])
+        return await User.aggregate([{ $match: { contractorId: _id } }, { $sort: { _id: -1 } }, { $skip: (limit * itemsPerPage) }, { $limit: (itemsPerPage * 1) }, { $project: { name: 1, email: 1, mobile: 1, place: 1, profession: 1, image: 1 } }])
     }
 
     public findWorkersCount = async (_id: string): Promise<number> => {
@@ -40,6 +40,10 @@ export class UserRepository implements IUserRepository {
 
     public findworkerBasedOnRoles = async (contractorId: string, profession: string): Promise<any> => {
         return await User.find({ contractorId, profession }, { name: 1 })
+    }
+
+    public addImage = async (_id: string, image: string): Promise<any> => {
+        return await User.updateOne({ _id }, { image })
     }
 
 }
