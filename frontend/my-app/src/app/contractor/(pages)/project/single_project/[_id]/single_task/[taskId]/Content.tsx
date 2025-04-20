@@ -26,7 +26,7 @@ type IEquipment = {
 
 type IWorker = {
     name: string;
-    role: string;
+    profession: string;
     _id: string;
 }
 
@@ -187,7 +187,7 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                                 className="bg-white p-6 rounded-xl shadow-md border border-gray-300 hover:shadow-lg transition-all transform hover:scale-105"
                             >
                                 <h3 className="text-xl font-semibold text-gray-800">{worker.name}</h3>
-                                <p className="text-gray-600"><span className="font-medium text-gray-700">Role:</span> {worker.role}</p>
+                                <p className="text-gray-600"><span className="font-medium text-gray-700">Role:</span> {worker.profession}</p>
                                 
                             </div>
                         ))}

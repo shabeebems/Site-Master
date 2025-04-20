@@ -13,7 +13,7 @@ export class UserRepository implements IUserRepository {
     }
 
     public findUserBy_id = async (_id: string): Promise<IUser | null> => {
-        return await User.findOne({ _id }, { name: 1, email: 1, mobile: 1, place: 1, role: '$profession', image: 1 })
+        return await User.findOne({ _id }, { name: 1, email: 1, mobile: 1, place: 1, profession: 1, image: 1 })
     }
 
     public changePasswordByEmail = async (email: string, password: string): Promise<void> => {
@@ -44,6 +44,11 @@ export class UserRepository implements IUserRepository {
 
     public addImage = async (_id: string, image: string): Promise<any> => {
         return await User.updateOne({ _id }, { image })
+    }
+
+    public updateWorker = async (worker: any): Promise<any> => {
+        const { _id, ...updateData } = worker;
+        return await User.updateOne({ _id }, { $set: updateData })
     }
 
 }

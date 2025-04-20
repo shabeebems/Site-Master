@@ -76,4 +76,25 @@ export class WorkerController implements IWorkerController {
             return
         }
     }
+
+    public editWorker = async(req: Request, res: Response): Promise<void> => {
+        try {
+            const result: WorkerControllerResponse = await workerService.editWorker(req.body)
+            const { success, message } = result
+            
+            res.status(201).json({
+                success,
+                message,
+            });
+            return
+        } catch (error) {
+
+            console.error(Messages.FETCH_WORKERS_SERVER_ERROR, error);
+            res.status(500).json({
+                success: false,
+                message: Messages.FETCH_WORKERS_SERVER_ERROR,
+            });
+            return
+        }
+    }
 }

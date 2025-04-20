@@ -13,8 +13,8 @@ const equipmentController = new EquipmentController()
 router.post('/newWorker', authenticateToken, workerController.addWorker)
       .get('/get_workers/:currentPage/:itemsPerPage', authenticateToken, workerController.getWorkers)
       .get('/get_single_worker/:_id', authenticateToken, workerController.getWorkerDetails)
+      .post('/edit_worker', authenticateToken, workerController.editWorker)
       .post('/add_worker_image', authenticateToken, projectController.addWorkerImage)
-      
       
       .get('/get_workerRoles', authenticateToken, projectController.getWorkerRoles)
       .get('/get_workers_to_add_task/:role', authenticateToken, projectController.getWorkerToAddTask)
@@ -22,7 +22,8 @@ router.post('/newWorker', authenticateToken, workerController.addWorker)
       
       .post('/add_equipment', authenticateToken, equipmentController.addEquipment)
       .get('/get_equipment/:currentPage/:itemsPerPage', authenticateToken, equipmentController.getEquipment)
-
+      .get('/get_single_equipment/:_id', authenticateToken, equipmentController.getequipmentDetails)
+      
       .post('/new_project', authenticateToken, projectController.newProject)
       .get('/get_projects/:currentPage/:itemsPerPage', authenticateToken, projectController.getProjects)
       .get('/get_single_project/:_id', authenticateToken, projectController.getSingleProject)

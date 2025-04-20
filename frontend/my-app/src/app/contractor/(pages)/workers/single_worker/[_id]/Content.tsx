@@ -14,7 +14,18 @@ const Content: React.FC<PageProps> = ({ workerId }) => {
   const [history, setHistory] = useState<any[]>([]);
   const [editDisplay, setEditDisplay] = useState<boolean>(false)
 
-  const cancelEdit = () => setEditDisplay(false)
+  const exitEditForm = () => setEditDisplay(false)
+
+  const edit = (editWorker: any, success: boolean) => {
+    if(success) {
+      const { name, place, profession } = editWorker
+      setWorker({ ...worker, name, place, profession })
+      setEditDisplay(false)
+      toast.success('Worker updated successfully', { position: "top-right" });
+    } else {
+      toast.error('Worker updated Failed', { position: "top-right" });
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,6 +33,7 @@ const Content: React.FC<PageProps> = ({ workerId }) => {
         const fetchDetails = await fetchSingleData('get_single_worker', workerId);
         setHistory(fetchDetails?.workerHistory?.activities || []);
         setWorker(fetchDetails.worker || {});
+        console.log(fetchDetails.worker)
       } catch (error) {
         console.error('Error fetching worker:', error);
       }
@@ -40,6 +52,7 @@ const Content: React.FC<PageProps> = ({ workerId }) => {
     }
   }
 
+  // Updating image
   const setFileToBase = async(file: any) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
@@ -71,7 +84,7 @@ const Content: React.FC<PageProps> = ({ workerId }) => {
         </div>
         <div>
           <h1 className="text-3xl font-bold text-gray-800">{worker.name}</h1>
-          <p className="text-gray-500">{worker.role}</p>
+          <p className="text-gray-500">{worker.profession}</p>
         </div>
       </div>
 
@@ -81,7 +94,7 @@ const Content: React.FC<PageProps> = ({ workerId }) => {
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold text-gray-700">Personal Information</h2>
           {editDisplay ? (
-            <EditForm worker={worker} cancelEdit={cancelEdit} />
+            <EditForm exit={exitEditForm} worker={worker} edit={edit} />
           ) : (
             <button
               onClick={() => setEditDisplay(true)}
@@ -104,7 +117,7 @@ const Content: React.FC<PageProps> = ({ workerId }) => {
           </div>
           <div>
             <p className="font-medium">Position</p>
-            <p className="text-gray-600">{worker.role}</p>
+            <p className="text-gray-600">{worker.profession}</p>
           </div>
           <div>
             <p className="font-medium">Place</p>

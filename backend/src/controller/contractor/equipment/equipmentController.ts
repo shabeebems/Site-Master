@@ -53,4 +53,30 @@ export class EquipmentController implements IEquipmentController {
                 return
             }
         }
+    
+        public getequipmentDetails = async(req: Request, res: Response): Promise<void> => {
+            try {
+
+                console.log('ss')
+    
+                const result: EquipmentControllerResponse = await equipmentService.getEquipment(req)
+             
+                const { success, message, data } = result
+                res.status(201).json({
+                    success,
+                    message,
+                    data
+                });
+                return
+            } catch (error) {
+                
+                console.error(Messages.FETCH_EQUIPMENT_SERVER_ERROR, error);
+                res.status(500).json({
+                    success: false,
+                    message: Messages.FETCH_EQUIPMENT_SERVER_ERROR,
+                });
+                return
+            }
+        }
+
 }

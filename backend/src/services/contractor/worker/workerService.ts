@@ -127,4 +127,22 @@ export class WorkerService implements IWorkerService {
             }
         }
     }
+
+    public editWorker = async(worker: any): Promise<ServiceResponse> => {
+        try {
+
+            await userScheme.updateWorker(worker)
+
+            return {
+                success: true,
+                message: Messages.FETCH_WORKER_SUCCESS,
+            }
+
+        } catch (error) {
+            return {
+                success: false,
+                message: Messages.FETCH_WORKER_FAILED
+            }
+        }
+    }
 }

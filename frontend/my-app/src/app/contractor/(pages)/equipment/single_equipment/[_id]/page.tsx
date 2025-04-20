@@ -1,9 +1,15 @@
 import React from 'react'
+import Content from './components/Content'
 
-const Page = () => {
+interface PageProps {
+  params: { [key: string]: string };
+}
+
+const Page: React.FC<PageProps> = async ({ params }) => {
+  const { _id } = await params
   return (
     <>
-      <h1>Hello</h1>
+      <Content equipmentId={_id} />
     </>
   )
 }

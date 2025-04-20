@@ -4,9 +4,11 @@ import { useCallback, useEffect, useState } from "react"
 import AddForm from "./AddForm"
 import { fetchPaginationDetails } from "@/app/api/api"
 import PaginationPage from "@/app/components/Pagination";
+import { useRouter } from "next/navigation";
 
 // For display equipment details
 interface IEquipment {
+  _id: string;
   tool: string;
   available: number;
   onSite: number;
@@ -16,6 +18,8 @@ const Content = () => {
 
     // State to manage new equipment adding form (Show form while true)
     const [add, setAdd] = useState(false)
+
+    const router = useRouter()
 
     // Save all equipments
     const [tools, setTools] = useState<IEquipment[]>([]);
@@ -89,7 +93,8 @@ const Content = () => {
                   {tools.map((tool, index) => (
                     <tr
                       key={index}
-                      className="border-t border-gray-100 hover:bg-blue-50 transition duration-150"
+                      onClick={() => router.push(`equipment/single_equipment/${tool._id}`)}
+                      className="cursor-pointer border-t border-gray-100 hover:bg-blue-50 transition duration-150"
                     >
                       <td className="px-6 py-4 text-gray-500">{index + 1}</td>
                       <td className="px-6 py-4 font-semibold text-gray-800">{tool.tool}</td>

@@ -56,7 +56,6 @@ export class EquipmentService implements IEquipmentService {
                 
                 // Decode access token for get logged contractor id to get equipment, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
                 const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
-    
                 // Find equipment with contractor id
                 const equipment = await equipmentScheme.findEquipmentByContractorId(decoded._id, currentPage - 1, itemsPerPage)
                 const totalEquipmentCount = await equipmentScheme.findEquipmentCount(decoded._id)
