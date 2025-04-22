@@ -25,8 +25,7 @@ const AddEquipment: React.FC<PageProps> = ({ success, usedEquipment, taskId, can
   useEffect(() => {
       const fetchData = async () => {
         try {
-          const getEquipment = await fetchDetails("get_equipment");
-
+          const getEquipment = await fetchDetails("get_allEquipment");
           const getNonUsing = getEquipment.filter((eqGet: any) =>
             !usedEquipment.some((eqUsed: any) => eqGet._id === eqUsed.equipmentId)
           );

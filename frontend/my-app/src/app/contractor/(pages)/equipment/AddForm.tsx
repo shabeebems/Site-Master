@@ -70,7 +70,7 @@ const AddForm: React.FC<AddFormProps> = ({ cancel, addEquipment }) => {
         <ToastContainer />
 
         <form 
-        className="flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto bg-white shadow-md px-4 py-2 rounded-xl border"
+          className="flex flex-col md:flex-row items-stretch md:items-center gap-2 w-full md:w-auto bg-white shadow-md px-4 py-2 rounded-xl border"
         >
         {["tool", "count"].map((field, i) => (
           <input

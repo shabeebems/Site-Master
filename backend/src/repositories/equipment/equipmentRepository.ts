@@ -8,6 +8,10 @@ export class EquipmentRepository implements IEquipmentRepository {
         return await toolModel.create({ ...data, available: data.count, onSite: 0, contractorId: _id })
     }
 
+    public findAllEquipmentByContractorId = async(contractorId: any): Promise<IEquipment[]> => {
+        return await toolModel.find({ contractorId })
+    }
+
     public findEquipmentByContractorId = async(_id: any, limit: number, itemsPerPage: number): Promise<IEquipment[]> => {
         return await toolModel.aggregate([{ $match: { contractorId: _id } }, { $skip: (limit * itemsPerPage) }, { $limit: (itemsPerPage * 1) }])
     }
@@ -44,7 +48,9 @@ export class EquipmentRepository implements IEquipmentRepository {
             $push: {
                 activities: {
                     taskId: task._id,
+                    task: task.name,
                     projectId: task.projectId,
+                    project: task.project,
                     start: task.startingDate,
                     end: task.endingDate,
                     count: data.count,

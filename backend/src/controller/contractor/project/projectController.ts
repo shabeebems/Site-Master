@@ -260,7 +260,6 @@ export class ProjectController implements IProjectController {
 
     public taskEquipmentAdd = async(req: Request, res: Response): Promise<void> => {
         try {
-            console.log(req.body)
             const { body, params } = req
             const result: ProjectControllerResponse = await projectService.taskEquipmentAdd(body, params.taskId)
             const { success, message, data } = result
