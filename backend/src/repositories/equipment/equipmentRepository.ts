@@ -28,6 +28,10 @@ export class EquipmentRepository implements IEquipmentRepository {
         return await toolModel.aggregate([{ $match: { contractorId: _id, count: { $gt: 0 } } }])
     }
 
+    public updateCount = async(data: any): Promise<void> => {
+        await toolModel.updateOne({ _id: data._id }, { $set: { count: data.count, available: data.available } })
+    }
+
     public returnEquipment = async(_id: any, count: number): Promise<void> => {
         await toolModel.updateOne({ _id }, { $inc: { available: count, onSite: -count } })
         // return

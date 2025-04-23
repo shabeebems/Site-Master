@@ -49,6 +49,8 @@ export const Messages = {
     CHECK_EQUIPMENT_AVAILABILITY_FAILED: "Checking equipment availability failed",
     ADD_EQUIPMENT_TO_TASK_SUCCESS: "Equipment added to task successfully",  
     ADD_EQUIPMENT_TO_TASK_FAILED: "Adding equipment to task failed",  
+    EQUIPMENT_COUNT_UPDATE_SUCCESS: "Equipment Count edited successfully",
+    EQUIPMENT_COUNT_UPDATE_FAILURE: "Equipment Count editing failed",
 
     // Project
     STARTING_DATE_GREATER: "Starting date is greater than ending date",

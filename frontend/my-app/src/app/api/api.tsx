@@ -56,6 +56,17 @@ export const statusEdits = async (route: string, data: object) => {
     }
 }
 
+// Patch works
+export const simpleEdits = async (route: string, data: object) => {
+    try {
+        const response = await apiClient.patch(`http://localhost:5000/api/contractor/${route}`, data, { withCredentials: true })
+        return response
+    } catch (error) {
+        console.error("Error during fetching workers", error);
+        throw error;
+    }
+}
+
 export const checkEquipmentCount = async (data: object, route: string) => {
     try {
         const response = await apiClient.post(`http://localhost:5000/api/contractor/${route}`, data, { withCredentials: true })

@@ -1,17 +1,45 @@
 'use client'
 
-import { fetchSingleData } from '@/app/api/api';
+import { fetchSingleData, simpleEdits } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
-import EditForm from './EditForm';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface PageProps {
     equipmentId: string;
 }
 
 const Content: React.FC<PageProps> = ({ equipmentId }) => {
+  const [isEditMode, setIsEditMode] = useState(false);
 
-  const [editFormDisplay, setEditFormDisplay] = useState(false)
-  const exitEditForm = () => setEditFormDisplay(false)
+  const handleIncrease = () => {
+    setEquipment((prev: any) => ({ 
+      ...prev,
+      count: prev.count + 1,
+      available: prev.available + 1
+    }));
+  };
+  
+  const handleDecrease = () => {
+    if(equipment.available > 0)
+    setEquipment((prev: any) => ({
+      ...prev,
+      count: prev.count > 0 ? prev.count - 1 : 0,
+      available: prev.available - 1,
+    }));
+  };
+
+  const handleEdit = async () => {
+    if(isEditMode) {
+      const response = await simpleEdits('edit_equipment_count', { count: equipment.count, _id: equipment._id, available: equipment.available })
+      if(response?.data?.success) {
+        toast.success(response.data.message, { position: "top-right", });
+      } else {
+        toast.error("Equipment Count editing failed", { position: "top-right", });
+      }
+    }
+    setIsEditMode(prev => !prev)
+  };
   
   const [equipment, setEquipment] = useState<any>({})
   const [history, setHistory] = useState<any[]>([])
@@ -27,45 +55,69 @@ const Content: React.FC<PageProps> = ({ equipmentId }) => {
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-10 space-y-10">
-  
-      {/* Top Section - Button */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-semibold">{equipment?.tool}</h1>
-        {editFormDisplay ? (
-          <EditForm exit={exitEditForm} equipment={equipment}/>
-        ) : (
-          <button onClick={() => setEditFormDisplay(true)} className="bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-xs font-medium px-3 py-1.5 shadow-md hover:from-blue-600 hover:to-indigo-600 transform hover:scale-105 transition-all duration-300 flex items-center gap-1 rounded-xl">
-            Edit
+      <ToastContainer />
+      <div className="bg-gradient-to-br from-yellow-400 to-yellow-600 p-6 rounded-2xl shadow-xl text-white">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-4">
+            <div className="w-16 h-16 rounded-full bg-white text-yellow-600 flex items-center justify-center text-3xl font-bold shadow-inner">
+              {equipment?.tool?.charAt(0).toUpperCase()}
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold capitalize">{equipment.tool}</h1>
+              <p className="text-sm opacity-90">Equipment Details</p>
+            </div>
+          </div>
+
+          {/* Edit/Save Button */}
+          <button
+            onClick={handleEdit}
+            className="px-5 py-2 bg-white text-yellow-600 font-semibold text-sm rounded-full shadow hover:bg-yellow-100 transition"
+          >
+            {isEditMode ? "Save" : "Edit"}
           </button>
-        )}
-      </div>
-      {/* Equipment Overview */}
-      <div className="flex items-center justify-between bg-gradient-to-r from-yellow-400 to-yellow-600 p-6 rounded-2xl shadow-lg text-white">
-        <div className="flex items-center space-x-4">
-          <div className="w-16 h-16 rounded-full bg-white text-yellow-600 flex items-center justify-center text-3xl font-bold">
-            {equipment?.tool?.charAt(0).toUpperCase()}
+        </div>
+
+        {/* Equipment Info */}
+        <div className="grid grid-cols-3 gap-6 text-sm">
+          {/* Total Count */}
+          <div className="bg-white/20 p-4 rounded-xl shadow-md text-center">
+            <p className="font-medium mb-2">Total Count</p>
+            {isEditMode ? (
+              <div className="flex items-center justify-center gap-2">
+                <button
+                  onClick={handleDecrease}
+                  className="w-8 h-8 bg-white text-yellow-600 rounded-full font-bold hover:bg-yellow-100"
+                >
+                  −
+                </button>
+                <span className="text-xl font-semibold">{equipment.count}</span>
+                <button
+                  onClick={handleIncrease}
+                  className="w-8 h-8 bg-white text-yellow-600 rounded-full font-bold hover:bg-yellow-100"
+                >
+                  +
+                </button>
+              </div>
+            ) : (
+              <p className="text-xl font-semibold">{equipment.count}</p>
+            )}
           </div>
-          <div>
-            <h1 className="text-3xl font-bold">{equipment.tool}</h1>
-            <p className="text-sm opacity-90">Equipment Details</p>
+
+          {/* Available */}
+          <div className="bg-white/20 p-4 rounded-xl shadow-md text-center">
+            <p className="font-medium mb-2">Available</p>
+            <p className="text-xl font-semibold">{equipment.available}</p>
+          </div>
+
+          {/* On Site */}
+          <div className="bg-white/20 p-4 rounded-xl shadow-md text-center">
+            <p className="font-medium mb-2">On Site</p>
+            <p className="text-xl font-semibold">{equipment.onSite}</p>
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-6 text-right text-sm">
-          <div>
-            <p className="font-medium">Total Count</p>
-            <p className="text-lg font-semibold">{equipment.count}</p>
-          </div>
-          <div>
-            <p className="font-medium">Available</p>
-            <p className="text-lg font-semibold">{equipment.available}</p>
-          </div>
-          <div>
-            <p className="font-medium">On Site</p>
-            <p className="text-lg font-semibold">{equipment.onSite}</p>
-          </div>
-        </div>
       </div>
-  
+
       {/* Activity History */}
       <div className="bg-gradient-to-br from-white to-orange-800 rounded-2xl p-6 shadow-sm">
         <div className="flex justify-between items-center mb-8">

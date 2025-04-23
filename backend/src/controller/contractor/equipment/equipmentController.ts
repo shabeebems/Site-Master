@@ -99,4 +99,26 @@ export class EquipmentController implements IEquipmentController {
         }
     }
 
+    public editEquipmentCount = async(req: Request, res: Response): Promise<void> => {
+        try {
+            const result: EquipmentControllerResponse = await equipmentService.editEquipmentCount(req.body)
+            
+            const { success, message } = result
+
+            res.status(201).json({
+                success,
+                message,
+            });
+            return
+        } catch (error) {
+            
+            console.error(Messages.EQUIPMENT_COUNT_UPDATE_FAILURE, error);
+            res.status(500).json({
+                success: false,
+                message: Messages.EQUIPMENT_COUNT_UPDATE_FAILURE,
+            });
+            return
+        }
+    }
+
 }

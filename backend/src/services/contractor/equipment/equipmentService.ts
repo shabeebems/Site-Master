@@ -113,4 +113,20 @@ export class EquipmentService implements IEquipmentService {
             }
         }
     }
+
+    public editEquipmentCount = async(data: any): Promise<ServiceResponse> => {
+        try {
+            await equipmentScheme.updateCount(data)
+            return {
+                success: true,
+                message: Messages.EQUIPMENT_COUNT_UPDATE_SUCCESS,
+            }
+            
+        } catch (error) {
+            return {
+                success: false,
+                message: Messages.EQUIPMENT_COUNT_UPDATE_FAILURE
+            }
+        }
+    }
 }

@@ -24,6 +24,7 @@ router.post('/newWorker', authenticateToken, workerController.addWorker)
       .get('/get_equipment/:currentPage/:itemsPerPage', authenticateToken, equipmentController.getEquipment)
       .get('/get_single_equipment/:_id', authenticateToken, equipmentController.getequipmentDetails)
       .get('/get_allEquipment', authenticateToken, equipmentController.getAllEquipment)
+      .patch('/edit_equipment_count', authenticateToken, equipmentController.editEquipmentCount)
       
       .post('/new_project', authenticateToken, projectController.newProject)
       .get('/get_projects/:currentPage/:itemsPerPage', authenticateToken, projectController.getProjects)
