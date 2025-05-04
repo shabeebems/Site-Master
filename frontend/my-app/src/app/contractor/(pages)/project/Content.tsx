@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { FaTasks } from "react-icons/fa";
 import AddModal from "./AddModal";
-import { fetchDetails, fetchPaginationDetails, statusEdits } from "@/app/api/api";
+import { fetchPaginationDetails, statusEdits } from "@/app/api/api";
 import { useRouter } from "next/navigation";
 import PaginationPage from "@/app/components/Pagination";
 
@@ -28,23 +28,21 @@ const Content = () => {
     const itemsPerPage = 3
 
     // Fetch projects under contractor to display
+    const fetchData = async () => {
+      try {
+
+        // Call api to get projects
+        const getProjects = await fetchPaginationDetails('get_projects', currentPage, itemsPerPage);
+        // Store projects details to state
+        setProjects(getProjects.projects);
+        setTotalProjectsCount(getProjects.projectsCount)
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-  
-          // Call api to get projects
-          const getProjects = await fetchPaginationDetails('get_projects', currentPage, itemsPerPage);
-          // Store projects details to state
-          setProjects(getProjects.projects);
-          setTotalProjectsCount(getProjects.projectsCount)
-        } catch (error) {
-          console.error("Error fetching projects:", error);
-        }
-      };
-    
-      // Call function
       fetchData();
-  
     }, [currentPage])
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -53,8 +51,8 @@ const Content = () => {
     setIsModalOpen(false)
   }
 
-  const afterModalSuccess = (newProject: Project) => {
-    setProjects((prevProjects) => [newProject, ...prevProjects])
+  const afterModalSuccess = () => {
+    fetchData();
   }
 
   const changeStatus = async(_id: string, status: string) => {
@@ -161,9 +159,9 @@ const Content = () => {
                 <p className="text-sm text-gray-500"><strong>End:</strong> {new Date(project.endingDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                 
                 {/* Notification Icon */}
-                <div className="p-2 bg-gray-200 rounded-full">
+                {/* <div className="p-2 bg-gray-200 rounded-full">
                   <FaTasks size={16} className="text-gray-600" />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

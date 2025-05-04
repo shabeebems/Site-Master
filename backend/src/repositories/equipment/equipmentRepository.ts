@@ -78,4 +78,26 @@ export class EquipmentRepository implements IEquipmentRepository {
         return await equipmentHistory.findOne({ equipmentId })
     }
 
+    public changeEquipmentHistoryEndDateAndStatus = async(equipmentId: string, taskId: string): Promise<any> => {
+        let a = await equipmentHistory.updateOne(
+            { 
+                equipmentId, "activities.taskId": taskId 
+            }, {
+                $set: { 'activities.$.status': 'Returned', 'activities.$.end': new Date() }      
+            })
+        console.log('a', a)
+        return a
+    }
+
+    public changeEquipmentHistoryStartDateAndStatus = async(equipmentId: string, taskId: string): Promise<any> => {
+        let a = await equipmentHistory.updateOne(
+            { 
+                equipmentId, "activities.taskId": taskId 
+            }, {
+                $set: { 'activities.$.status': 'Active', 'activities.$.start': new Date() }      
+            })
+        console.log('a', a)
+        return a
+    }
+
 }

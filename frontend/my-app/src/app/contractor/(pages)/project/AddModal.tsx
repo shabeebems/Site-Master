@@ -63,7 +63,7 @@ const AddModal: React.FC<AddFormProps> = ({cancel, afterModal}) => {
                     endingDate: "",
                 })
                 setImage(null)
-                afterModal({ _id: response.data._id, ...newProject, image, status: "Pending" })
+                afterModal()
             } else {
                 toast.error(response.message, { position: "top-right", });
             }

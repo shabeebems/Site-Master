@@ -8,7 +8,7 @@ export class ProjectRepository implements IProjectRepository {
     }
 
     public getProjects = async(contractorId: any, limit: number, itemsPerPage: number): Promise<IPtoject[]> => {
-        return await projectModel.aggregate([{ $match: { contractorId } }, { $skip: (limit * itemsPerPage) }, { $limit: (itemsPerPage * 1) }])
+        return await projectModel.aggregate([{ $match: { contractorId } }, { $sort: { _id: -1 } }, { $skip: (limit * itemsPerPage) }, { $limit: (itemsPerPage * 1) }])
     }
 
     public findProjectsCount = async (contractorId: string): Promise<number> => {

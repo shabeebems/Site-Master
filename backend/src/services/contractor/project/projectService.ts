@@ -207,7 +207,8 @@ export class ProjectService implements IProjectService {
     public equipmentAction = async(data: any): Promise<ServiceResponse> => {
         try {
             const { taskId, _id, equipmentId, count, status } = data
-
+            console.log(data)
+            // if status active make return, if pending make active
             const changeStatus = status === "Active" ? "Returned" : "Active"
 
             // Updating status of equipment saved by tasks
@@ -219,9 +220,11 @@ export class ProjectService implements IProjectService {
             if(status === "Active") {
                 // Returning equipment from project
                 await equipmentScheme.returnEquipment(equipmentId, count)
+                await equipmentScheme.changeEquipmentHistoryEndDateAndStatus(equipmentId, taskId)
             } else {
                 // Make approve equipment to project
                 await equipmentScheme.active(equipmentId, count)
+                await equipmentScheme.changeEquipmentHistoryStartDateAndStatus(equipmentId, taskId)
             }
 
             return {
