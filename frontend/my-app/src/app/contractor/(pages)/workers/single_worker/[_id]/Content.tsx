@@ -136,7 +136,11 @@ const Content: React.FC<PageProps> = ({ workerId }) => {
             {history.map((activity, index) => (
               <li key={index} className="bg-blue-50 p-4 rounded-2xl shadow-sm">
                 <div className="text-gray-700 space-y-1">
-                  <p><span className="font-medium">Date:</span> {new Date(activity.start).toLocaleDateString()} → {new Date(activity.end).toLocaleDateString()}</p>
+                <p>
+                  <span className="font-medium">Date:</span>{' '}
+                  {new Date(activity.start).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })} →{' '}
+                  {new Date(activity.end).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
+                </p>
                   <p><span className="font-medium">Project:</span> {activity.project}</p>
                   <p><span className="font-medium">Task:</span> {activity.task}</p>
                   <p><span className="font-medium">Status:</span> {activity.status}</p>

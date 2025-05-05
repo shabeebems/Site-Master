@@ -19,6 +19,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.10.0",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.10.0",
     "react-toastify": "^11.0.3"
   },
@@ -31,6 +32,7 @@
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.8",
     "@types/node": "^22.13.1",
+    "@types/node-cron": "^3.0.11",
     "@types/nodemailer": "^6.4.17",
     "@types/react-toastify": "^4.0.2",
     "nodemon": "^3.1.9",
