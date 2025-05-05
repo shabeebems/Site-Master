@@ -106,8 +106,6 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                     equipmentId: returnEquipment.equipmentId,
                     status: returnEquipment.status
                 }
-                console.log(data)
-            //   const { _id, taskId, count, equipmentId, status } = returnEquipment
               await statusEdits(`equipment_actions`, { ...data });
               
             //   // Update local state to reflect the status change
@@ -256,18 +254,28 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 </div>
 
                 {workers?.length > 0 ? (
-                    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                        {workers?.map((worker, index) => (
-                            <div 
-                                key={index} 
-                                className="bg-white p-6 rounded-xl shadow-md border border-gray-300 hover:shadow-lg transition-all transform hover:scale-105"
-                            >
-                                <h3 className="text-xl font-semibold text-gray-800">{worker.name}</h3>
-                                <p className="text-gray-600"><span className="font-medium text-gray-700">Role:</span> {worker.profession}</p>
-                                
-                            </div>
-                        ))}
+                    <div className="px-4 py-4 max-w-6xl mx-auto">
+                    <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                      {workers?.map((worker, index) => (
+                        <div 
+                          key={index}
+                          className="bg-white p-4 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-transform hover:scale-105 duration-200"
+                        >
+                          <h3 className="text-lg font-semibold text-gray-800 mb-1">{worker.name}</h3>
+                          <p className="text-sm text-gray-600 mb-3">
+                            <span className="font-medium text-gray-700">Role:</span> {worker.profession}
+                          </p>
+                          <button
+                            className="w-full bg-blue-500 text-white text-sm py-2 rounded-md hover:bg-blue-600 transition-colors"
+                          >
+                            View Profile
+                          </button>
+                        </div>
+                      ))}
                     </div>
+                  </div>
+                  
+                  
                 ) : (
                     <div className="text-center text-gray-500 mt-8">
                         <p className="text-lg font-medium">No workers assigned to this task.</p>
