@@ -109,11 +109,11 @@ const Content: React.FC<PageProps> = ({ _id }) => {
 
             {/* Navigation Buttons */}
             <div className="flex justify-center gap-6 mb-8">
-                <button
-                //   onClick={() => navigate('/workers')}
+                {/* <button
+                onClick={() => router.push(`/contractor/project/single_project/${_id}/workers`)}
                 className="bg-green-600 text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:bg-green-700 transition-transform transform hover:scale-105">
                 🏗️ View Workers
-                </button>
+                </button> */}
                 <button
                 onClick={() => router.push(`/contractor/project/single_project/${_id}/equipment`)}
                 className="bg-purple-600 text-white px-6 py-2 rounded-lg text-lg font-semibold shadow-md hover:bg-purple-700 transition-transform transform hover:scale-105">
@@ -175,6 +175,8 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                                         <span
                                             className={`px-4 py-1 rounded-full text-sm font-medium ${
                                             taskStatus === 'Pending'
+                                                ? 'bg-red-100 text-red-800'
+                                                :  taskStatus === 'In Progress'
                                                 ? 'bg-yellow-100 text-yellow-800'
                                                 : 'bg-green-100 text-green-800'
                                             }`}>

@@ -1,10 +1,11 @@
 'use client'
-import { apiCheck, checkEquipmentCount, dataValidation, fetchSingleData } from '@/app/api/api';
+import { apiCheck, checkEquipmentCount, dataValidation, fetchSingleData, statusEdits } from '@/app/api/api';
 import React, { useEffect, useState } from 'react'
 import AddEquipment from './AddEquipment';
 import AddWorker from './AddWorker';
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 type PageProps = {
     _id: any;
@@ -19,6 +20,8 @@ type ITask = {
 }
 
 type IEquipment = {
+    _id: any,
+    equipmentId: any;
     name: string;
     status: string;
     count: number;
@@ -83,6 +86,45 @@ const Content: React.FC<PageProps> = ({ _id }) => {
         setEquipment(prev => [...(prev || []), data])
     }
 
+    const onAction = async(returnEquipment: IEquipment) => {
+        const status = returnEquipment.status
+        try {
+          Swal.fire({
+            title: `Are you sure?`,
+            text: `You are about to this equipment!`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#28a745",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: `Yes, ${status === 'Pending' ? 'Use' : "Return"} it!`,
+          }).then(async(result) => {
+            if (result.isConfirmed) {
+                const data = {
+                    _id: returnEquipment._id,
+                    taskId: task && task._id,
+                    count: returnEquipment.count,
+                    equipmentId: returnEquipment.equipmentId,
+                    status: returnEquipment.status
+                }
+                console.log(data)
+            //   const { _id, taskId, count, equipmentId, status } = returnEquipment
+              await statusEdits(`equipment_actions`, { ...data });
+              
+            //   // Update local state to reflect the status change
+              setEquipment((prev) =>
+                prev && prev.map((item) =>
+                  item._id === returnEquipment._id
+                    ? { ...item, status: status === 'Pending' ? 'Active' : 'Returned' }
+                    : item
+                )
+              );
+            }
+          });
+        } catch (error) {
+          console.error("Error while return equipment:", error);
+        }
+      }
+
   return (
     <div className="max-w-6xl mx-auto p-4 md:p-6">
       <ToastContainer />
@@ -131,28 +173,62 @@ const Content: React.FC<PageProps> = ({ _id }) => {
                 </div>
 
                 {equipment?.length || 0 > 0 ? (
-                    <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                        {equipment?.map((item, index) => (
-                            <div 
-                                key={index} 
-                                className="relative bg-white p-6 rounded-xl shadow-md border border-gray-300 hover:shadow-lg transition-all transform hover:scale-105"
-                            >
-                                <h3 className="text-xl font-semibold text-gray-800 mb-2">
-                                    {item.name}
-                                </h3>
-                                <p className="text-gray-600">
-                                    <span className="font-medium text-gray-700">Quantity:</span> {item.count}
-                                </p>
-                                <div className="absolute top-4 right-4">
-                                    <span className={`px-3 py-1 text-sm font-medium rounded-full ${
-                                        item.status === "Available" ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
-                                    }`}>
-                                        {item.status}
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                    {equipment?.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col justify-between bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden transition-transform hover:scale-105 hover:shadow-xl"
+                      >
+                        {/* Top: Header with status */}
+                        <div className="flex items-start justify-between p-5 border-b border-gray-100 bg-gray-50">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-800">{item.name}</h3>
+                            <p className="text-sm text-gray-500 mt-1">
+                              Quantity: <span className="font-medium text-gray-700">{item.count}</span>
+                            </p>
+                          </div>
+                          <span
+                            className={`px-3 py-1 text-xs font-medium rounded-full ${
+                              item.status === "Active"
+                                ? "bg-green-100 text-green-700"
+                                : item.status === "Pending"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
+                          >
+                            {item.status}
+                          </span>
+                        </div>
+                        {/* Footer: Action Button */}
+                        <div className="px-5 pb-5">
+                          <p
+                          >
+                            {item.status === 'Active' ? (
+                                <button
+                                    onClick={() => onAction(item)}
+                                    className="w-full py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">
+                                    Return
+                                </button> 
+                            ) : (
+                            item.status === 'Pending' ? (
+                                task && new Date(task.startingDate) < new Date() ? (
+                                    <button
+                                        onClick={() => onAction(item)}
+                                        className="w-full py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition-colors">
+                                            Use
+                                    </button>   
+                            ) : (
+                                <p>Time not started</p>
+                            )
+                        ) : (
+                            <p>N/A</p>
+                        )
+                        )}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 ) : (
                     <div className="text-center text-gray-500 mt-8">
                         <p className="text-lg font-medium">No equipment assigned to this task.</p>
