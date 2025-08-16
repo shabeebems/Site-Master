@@ -1,5 +1,4 @@
 'use client'
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const chatsData = [
@@ -33,14 +32,6 @@ const Content = () => {
   const filteredChats = chatsData.filter((chat) =>
     chat.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  useEffect(() => {
-    const fetchWorkers = async() => {
-      const response = await axios.get(`http://localhost:5000/api/contractor/get_all_workers`, { withCredentials: true })
-      console.log(response)
-    }
-    fetchWorkers()
-  }, [])
 
 
   return (

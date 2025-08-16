@@ -53,6 +53,7 @@ const AddModal: React.FC<AddFormProps> = ({cancel, afterModal}) => {
         setIsLoading(true)
         try {
             // Calling the api to validate and add new projects
+            console.log('image', image)
             const response = await apiCheck({ ...newProject, image }, 'contractor/new_project')
             if(response.success) {
                 toast.success(response.message, { position: "top-right", });
