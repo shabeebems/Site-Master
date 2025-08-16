@@ -23,7 +23,7 @@ export class ProjectService implements IProjectService {
         try {
 
             const { name, location, startingDate, endingDate, image } = data
-
+            console.log(image)
             if(!name || !location || !startingDate || !endingDate || !image) {
                 return {
                     success: false,
@@ -453,7 +453,7 @@ export class ProjectService implements IProjectService {
             const { image, _id } = data
             // Upload image to cloudinary
             let result = await cloudinary.uploader.upload(image, {
-                folder: "Site-Master/user",
+                folder: "Site-Master/users",
             });
             
             await userScheme.addImage(_id, result.url)

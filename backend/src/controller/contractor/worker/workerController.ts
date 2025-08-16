@@ -54,6 +54,29 @@ export class WorkerController implements IWorkerController {
         }
     }
 
+    public getAllWorkers = async(req: Request, res: Response): Promise<void> => {
+        try {
+            const result: WorkerControllerResponse = await workerService.getAllWorkers(req)
+            
+            const { success, message, data } = result
+            
+            res.status(201).json({
+                success,
+                message,
+                data
+            });
+            return
+        } catch (error) {
+
+            console.error(Messages.FETCH_WORKERS_SERVER_ERROR, error);
+            res.status(500).json({
+                success: false,
+                message: Messages.FETCH_WORKERS_SERVER_ERROR,
+            });
+            return
+        }
+    }
+
     public getWorkerDetails = async(req: Request, res: Response): Promise<void> => {
         try {
             

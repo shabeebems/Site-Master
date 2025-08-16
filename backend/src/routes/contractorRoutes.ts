@@ -12,6 +12,7 @@ const equipmentController = new EquipmentController()
 
 router.post('/newWorker', authenticateToken, workerController.addWorker)
       .get('/get_workers/:currentPage/:itemsPerPage', authenticateToken, workerController.getWorkers)
+      .get('/get_all_workers', authenticateToken, workerController.getAllWorkers)
       .get('/get_single_worker/:_id', authenticateToken, workerController.getWorkerDetails)
       .post('/edit_worker', authenticateToken, workerController.editWorker)
       .post('/add_worker_image', authenticateToken, projectController.addWorkerImage)

@@ -109,6 +109,29 @@ export class WorkerService implements IWorkerService {
         }
     }
 
+    public getAllWorkers = async(req: any): Promise<ServiceResponse> => {
+        try {
+            const accessToken = req.cookies.accessToken
+            
+            // Decode access token for get logged contractor id for get workers from db, If access token didnt exist(because access token created this same request) take data from req.user(assigned from tokenValidation middleware)
+            const decoded: any = accessToken ? await decode(accessToken, process.env.ACCESS_TOKEN_SECRET) : req.user
+
+            // Find workers using contractor id
+            const workers = await userScheme.findAllWorkersByContractorId(decoded._id)
+            return {
+                success: true,
+                data: workers,
+                message: Messages.FETCH_WORKER_SUCCESS
+            }
+
+        } catch (error) {
+            return {
+                success: false,
+                message: Messages.FETCH_WORKER_FAILED
+            }
+        }
+    }
+
     public getWorkerDetails = async(_id: string): Promise<ServiceResponse> => {
         try {
 
