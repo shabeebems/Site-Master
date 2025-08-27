@@ -32,6 +32,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/contractor', contractorRoutes);
 
 // app.use(errorHandling)
+console.log('asdasd')
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

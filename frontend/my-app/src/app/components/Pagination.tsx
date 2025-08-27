@@ -10,7 +10,7 @@ const PaginationPage: React.FC<PaginationPageProps> = ({ count, onChange }) => {
   return (
     <div className="mt-8 flex justify-center gap-2 flex-wrap p-4 rounded-lg">
       <Pagination
-        count={count}
+        count={count} // pagination size
         onChange={onChange}
         color="primary"
         shape="rounded"
