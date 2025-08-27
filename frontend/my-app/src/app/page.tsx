@@ -1,8 +1,11 @@
+import Hero from "@/app/home/Hero";
 
-export default function Home() {
+const Page = () => {
   return (
-    <>
-      <h1>Main</h1>
-    </>
+    <div className="min-h-screen bg-white overflow-x-hidden">
+      <Hero />
+    </div>
   );
-}
+};
+
+export default Page;

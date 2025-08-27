@@ -40,8 +40,6 @@ const Sidebar: React.FC<SidebarProps> = ({ active }) => {
     { title: 'Project', path: '/contractor/project', icon: <BiTask color='#030032' /> },
     { title: 'Workers', path: '/contractor/workers', icon: <GrUserWorker color='#030032' />},
     { title: 'Equipment', path: '/contractor/equipment', icon: <VscTools color='#030032' />},
-    { title: 'Messages', path: '/contractor/messages', icon: <MdOutlineMessage color='#030032' />},
-    { title: 'Profile', path: '/contractor/profile', icon: <LuCircleUser color='#030032' />},
   ]
 
   
